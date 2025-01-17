@@ -243,6 +243,8 @@ Hello @bubeckEntropicCLTPhase2018.
 
 #lorem(100)
 
+#include "chapter1.typ"
+
 // Appendix
 
 #set heading(numbering: "A.1")
@@ -261,6 +263,10 @@ Hello @bubeckEntropicCLTPhase2018.
 #bibliography(full: true, "references.bib")
 
 // sw=2 ts=2 sts=2
+
+
+
+
 
 
 
