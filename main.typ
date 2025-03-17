@@ -1,4 +1,3 @@
-#set text(font: "Crimson Pro", size: 12pt)
 #set page(paper: "us-letter", margin: (x: 1.75in))
 
 // #show link.where
@@ -237,7 +236,7 @@ In @intro
 In @beginning we prove @pythagoras.
 $ a^2 + b^2 = c^2 $ <pythagoras>
 
-Hello @bubeckEntropicCLTPhase2018.
+Hello @baukeNumberPartitioningRandom2004.
 
 == Meow
 
