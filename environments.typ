@@ -3,29 +3,57 @@
 #import "@preview/ctheorems:1.1.3": *
 // #show: thmrules.with(qed-symbol: $square$)
 
+#let thmthesis = thmbox.with(
+  padding: (top: 0.8em, bottom: 0em),
+  breakable: true,
+  inset: 0em,
+  //namefmt: none, // name => emph([(#name)]),
+  separator: [#h(0.0em)#strong(".")#h(0.2em)],
+  titlefmt: strong,
+  base_level: 1,
+)
+
+/*
 #let theorem = thmbox(
   "theorem",
   "Theorem",
   breakable: true,
   fill: rgb("#eeffee"),
 )
-#let corollary = thmplain(
+*/
+
+#let theorem = thmthesis(
+  "theorem",
+  "Theorem",
+  bodyfmt: emph,
+)
+#let corollary = thmthesis(
   "theorem",
   "Corollary",
-  base: "theorem",
-  titlefmt: strong,
+  bodyfmt: emph,
 )
-
-#let lemma = thmplain(
+#let lemma = thmthesis(
   "theorem",
   "Lemma",
-  // base: "theorem",
-  titlefmt: strong,
+  bodyfmt: emph,
 )
-#let definition = thmbox("theorem", "Definition", inset: (x: 1.2em, top: 1em))
+#let proposition = thmthesis(
+  "theorem",
+  "Proposition",
+  bodyfmt: emph,
+)
 
-#let example = thmplain("example", "Example") // .with(numbering: none)
-#let proof = thmproof("proof", "Proof")
+#let definition = thmthesis(
+  "theorem",
+  "Definition",
+)
+#let example = thmthesis(
+  "example",
+  "Example",
+).with(numbering: none)
+
+
+#let proof = thmproof("proof", "Proof", inset: 0em)
 
 
 

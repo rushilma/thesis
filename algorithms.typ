@@ -216,7 +216,7 @@ To us, the interesting functions in this space are those given by degree $D$ mul
 Thrm. monomials form basis of 1D Gaussian space (cite)
 
 It is a well-known fact that the monomials $1,z,z^2,dots$ form a complete basis for $L2norm$ (O'Donnell 11.22).
-However, these are far from an orthonormal "Fourier" basis; for instance, we know $EE[z^2]=1$ for $z ~ cal(N)(0,1)$.
+However, these are far from an orthonormal "Fourier" basis; for instance, we know $EE[z^2]=1$ for $z ~ Normal(0,1)$.
 By the Gram-Schmidt process, these monomials can be converted into the polynomials $h_j$ for $j>=0$, given as
 $
   h_0(z)=1,
@@ -285,7 +285,7 @@ In a similar way to the Efron-Stein case, we can consider the resulting "noise o
 #definition[
   For $p in [0,1]$, the #emph[Gaussian noise operator] $T_p$ is the linear operator on $L2normN$, given by
   $
-    T_p f(x) = EE_(y " " p"-correlated to" x)[f(y)] = EE_(y tilde stdnorm )[ f(p x + sqrt(1-p^2) y)]
+    T_p f(x) = EE_(y " " p"-correlated to" x)[f(y)] = EE_(y ~ stdnorm )[ f(p x + sqrt(1-p^2) y)]
   $
 ]
 
@@ -385,3 +385,6 @@ By the will of God (i.e. writeup pending), we have the following:
 
 As a consequence, a degree $D$ algorithm $alg$ has $p_"unstable" = o_N(1)$ for $eta ^4 >> epsilon D$.
 
+@odonnellAnalysisBooleanFunctions2021
+
+@korfCompleteAnytimeAlgorithm1998
