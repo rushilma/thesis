@@ -23,9 +23,9 @@ We start with a bound on the geometry of the binary hypercube.
   $
     sum_(k <= K) binom(N,k) &<= p^(-K) (1-p)^(-(N-K)) \ &= exp(-K log(p) - (N-K) log(1-p)) \
     &= exp(N dot (-K/N log(p) - ((N-K)/N) log(1-p))) \
-    &= exp(N (-p log(p) - (1-p) log(p))) = exp(N h(p)).
+    &= exp(N dot (-p log(p) - (1-p) log (1-p)) ) = exp(N h(p)).
   $
-  The final equality then follows from the bound $h(p) <= 2 p log(1 slash p)$ for $p <= 1/2$.
+  The final equality then follows from the bound $h(p) <= 2 p log(1 slash p)$ for $p <= 1 slash 2$.
 ]
 
 
@@ -33,7 +33,7 @@ We start with a bound on the geometry of the binary hypercube.
   Fix $x in Sigma_N$, and let $eta <= 1/2$. Then the number of $x'$ within distance $2 sqrt(eta N)$ of $x$ is
   $
     abs({x' in Sigma_N | norm(x-x') <= 2eta sqrt(N)})
-    <= exp_2(2 eta log (1 slash eta)N )
+    <= exp(2 eta log (1 slash eta)N )
   $
 ] <lem_hypercube_counting>
 #proof[
@@ -42,8 +42,8 @@ We start with a bound on the geometry of the binary hypercube.
   Moreover, for $eta <= 1/2$, $k <= N/2$.
   Thus, by @lem_chernoff_hoeffding, we get
   $
-    sum_(k <= N eta) binom(N,k) <= exp_2(N h(eta))
-    <= exp_2(2 eta log(1 / eta)N )
+    sum_(k <= N eta) binom(N,k) <= exp(N h(eta))
+    <= exp(2 eta log(1 slash eta)N ). #qedhere
   $
 ]
 
@@ -51,7 +51,7 @@ We start with a bound on the geometry of the binary hypercube.
 Next, we can consider what this probability is in the case of correlated Normals.
 
 #lemma[Suppose $(g,g')$ are $(1-epsilon)$-correlated Normal vectors, and let $x in Sigma_N$. Then
-  $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= 2^(-E + O(log_2 epsilon N)). $
+  $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= exp(-E - 1/2 log(epsilon) + O(log N)). $
 ] <correlated_solution_lowprob>
 #proof[
   Let $tilde(g)$ be an independent Normal vector to $g$, and observe that $g'$ can be represented as
@@ -64,13 +64,13 @@ Next, we can consider what this probability is in the case of correlated Normals
     phi_(g)(z) &= 1 / (sqrt(2pi (1-p^2)N)) e^(- (z-p inn(g,x))^2 / (2(1-p^2)N)) <= 1 / sqrt(2 pi (1-p^2) N) \
     &<= 1 / sqrt(2 pi epsilon N) = exp (-1 / 2 log (epsilon) + O(log N))
   $
-  Following the remainder of the proof of @resampled_solution_lowprob, we conclude that
+  Integrating this bound over the interval $abs(z) <= 2^(-E)$, we conclude that
   $
-    PP(abs(inn(g',x)) <= 2^(-E) | g) = integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= exp(-E - 1/2 log(epsilon) + O(log N)).
+    PP(abs(inn(g',x)) <= 2^(-E) | g) = integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= exp(-E - 1/2 log(epsilon) + O(log N)). #qedhere
   $
 ]
 
-Note for instance that here $epsilon$ can be exponentially small in $E$ (i.e. $epsilon = exp_2(-E slash 10)$), which for the case $E=Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
+Note for instance that here $epsilon$ can be exponentially small in $E$ (e.g. $epsilon = exp(-E slash 10)$), which for the case $E=Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
 
 // Efron-Stein case
 
@@ -78,7 +78,7 @@ First, we consider the probability of a solution being optimal for a resampled i
 
 
 #lemma[Suppose $(g,g')$ are $(1-epsilon)$-resampled Normal vectors, and let $x in Sigma_N$. Then,
-  $ PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= 2^(-M + O(1)). $
+  $ PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= 2^(-E + O(1)). $
 ] <resampled_solution_lowprob>
 #proof[
   Let $S={ i in [N] : g_i != g'_i}$ be the set of indices where $g$ and $g'$ differ. We can express
@@ -94,52 +94,53 @@ First, we consider the probability of a solution being optimal for a resampled i
   $
   Hence, the quantity of interest can be bounded as
   $
-    PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= sqrt(2/pi) 2^(-E) = 2^(-E + O(1)).
+    PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= sqrt(2/pi) 2^(-E) = 2^(-E + O(1)). #qedhere
   $
 ]
 
-In this case, we can compute the probability that $g=g'$ as
+Note that in the resampled case, we can compute the probability that $g=g'$ as
 $ PP(g=g') = product_(i=1)^N PP(g_i = g_i') = (1-epsilon)^N, $
 which for $epsilon << 1$ is approximately $1-N epsilon$. Thus, for $epsilon >> omega(1/N)$, we have
 $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= 2^(-E + O(1)) $
 
 
-= Proof of Low-Degree Hardness in Linear Energy Regime.
+= Proof of Low-Degree Hardness in Linear Energy Regime <section_proof>
+
+Throughout this section, we let $E=delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
+This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
+
+For now, let $alg$ denote a $Sigma_N$-valued deterministic algorithm.
+We discuss the extension to random, $RR^N$-valued algorithms later on in (section ???).
+
 
 == Hermite Case
 
-Let $E$ be a sequence of energy levels depending on $N$.
+First, we consider
 
-#let multiset(..x) = (
-  math.lr(
-    size: 100% + 1em,
-    $brace.l
-      #stack(
-        spacing: 0.7em,
-        ..x.pos().map(it => align(left, it)),
-      )
-      brace.r$,
-  )
-)
+Assume for sake of contradiction that $p_"solve" >= Omega(1)$.
 
-
-Assume for sake of contradiction that $p_"solve" >= Omega(1)$. Let $g,g'$ be $(1-epsilon)$-correlated instances. We define the following events:
+Let $g,g'$ be $(1-epsilon)$-correlated instances. We define the following events:
 $
-  S_"solve" &= {alg(g) in S(E;g), alg(g') in S(E;g')} \
-  S_"stable" &= {norm(alg(g) - alg(g')) <= 2eta sqrt(N) } \
-  S_"ogp" &= {"for" x "depending only on" g, exists x' in S(delta;g') "such that" norm(x-x') <= eta sqrt(N) } \
-
-  S_"brittle" &= multiset(
-    exists.not x' in S(E;g') "such that",
+  S_"solve" &= {alg(g) in Soln(g), alg(g') in Soln(g')} \
+  S_"stable" &= {norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
+  // S_"ogp" &= {"for" x "depending only on" g, exists x' in Soln(g') "such that" norm(x-x') <= eta sqrt(N) } \
+  S_"cond" &= multiset(
+    exists.not x' in Soln(g') "such that",
     norm(x-x') <= 2sqrt(eta N),
   )
-
-  // S_"ogp" (g,x) &= {"for "g'" "p"-resampled from "g, exists x' in Sigma_N " s.t. " norm(x-x') <= eta sqrt(N)" and "x' in S(delta;g')}
 $
 
-To set the remaining parameters, choose $epsilon = omega(1/N)$ such that $epsilon D = o(1)$.
-Then, choose $eta$ such that $(h^(-1)(delta))^2 >> eta^4 >> epsilon D$.
-With this, the previous landscape obstructions give the following.
+In this case, set $epsilon = 2^(-delta N)=o(1)$
+
+#lemma[
+  There exists an $eta > 0$ of constant order such that
+  $ PP(S_"cond") >= 1 - e^(-c N) $
+  for an arbitrary constant $c$.
+]
+
+$D=o(2^N)$.
+
+$D epsilon = D / 2^N * 2^((1-delta)N)$
 
 
 #lemma[

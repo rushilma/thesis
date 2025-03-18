@@ -60,7 +60,7 @@
 )
 
 
-// #set cite(style: "alphanumeric")
+#set cite(style: "alphanumeric.csl")
 
 /// Math environments
 
