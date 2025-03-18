@@ -4,7 +4,7 @@
 // #show: thmrules.with(qed-symbol: $square$)
 
 #let thmthesis = thmbox.with(
-  padding: (top: 0.8em, bottom: 0em),
+  padding: (top: 0em, bottom: 0em),
   breakable: true,
   inset: 0em,
   //namefmt: none, // name => emph([(#name)]),

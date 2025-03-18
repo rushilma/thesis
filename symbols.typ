@@ -22,3 +22,16 @@
 #let L2norm = $L^2(RR,gamma)$
 #let L2normN = $L^2(RR^N,gamma^N)$
 
+#let Soln(x) = $S(E;#x)$
+
+#let multiset(..x) = (
+  math.lr(
+    size: 100% + 1em,
+    $brace.l
+      #stack(
+        spacing: 0.7em,
+        ..x.pos().map(it => align(left, it)),
+      )
+      brace.r$,
+  )
+)

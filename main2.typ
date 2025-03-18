@@ -34,7 +34,11 @@
   number-align: bottom + right,
   margin: (x: 1in, y: 1in),
 )
-#set par(justify: true)
+#set par(
+  justify: true,
+  first-line-indent: (amount: 1.2em, all: false),
+)
+
 #show math.equation: set text(font: "STIX Two Math")
 
 // 2 level math numbering
@@ -56,7 +60,7 @@
 )
 
 
-#set cite(style: "alphanumeric")
+// #set cite(style: "alphanumeric")
 
 /// Math environments
 
