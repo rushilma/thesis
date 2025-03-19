@@ -31,3 +31,44 @@ We start with some setup which will apply, with minor modifications depending on
 After proving some preliminary estimates, we establish the existence of our conditional landscape obstruction, which is of independent interest.
 Finally, we conclude by establishing low-degree hardness in both the linear and sublinear energy regimes.
 
+== Proof Outline and Preliminary Estimates
+
+First, consider the case of $alg$ being a polynomial algorithm with degree $D$, where $D$ will depend on $N$.
+Let $g,g'$ be $(1-epsilon)$-correlated. We define the following events:
+$
+  S_"solve" &= {alg(g) in Soln(g), alg(g') in Soln(g')} \
+  S_"stable" &= {norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
+  S_"cond" &= multiset(
+    exists.not x' in Soln(g') "such that",
+    norm(x-x') <= 2sqrt(eta N),
+  )
+$ <eq_poly_events>
+
+
+
+Next, let $alg$ be given by a function with Efron-Stein degree $D$.
+We now want $g,g'$ to be $(1-epsilon)$-resampled. We define the following events.
+$
+  S_"diff" &= { g != g'} \
+  S_"solve" &= {alg(g) in Soln(g), alg(g') in Soln(g')} \
+  S_"stable" &= {norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
+  S_"cond" &= multiset(
+    exists.not x' in Soln(g') "such that",
+    norm(x-x') <= 2sqrt(eta N),
+  )
+$ <eq_es_events>
+Note that these are the same events as @eq_poly_events, along with an
+
+== Conditional Landscape Obstruction
+
+Our goal is to show that
+$
+  p_"cond" = PP(
+  multiset(
+    exists x' in Soln(g') "such that",
+    norm(x-x') <= 2sqrt(eta N),
+  )
+) <= o(1).
+$
+
+

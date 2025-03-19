@@ -107,6 +107,8 @@
   caption: [Explanation of Parameters],
 ) <parameter_table>
 
+/// Results
+
 #include "results.typ"
 
 #include "results2.typ"
