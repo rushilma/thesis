@@ -104,7 +104,13 @@ which for $epsilon << 1$ is approximately $1-N epsilon$. Thus, for $epsilon >> o
 $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= 2^(-E + O(1)) $
 
 
-= Proof of Low-Degree Hardness in Linear Energy Regime <section_proof>
+
+= Proof of Strong Low-Degree Hardness <section_proof>
+
+Broad setup
+
+
+
 
 Throughout this section, we let $E=delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
 This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
@@ -112,15 +118,12 @@ This corresponds to the statistically optimal regime, as per @karmarkarProbabili
 For now, let $alg$ denote a $Sigma_N$-valued deterministic algorithm.
 We discuss the extension to random, $RR^N$-valued algorithms later on in (section ???).
 
+// Assume for sake of contradiction that $p_"solve" >= Omega(1)$.
 
-== Hermite Case
-
-First, we consider
-
-Assume for sake of contradiction that $p_"solve" >= Omega(1)$.
-
+Setup
 Let $g,g'$ be $(1-epsilon)$-correlated instances. We define the following events:
 $
+  S_"diff" &= { g != g'} \
   S_"solve" &= {alg(g) in Soln(g), alg(g') in Soln(g')} \
   S_"stable" &= {norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
   // S_"ogp" &= {"for" x "depending only on" g, exists x' in Soln(g') "such that" norm(x-x') <= eta sqrt(N) } \
@@ -129,6 +132,8 @@ $
     norm(x-x') <= 2sqrt(eta N),
   )
 $
+
+
 
 In this case, set $epsilon = 2^(-delta N)=o(1)$
 

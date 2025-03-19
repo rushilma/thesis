@@ -74,177 +74,267 @@ Glossary:
 = Literature Review
 
 @achlioptasAlgorithmicBarriersPhase2008
+- S2C gap for random constraint satisfaction
 
 @achlioptasSolutionSpaceGeometryRandom2006
+-
 
 @addario-berryLocalOptimaSherringtonKirkpatrick2017
+-
 
 @alidaeeNewModelingSolution2005
+-
 
 @arguelloRandomizedMethodsNumber1996
+-
 
 @asproniAccuracyMinorEmbedding2020
+-
 
 @aubinStorageCapacitySymmetric2019
+-
 
 @bandeiraNotesComputationaltostatisticalGaps2018
+-
 
 @bansalConstructiveAlgorithmsDiscrepancy2010
+-
 
 @barakNearlyTightSumofSquares2016
+-
 
 @baukeNumberPartitioningRandom2004
+-
 
 @bayatiCombinatorialApproachInterpolation2013
+-
 
 @berthetComputationalLowerBounds2013
+-
 
 @boettcherAnalysisKarmarkarKarpDifferencing2008
+-
 
 @borgsPhaseTransitionFinitesize2001
+-
 
 @brennanOptimalAverageCaseReductions2019
+-
 
 @brennanReducibilityComputationalLower2019
+-
 
 @chandrasekaranIntegerFeasibilityRandom2013
+-
 
 @chenSuboptimalityLocalAlgorithms2019
+-
 
 @coffmanjr.ApplicationBinPackingMultiprocessor1978
+-
 
 @coffmanProbabilisticAnalysisPacking1991
+-
 
 @coja-oghlanIndependentSetsRandom2015
+-
 
 @corusArtificialImmuneSystems2019
+-
 
 @deshpandeImprovedSumofSquaresLower2015
+-
 
 @diakonikolasStatisticalQueryLower2017
+-
 
 @feldmanStatisticalAlgorithmsLower2016
+-
 
 @ferreiraProbabilisticAnalysisNumber1998
+-
 
 @gamarnikAlgorithmicObstructionsRandom2021b
+-
 
 @gamarnikAlgorithmsBarriersSymmetric2022
+-
 
 @gamarnikComputingPartitionFunction2021
+-
 
 @gamarnikHardnessRandomOptimization2022a
+-
 
 @gamarnikHighDimensionalRegressionBinary2019
+-
 
 @gamarnikLandscapePlantedClique2019
+-
 
 @gamarnikLimitsLocalAlgorithms2013
+-
 
 @gamarnikOverlapGapProperty2019
+-
 
 @gamarnikOverlapGapProperty2021
+-
 
 @gamarnikOverlapGapProperty2021a
+-
 
 @gamarnikPerformanceSequentialLocal2017
+-
 
 @gamarnikSparseHighDimensionalLinear2019
+-
 
 @gareyComputersIntractabilityGuide1979
+-
 
 @gentAnalysisHeuristicsNumber1998
+-
 
 @gentPhaseTransitionsAnnealed2000
+-
 
 @harshawBalancingCovariatesRandomized2023
+-
 
 @hastieElementsStatisticalLearning2009
+-
 
 @hatamiLimitsLocallyGlobally2014
+-
 
 @hobergNumberBalancingHard2016
+-
 
 @hopkinsPowerSumofsquaresDetecting2017
+-
 
 @hopkinsStatisticalInferenceSum2018
+-
 
 @hopkinsTensorPrincipalComponent2015
+-
 
 @huangStrongLowDegree2025
+-
 
 @jerrumLargeCliquesElude1992
+-
 
 @johnsonOptimizationSimulatedAnnealing1989b
+-
 
 @johnsonOptimizationSimulatedAnnealing1991
+-
 
 @karmarkarProbabilisticAnalysisOptimum1986
+-
 
 @karmarkerDifferencingMethodSet1983
+-
 
 @kearnsEfficientNoisetolerantLearning1998
+-
 
 @kizildagPlantedRandomNumber2023
+-
 
 @kojicIntegerLinearProgramming2010
+-
 
 @korfApproximateOptimalSolutions1995
+-
 
 @korfCompleteAnytimeAlgorithm1998
+-
 
 @korfMultiwayNumberPartitioning2009
+-
 
 @kothariSumSquaresLower2017
+-
 
 @kraticaTwoMetaheuristicApproaches2014
+-
 
 @kriegerNearlyRandomDesigns2019
+-
 
 @kuniskyNotesComputationalHardness2019
+-
 
 @lauerLargeIndependentSets2007
+-
 
 @levyDeterministicDiscrepancyMinimization2017
+-
 
 @lovettConstructiveDiscrepancyMinimization2012
+-
 
 @luekerNoteAveragecaseBehavior1987
+-
 
 @mekaSumofsquaresLowerBounds2015
+-
 
 @merkleHidingInformationSignatures1978
+-
 
 @mertensEasiestHardProblem2003
+-
 
 @mertensPhysicistsApproachNumber2001
+-
 
 @mezardClusteringSolutionsRandom2005
+-
 
 @michielsPerformanceRatiosDifferencing2003
+-
 
 @odonnellAnalysisBooleanFunctions2021
+-
 
 @raghavendraHighdimensionalEstimationSumofsquares2019
+-
 
 @rahmanLocalAlgorithmsIndependent2017
+-
 
 @rothvossConstructiveDiscrepancyMinimization2016
+-
 
 @santucciImprovedMemeticAlgebraic2021
+-
 
 @storerProblemSpaceLocal1996
+-
 
 @tsaiAsymptoticAnalysisAlgorithm1992
+-
 
 @turnerBalancingGaussianVectors2020
+-
 
 @wainwrightHighDimensionalStatisticsNonAsymptotic2019
+-
 
 @weinOptimalLowDegreeHardness2020
+-
 
 @wenOpticalExperimentalSolution2023
+-
 
 @yakirDifferencingAlgorithmLDM1996
+- Showed LDM achieves $n^log(n)$ performance despite being a simple heuristic, for uniform instance.
 
 @zdeborovaStatisticalPhysicsInference2016
+-
+
+== Our Results <subsection_intro_results>

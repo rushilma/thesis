@@ -331,22 +331,6 @@ Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
 Show that Markov gives a useful bound on
 
 
-
-
-
-// TODO
-// #definition[Degree.]
-
-// $pi$ any distribution with
-
-
-// == Efron-Stein Decomposition
-
-// O'Donnell 8.28
-
-
-
-
 #lemma[
   Let $f:RR^N arrow RR^N$, $p in [0,1]$, and $X,Y$ marginally $N$-dimensional standard Normal vectors.
   Suppose that $EE norm(f(X))_2^2 = 1$ and either of the following cases hold:
@@ -358,9 +342,6 @@ Show that Markov gives a useful bound on
   Then
   $ EE norm(f(X)- f(Y))_2^2 <= 2(1-p^D). $
 ]
-
-
-== Algorithms
 
 #definition[
   A #emph[randomized algorithm] is a measurable function $cal(A)^degree :(g,omega) mapsto bold(x) in RR^N $, where $omega in Omega_N$ is an independent random variable in some Polish space. Such an $cal(A)^degree$ is #emph[deterministic] if it does not depend on $omega$.

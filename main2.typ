@@ -109,6 +109,8 @@
 
 #include "results.typ"
 
+#include "results2.typ"
+
 = Randomized Rounding Things
 
 Claim: no two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
