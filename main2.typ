@@ -36,6 +36,7 @@
 )
 #set par(
   justify: true,
+  spacing: 1em,
   first-line-indent: (amount: 1.2em, all: false),
 )
 
@@ -59,7 +60,6 @@
   },
 )
 
-
 #set cite(style: "alphanumeric.csl")
 
 /// Math environments
@@ -74,42 +74,9 @@
 
 #include "algorithms.typ"
 
-= Summary of Parameters
-
-#figure(
-  table(
-    columns: 4,
-    fill: (_, y) => if calc.odd(y) { rgb("EAF2F5") },
-    stroke: none,
-    table.hline(),
-    [*Parameter*], [*Meaning*], [*Desired Direction*], [*Intuition*],
-    table.hline(),
-    [$N$], [Dimension],
-    [Large], [Showing hardness _asymptotically_, want "bad behavior" to pop up in low dimensions.],
-
-    [$delta$], [Solution tightness; want to find $x$ such that $abs(inn(g,x)) <= 2^(-delta N)$],
-    [Small], [Smaller $delta$ implies weaker solutions, e.g. $delta=0$ is just finding solutions $<= 1$. Want to show even weak solutions are hard to find.],
-
-    [$E$], [Solution tightness; "energy level"; want to find $x$ such that $abs(inn(g,x)) <= 2^(-E)$],
-    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by Karmarkar-Karp],
-
-    [$D$], [Algorithm degree (in either Efron-Stein sense or usual polynomial sense.)],
-    [Large], [Higher degree means more complexity. Want to show even complex algorithms fail.],
-
-    [$epsilon$], [Complement of correlation/resample probability; (g,g') are $(1-epsilon)$-correlated.],
-    [Small], [$epsilon$ is "distance" between $g,g'$. Want to show that small changes in disorder lead to "breaking" of landscape.],
-
-    [$eta$], [Algorithm instability; $alg$ is stable if $norm(alg(g) - alg(g')) <= eta sqrt(N)$, for $(g,g')$ $(1-epsilon)$-correlated.],
-    [Large], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
-
-    table.hline(),
-  ),
-  caption: [Explanation of Parameters],
-) <parameter_table>
-
 /// Results
 
-#include "results.typ"
+// #include "results.typ"
 
 #include "results2.typ"
 
