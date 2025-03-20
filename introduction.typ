@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Chapter 1: Introduction
+= Introduction
 
 Overview of number partitioning problem.
 
@@ -25,7 +25,7 @@ Two questions of interest:
 
 
 
-= Number Packing Problem
+== Number Packing Problem
 
 Let $N$ be the dimensionality, and $Sigma_N := { plus.minus 1}$ be the binary cube.
 Suppose we're given $g ~ #stdnorm$.
@@ -58,7 +58,7 @@ We want to find $x in Sigma_N$ such that we minimize $abs(inn(x, g))$.
 + For $epsilon in (0,1/5)$, no stable algorithm can solve $omega(n log^(-1/5 + epsilon) n) <= E_n <= o(n)$
 + Possible to strengthen to $E_n=Theta(n)$ (as $2^(-Theta(n)) <= 2^(-o(n))$)
 
-= Glossary and conventions
+== Glossary and conventions
 
 Conventions:
 + $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
@@ -71,7 +71,7 @@ Glossary:
 + "near-ground state"/"approximate solution"
 
 
-= Literature Review
+== Literature Review
 
 @achlioptasAlgorithmicBarriersPhase2008
 - S2C gap for random constraint satisfaction

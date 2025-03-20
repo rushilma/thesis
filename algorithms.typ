@@ -279,7 +279,7 @@ In a similar way to the Efron-Stein case, we can consider the resulting "noise o
 ]
 #show sym.EE: math.scripts
 
-This operator admits a more classical description in terms of the Ornstein-Uhlenbeck semigroup, but we will not need those connections for what follows.
+This operator admits a more classical description in terms of the Ornstein-Uhlenbeck semigroup, but we will not need that connection here.
 As it happens, a straightforward computation with the Normal moment generating function gives the following:
 
 #lemma[@odonnellAnalysisBooleanFunctions2021[Prop 11.37]][
@@ -306,47 +306,53 @@ With this in hand, we can prove a similar stability bound to @thrm_es_stability.
   From there, the proof proceeds as before.
 ]
 
-As a comparision to the case for functions with Efron-Stein degree $D$, notice that @thrm_poly_stability gives a much looser bound.
+As a comparision to the case for functions with Efron-Stein degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
 For instance, the function $f(x)=x_1^2 x_2^4$ has Efron-Stein degree 2, but polynomial degree 6.
 In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant benefits in the arguments which follow, justifying equal consideration of both classes of functions.
 
-== Algorithms
+== Stability of Low-Degree Algorithms
 
-Def. Randomized algorithm
-
-Def. degree of algorithm is degree as multivariate function.
-
-Discussion of how low-degree algs are approximate for class of Lipschitz algorithms?
-
-Need for rounding function to land on $Sigma_N$
-
-Construction of randomized rounding function.
-
-Constr. rounded algorithm.
-
-Lemma. stability of rounding
-
-Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
-
-Show that Markov gives a useful bound on
-
-
-#lemma[
-  Let $f:RR^N arrow RR^N$, $p in [0,1]$, and $X,Y$ marginally $N$-dimensional standard Normal vectors.
-  Suppose that $EE norm(f(X))_2^2 = 1$ and either of the following cases hold:
-  #[
-    #set enum(numbering: "I.")
-    + $(X,Y)$ are a $p$-resampled pair, and $f$ is a degree-$D$ function.
-    + $(X,Y)$ are $p$-correlated, and $f$ is a degree-$D$ polynomial.
-  ]
-  Then
-  $ EE norm(f(X)- f(Y))_2^2 <= 2(1-p^D). $
-]
+With these notions of low-degree functions/polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
-  A #emph[randomized algorithm] is a measurable function $cal(A)^degree :(g,omega) mapsto bold(x) in RR^N $, where $omega in Omega_N$ is an independent random variable in some Polish space. Such an $cal(A)^degree$ is #emph[deterministic] if it does not depend on $omega$.
-] <algorithm>
+  A #emph[(randomized) algorithm] is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is #emph[deterministic] if it does not depend on $omega$.
+] <def_algorithm>
 
+In practice, we want to consider $RR^N$-valued algorithms as opposed to $Sigma_N$-valued ones to avoid the resulting restrictions on the component functions. These can then be converted to $Sigma_N$-valued algorithms by some rounding procedure. We discuss the necessary extensions to handling this rounding in (section ???).
+
+#definition[
+  A #emph[polynomial algorithm] is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
+]
+
+We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of Efron-Stein degree:
+
+#definition[
+  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the #emph[Efron-Stein degree] of $alg$ is the maximum Efron-Stein degree of each of its coordinate functions.
+]
+
+By the low-degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
+
+// Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
+
+#proposition[Low-Degree Stability -- @huangStrongLowDegree2025[Prop. 1.9]][
+  Suppose we have a deterministic algorithm $alg$ with degree (or Efron-Stein degree) $<= D$ and norm $EE norm(alg(g))^2 <= C N$.
+  Then, for inputs $g,g'$ which are $(1-epsilon)$-correlated,
+  $ EE norm(alg(g) - alg(g'))^2 <= 2C D epsilon N, $ <eq_alg_expected_stability>
+  and thus
+  $
+    PP( norm(alg(g) - alg(g'))>= 2sqrt(eta N)) <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta
+  $ <eq_alg_stability>
+] <prop_alg_stability>
+#proof[
+  Let $C' := EE norm(alg(g))^2$, and define the rescaling $alg' := alg slash sqrt(C')$. Then, by @thrm_poly_stability (or @thrm_es_stability, in the Efron-Stein case), we have
+  $
+    EE norm(alg'(g) - alg'(g'))^2 = 1 / (C') EE norm(alg(g) - alg(g'))^2 <= 2 D epsilon.
+  $
+  Multiplying by $C'$, and using that $C' <= C N$, we get @eq_alg_expected_stability.
+  Finally, @eq_alg_stability follows immediately from Markov's inequality.
+]
+
+/*
 #example[
   Let $bold(U)=(U_1,dots,U_N)$ be i.i.d. $Unif([-1,1])$. Then, we define the random coordinate-wise function
   $ "round"_bold(U)(bold(x))=("round"_(U_1)(x_1),dots,"round"_(U_N)(x_N)), $
@@ -359,23 +365,7 @@ Show that Markov gives a useful bound on
   $ cal(A)(g,omega,bold(U)) := round_bold(U)(cal(A)^degree (g,omega)). $
 ] <rounded_algorithm>
 
-
-#definition[
-  Algorithm $alg$ is $(epsilon,eta,p_"unstable")$-stable if, for $g,g'$ $(1-epsilon)$-correlated/resampled, we have
-  $ PP(norm(alg(g) - alg(g'))<= eta sqrt(N)) >= 1-p_"unstable". $
-] <stability_def>
-
 By the will of God (i.e. writeup pending), we have the following:
 
-#lemma[Algorithm $alg$ with degree $<= D$ and norm $EE norm(alg(g))^2 <= C N$ has
-  $ EE norm(alg(g) - alg(g'))^2 <= 2C N epsilon D, $
-  and (because of randomized rounding)
-  $ EE norm(alg(g)- alg(g'))^4 <= 16 C N^2 epsilon D. $
-  Thus,
-  $
-    PP(norm(alg(g) - alg(g'))>= eta sqrt(N)) <= (16 C N^2 epsilon D) / (eta^4 N^2) asymp (epsilon D) / eta^4.
-  $
-] <stability>
-
 As a consequence, a degree $D$ algorithm $alg$ has $p_"unstable" = o_N(1)$ for $eta ^4 >> epsilon D$.
-
+*/

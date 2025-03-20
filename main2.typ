@@ -5,21 +5,6 @@
 
 #import "@preview/equate:0.3.1": equate
 
-// #show: equate.with(breakable: true, sub-numbering: true)
-// #set math.equation(numbering: "(1.1)", supplement: "Eq.") // , supplement: (x) => [(#x.label)])
-#set math.equation(
-  supplement: none,
-  numbering: (..nums) => numbering("(1.1)", ..nums),
-)
-#show math.equation: it => {
-  if it.block and not it.has("label") [
-    #counter(math.equation).update(v => v - 1)
-    #math.equation(it.body, block: true, numbering: none)#label("")
-  ] else {
-    it
-  }
-}
-
 // page layout
 #set text(font: "Crimson Pro", size: 12pt)
 #set page(
@@ -43,6 +28,23 @@
 #show math.equation: set text(font: "STIX Two Math")
 
 // 2 level math numbering
+
+// #show: equate.with(breakable: true, sub-numbering: true)
+// #set math.equation(numbering: "(1.1)", supplement: "Eq.") // , supplement: (x) => [(#x.label)])
+#set math.equation(
+  supplement: none,
+  numbering: (..nums) => numbering("(1.1)", ..nums),
+)
+#show math.equation: it => {
+  if it.block and not it.has("label") [
+    #counter(math.equation).update(v => v - 1)
+    #math.equation(it.body, block: true, numbering: none)#label("")
+  ] else {
+    it
+  }
+}
+
+
 #set heading(numbering: "1.1.")
 #show heading.where(level: 1): it => {
   counter(math.equation).update(0)
@@ -101,14 +103,6 @@ Thus, rounding would destroy the solution.
 - Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100\leq omega(1)$, there are at least 100 heads whp.
 - Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
 - Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
-
-
-
-// $ PP(A,B) = 1-PP(not A "or" not B) >= 1 - PP(not A) - PP(not B) = PP(A) + PP(B) - 1 $
-
-
-
-@odonnellAnalysisBooleanFunctions2021
 
 
 #bibliography("references.bib", full: true)

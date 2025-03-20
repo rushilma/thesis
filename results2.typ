@@ -298,7 +298,7 @@ Note that in contrast to @lem_resampled_solution_lowprob, this bound doesn't inv
 
 Putting together these bounds, we conclude the following fundamental estimates of $p_"cond"$, i.e. of the failure of our conditional landscape obstruction.
 
-#proposition[Fundamental Estimate - Correlated Case][
+#proposition[Fundamental Estimate -- Correlated Case][
   Assume that $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors. Then, for any $x$ only depending on $g$,
   $
     p_"cond" = PP(
@@ -320,13 +320,13 @@ Putting together these bounds, we conclude the following fundamental estimates o
       )
       mid(|) g )].
   $
-  Then, for fixed $x$, we know there are $exp(2 eta log(1 slash eta)N)$ $x'$ satisfying condition (II), with each having an exponentially small probability of satisfying condition (I).
-  Thus, we union bound @lem_correlated_solution_lowprob over @lem_hypercube_counting, and conclude as the bound in @lem_correlated_solution_lowprob does not depend on $g$.
+  Then, for fixed $x$, we know there are $exp(2 eta log(1 slash eta)N)$-many $x'$ satisfying condition (II), with each having an exponentially small probability of satisfying condition (I).
+  Thus, we conclude by union bounding @lem_correlated_solution_lowprob (which is independent of $g$) over @lem_hypercube_counting.
 ]
 
 By the same proof, using @lem_resampled_solution_lowprob instead of @lem_correlated_solution_lowprob, we show:
 
-#proposition[Fundamental Estimate - Resampled Case][
+#proposition[Fundamental Estimate -- Resampled Case][
   Assume that $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors. Then, for any $x$ only depending on $g$,
   $
     p_"cond" = PP(
@@ -338,4 +338,7 @@ By the same proof, using @lem_resampled_solution_lowprob instead of @lem_correla
   $
 ] <prop_resampled_fundamental>
 
-==
+== Hardness in the Linear Energy Regime
+
+
+== Hardness in the Sublinear Regime
