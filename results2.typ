@@ -121,7 +121,7 @@ In this case, we should interpret this as saying $S_"solve", S_"stable", S_"cond
 #lemma[
   For $g,g'$ being $(1-epsilon)$-resampled,
   $PP(S_"diff") = 1 - (1-epsilon)^N <= epsilon N$.
-]
+] <lem_sdiff_prob>
 #proof[
   Follows from calculation:
   $ PP(g=g') = product_(i=1)^N PP(g_i = g_i') = (1-epsilon)^N #qedhere $
@@ -157,7 +157,9 @@ $
   PP(S_"solve"|S_"diff") + PP(S_"stable"|S_"diff") + PP(S_"cond"|S_"diff") <= 2.
 $
 Thus, rearranging and multiplying by $PP(S_"diff")$ (so as to apply @lem_es_solve_prob) gives
-$ p_"solve"^2 <= P(S_"diff") dot (p_"unstable" + p_"cond") $ <eq_es_fundamental>
+$
+  p_"solve"^2 <= PP(S_"diff") dot (p_"unstable" + p_"cond")
+$ <eq_es_fundamental>
 
 As before, our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, that $p_"unstable",p_"cond" = o(1)$. However, this also requires us to choose $epsilon >> 1/N$, so as to ensure that $g != g'$, as otherwise $p_"unstable",p_"cond"$ would be too large. This restriction on $epsilon$ effectively limits us from showing hardness for algorithms with degree larger than $o(N)$, as we will see shortly.
 
@@ -190,7 +192,6 @@ As before, our proof follows by showing that, for appropriate choices of $epsilo
   ),
   caption: [Explanation of Parameters],
 ) <parameter_table>
-
 
 == Conditional Landscape Obstruction <section_proof>
 
@@ -340,5 +341,103 @@ By the same proof, using @lem_resampled_solution_lowprob instead of @lem_correla
 
 == Hardness in the Linear Energy Regime
 
+Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
+This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
+These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low-degree hardness-type result.
+
+#theorem[
+  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
+  Then, for any degree $D <= o(exp(delta N slash 2))$ polynomial algorithm $alg$ (with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_poly_linear>
+#proof[
+  Recall from @eq_poly_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
+  Further, by @prop_correlated_fundamental, we have
+  $ p_"cond" <= exp(-E - 1/2 log(epsilon) + 2 eta log(1 / eta) N + O(log N)) $
+  Thus, first choose $eta$ sufficiently small, such that $2 eta log(1 slash eta) < delta slash 4$ -- this results in $eta$ being independent of $N$.
+  Next, choose $epsilon = exp(- delta N slash 2)$. This gives
+  $
+    p_"cond" <= exp(- delta N - 1/2 (-(delta N)/2) + (delta N) / 4 + O(log N)) = exp(- (delta N)/2 + O(log N)) = o(1).
+  $
+  Moreover, for $D <= o(exp(delta N slash 2))$, we get by @prop_alg_stability that
+  $
+    p_"unstable" <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta asymp D dot exp(- (delta N)/2) -> 0.
+  $
+  By @eq_poly_fundamental, we conclude that $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, thus completing the proof.
+]
+
+Remark that this implies poly algs are really bad, requiring ~double exponential time.
+
+#theorem[
+  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_es_linear>
+#proof[
+  Recall from @eq_es_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$.
+  By @lem_sdiff_prob, the latter condition is satisfied for $epsilon = omega(1 slash N)$.
+  Thus, pick $epsilon = log(N slash D) / N$: note that this satisfies $N epsilon = log(N slash D) >> 1$, for $D = o(N)$.
+  Next, choose $eta$ such that $2 eta log(1 slash eta) < delta slash 4$ -- again, this results in $eta$ being independent of $N$.
+  By @prop_resampled_fundamental we get
+  $
+    p_"cond" <= exp(- delta N + (delta N) / 4 + O(1) ) = o(1).
+  $
+  Moreover, for $D <= o(N)$, @prop_alg_stability now gives
+  $
+    p_"unstable" <= (C D epsilon) / (2 eta) asymp D dot log(N slash D) / N -> 0,
+  $
+  as $x log(1 slash x) -> 0$ for $x << 1$.
+  By @eq_es_fundamental, we conclude that $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
+]
 
 == Hardness in the Sublinear Regime
+
+In this section, we let $omega((log N)^2) <= E <= o(N)$.
+
+#theorem[
+  // TODO: change this
+  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_poly_sublinear>
+#proof[
+
+  $ epsilon = exp(-E/2) => -1 / 2 log(epsilon) = E / 4 $
+  $ 2 eta log (1 slash eta) <= E / N 4 <=> eta = E / (16 N log(N slash E)) $
+  $ => p_"cond" <= exp(-E + E/4 + E/(N 4) N) = exp(-E) = o(1). $
+
+  $
+    (C D epsilon) / (2 eta) asymp (D epsilon N log(N slash E)) / (E) <= (D exp(-E/2) N log(N)) / (E)
+  $
+  $
+    D = o((E exp(E slash 2)) / (N log(N)))
+  $
+]
+
+
+#theorem[
+  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(E slash log^2 N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_es_sublinear>
+#proof[
+  As in @thrm_sldh_es_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$ (i.e., with $epsilon= omega(1 slash N)$.
+  Thus, as before, pick $epsilon = log(N slash D) / N$: this satisfies $N epsilon = log(N slash D) >> 1$, for $D = o(N)$ (which holds as $E <= o(N)$).
+  Now recall that by @prop_resampled_fundamental we have
+  $
+    p_"cond" <= exp(- E + 2 eta log(1 slash eta) N + O(1) ).
+  $
+  In particular, if we choose
+  $ eta = E / (16 N log (N slash E)), $
+  we have that
+  $ E / (4 N) > 2 eta log(1 slash eta) $
+  for $E slash N << 1$, thus ensuring $p_"cond" <= exp(-3 E slash 4 + O(1)) = o(1)$ (as $E >> log N$).
+
+  Thus, (as $D,E>=1$), the choice of $D <= o(E slash log^2 N)$ combined with @prop_alg_stability now gives
+  $
+    p_"unstable" &<= (C D epsilon) / (2 eta) \
+    &= (D epsilon N log(N slash E)) / E <= (D epsilon N log(N)) / E \
+    &= (D log(N slash D) log(N)) / E \
+    &<= (D log(N)^2) / E \
+    &=> D = o(E / (log N)^2)
+  $
+
+
+  By @eq_es_fundamental, we conclude that $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
+]
