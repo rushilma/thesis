@@ -393,22 +393,32 @@ Remark that this implies poly algs are really bad, requiring ~double exponential
 In this section, we let $omega((log N)^2) <= E <= o(N)$.
 
 #theorem[
-  // TODO: change this
-  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
-  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
+  Then, for any polynomial algorithm $alg$ with degree $D <= o(exp(E slash 4))$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
 ] <thrm_sldh_poly_sublinear>
 #proof[
-
-  $ epsilon = exp(-E/2) => -1 / 2 log(epsilon) = E / 4 $
-  $ 2 eta log (1 slash eta) <= E / N 4 <=> eta = E / (16 N log(N slash E)) $
-  $ => p_"cond" <= exp(-E + E/4 + E/(N 4) N) = exp(-E) = o(1). $
-
+  As in @thrm_sldh_poly_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
+  To do this, we choose
+  $ epsilon = exp(-E/2), #h(5em) eta = E / (16 N log (N slash E)). $
+  With this choice of $eta$, some simple analysis shows that for $E / N << 1$, we have that
+  $ E / (4 N) > 2 eta log(1 slash eta). $
+  Thus, by @prop_correlated_fundamental, we get
   $
-    (C D epsilon) / (2 eta) asymp (D epsilon N log(N slash E)) / (E) <= (D exp(-E/2) N log(N)) / (E)
+    p_"cond" &<= exp(-E - 1/2 log(epsilon) + 2 eta log(1/eta) N + O(log N)) \
+    &<= exp(-E + E/4 + E/4 + O(log N)) = exp(-E/2 + O(log N)) = o(1).
   $
+  where the last equality follows as $E >> log N$.
+  Then, by @prop_alg_stability, the choice of $D = o(exp(E slash 4))$ gives
   $
-    D = o((E exp(E slash 2)) / (N log(N)))
+    p_"unstable" &<= (C D epsilon) / (2 eta)
+    asymp (D epsilon N log(N slash E)) / E \
+    &= (D exp(-E slash 2) N log(N slash E)) / E
+    <= (D exp(-E slash 2) N log(N)) / E \
+    &<= D exp(-E/2 + log(N) + log log(N) - log(E)) \
+    &<= exp(-E/4 + log(N) + log log(N) - log(E)) = o(1),
   $
+  again, as $E >> log N$.
+  Ergo, by @eq_poly_fundamental, $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, as desired.
 ]
 
 
@@ -418,7 +428,7 @@ In this section, we let $omega((log N)^2) <= E <= o(N)$.
 ] <thrm_sldh_es_sublinear>
 #proof[
   As in @thrm_sldh_es_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$ (i.e., with $epsilon= omega(1 slash N)$.
-  Thus, as before, pick $epsilon = log(N slash D) / N$: this satisfies $N epsilon = log(N slash D) >> 1$, for $D = o(N)$ (which holds as $E <= o(N)$).
+  As before, pick $epsilon = log(N slash D) slash N$, ensuring that $N epsilon = log(N slash D) >> 1$ (for $D = o(N)$, which holds as $E <= o(N)$).
   Now recall that by @prop_resampled_fundamental we have
   $
     p_"cond" <= exp(- E + 2 eta log(1 slash eta) N + O(1) ).
@@ -428,16 +438,12 @@ In this section, we let $omega((log N)^2) <= E <= o(N)$.
   we have that
   $ E / (4 N) > 2 eta log(1 slash eta) $
   for $E slash N << 1$, thus ensuring $p_"cond" <= exp(-3 E slash 4 + O(1)) = o(1)$ (as $E >> log N$).
-
-  Thus, (as $D,E>=1$), the choice of $D <= o(E slash log^2 N)$ combined with @prop_alg_stability now gives
+  Finally, the choice of $D <= o(E slash log^2 N)$ combined with @prop_alg_stability now gives
   $
-    p_"unstable" &<= (C D epsilon) / (2 eta) \
-    &= (D epsilon N log(N slash E)) / E <= (D epsilon N log(N)) / E \
-    &= (D log(N slash D) log(N)) / E \
-    &<= (D log(N)^2) / E \
-    &=> D = o(E / (log N)^2)
+    p_"unstable" &<= (C D epsilon) / (2 eta)
+    asymp (D epsilon N log(N slash E)) / E \
+    &= (D log(N slash D) log(N slash E)) / E
+    <= (D log^2 N) / E -> 0
   $
-
-
-  By @eq_es_fundamental, we conclude that $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
+  By @eq_es_fundamental, $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
 ]

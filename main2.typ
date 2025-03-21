@@ -64,6 +64,9 @@
 
 #set cite(style: "alphanumeric.csl")
 
+#let crimson = rgb(68%, 12%, 20%)
+#show ref: it => text(fill: crimson)[#it]
+
 /// Math environments
 
 #import "symbols.typ": *
