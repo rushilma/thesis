@@ -1,3 +1,3 @@
 #!/opt/homebrew/bin/fish
 
-typst watch main2.typ --font-path fonts/
+typst watch main.typ --font-path fonts/

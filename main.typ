@@ -1,289 +1,163 @@
-#set page(paper: "us-letter", margin: (x: 1.75in))
+#import "@preview/ctheorems:1.1.3": *
+#show: thmrules.with(qed-symbol: $square$)
 
-// #show link.where
+#import "environments.typ": *
 
-#let crimson = rgb(68%, 12%, 20%)
-// I modified the code a bit to make it works along with cite and refs other than heading. note that equations don't have a numbering by default, so need to #set math.equation(numbering: "(1)") if anyone wants to reference an equation with a such colored box manner.
+#import "@preview/equate:0.3.1": equate
 
-#let separate-supplement-style(supp, num) = {
-  text(supp, fill: crimson)
-  [ ]
-  box(num, stroke: 1pt + green, outset: (bottom: 1.5pt, x: .5pt, y: .5pt))
-}
-/*
-#show ref: it => {
-  let (element, target, supplement: supp) = it.fields()
-  // cite doesn't have element
-  if element == none {
-    return it
-  }
-
-  let non_cite_ref = element.fields()
-  let supp = if supp == auto { non_cite_ref.supplement } else { supp }
-  let num = context {
-    // apply the heading's numbering style
-    let head-count = counter(heading).at(target)
-    numbering(non_cite_ref.numbering, ..head-count)
-  }
-  link(target, separate-supplement-style(supp, num))
-}
-*/
-
-#set heading(numbering: "1.")
-
-#show smallcaps: set text(font: "Latin Modern Roman Caps")
-
-
-
-
-#let titlepage(
-  title,
-  subtitle,
-  author,
-  date,
-) = {
-  set align(center)
-  set par(leading: 0.5em)
-
-
-  page([
-    #v(150pt)
-    #text(
-      fill: crimson,
-      style: "italic",
-      size: 40pt,
-      title,
-    )
-    #v(1fr)
-    #text(
-      fill: crimson,
-      style: "italic",
-      size: 30pt,
-      subtitle,
-    )
-    #v(5fr)
-    #smallcaps[
-      A thesis presented \
-      by \
-      #author \
-      to \
-      The Department of Statistics
-    ]
-    #v(1fr)
-    #smallcaps[
-      in partial fulfillment of the requirements \
-      for the degree of \
-      Bachelor of Arts (Honors) \
-      in the subject of \
-      Statistics
-    ]
-    #v(1fr)
-    #smallcaps[
-      Harvard University \
-      Cambridge, Massachusetts \
-      #date
-    ]
-    #v(3fr)
-  ])
-}
-
-#let author = "Rushil Mallarapu"
-#let degreemonth = "April"
-#let degreeyear = "2025"
-
-#titlepage(
-  "Meow",
-  "meow meow",
-  author,
-  [#degreemonth #degreeyear],
+// page layout
+#set text(font: "Crimson Pro", size: 12pt)
+#set page(
+  paper: "us-letter",
+  header: [
+    Rushil Mallarapu
+    #h(1fr) #datetime.today().display()
+    #v(-0.8em)
+    #line(length: 100%, stroke: 0.5pt)
+  ],
+  numbering: "1",
+  number-align: bottom + right,
+  margin: (x: 1in, y: 1in),
+)
+#set par(
+  justify: true,
+  spacing: 1em,
+  first-line-indent: (amount: 1.2em, all: false),
 )
 
-#set math.equation(numbering: "(1)")
+#show math.equation: set text(font: "STIX Two Math")
 
-#let copyrightpage(author, year) = {
-  set align(left)
-  page([
-    #v(1fr)
-    #sym.copyright
-    #text(style: "italic")[#year -- #author]
-    \
-    #smallcaps[All rights reserved.]
-    #v(1fr)
-  ])
-}
+// 2 level math numbering
 
-#copyrightpage([#author], [#degreeyear])
-
-#set page(numbering: "i")
-
-#let abstractpage(author, advisor, title, content) = {
-  set page(
-    header: [
-      Thesis advisor: #advisor
-      #h(1fr)
-      #author
-    ],
-  )
-
-  page([
-    #set align(center)
-    #text(
-      fill: crimson,
-      style: "italic",
-      size: 35pt,
-      title,
-    )
-    \ #v(0.7em)
-    #smallcaps[Abstract]
-    #v(1em)
-
-    #set align(left)
-    #par(first-line-indent: 1em, leading: 1.3em)[#content]
-  ])
-}
-
-#abstractpage(author, "Subhabrata Sen", "Meow")[
-  #lorem(100)
-
-  #lorem(100)
-
-  #lorem(100)
-
-  #lorem(100)
-
-  #lorem(100)
-  #lorem(100)
-]
-
-// Outline
-#show outline: it => {
-  v(150pt)
-  align(right)[#text(size: 30pt)[#it.title]]
-  v(100pt)
-  let chapters = query(it.target)
-  for chapter in chapters {
-    let loc = chapter.location()
-    let nr = numbering(loc.page-numbering(), ..counter(page).at(loc))
-    // [#chapter.numbering]
-    let n = 1
-    if chapter.level == 1 {
-      if chapter.numbering != none {
-        let n = numbering(chapter.numbering, ..counter(heading).at(loc))
-        smallcaps[#n #h(1em) #chapter.body]
-      } else {
-        smallcaps[#chapter.body]
-      }
-      h(1fr)
-      nr // page number
-      linebreak()
-      v(1em)
-    } else if chapter.level == 2 {
-      let n = numbering(chapter.numbering, ..counter(heading).at(loc))
-      smallcaps[#n #h(1em) #chapter.body]
-      // #smallcaps[#chapter.body] #box(width: 1fr, repeat(".")) #nr \
-      //smallcaps[#chapter.body]
-      box(
-        width: 1fr,
-        repeat("."),
-      )
-      nr // page number
-      linebreak()
-    }
-    // [#chapter.fields()]
+// #show: equate.with(breakable: true, sub-numbering: true)
+// #set math.equation(numbering: "(1.1)", supplement: "Eq.") // , supplement: (x) => [(#x.label)])
+#set math.equation(
+  supplement: none,
+  numbering: (..nums) => numbering("(1.1)", ..nums),
+)
+#show math.equation: it => {
+  if it.block and not it.has("label") [
+    #counter(math.equation).update(v => v - 1)
+    #math.equation(it.body, block: true, numbering: none)#label("")
+  ] else {
+    it
   }
 }
 
 
-#outline(title: align(right)[Content])
-
-
-
-#set heading(numbering: "1.1")
-
+#set heading(numbering: "1.1.")
 #show heading.where(level: 1): it => {
-  set align(right)
-  pagebreak()
-  v(150pt)
-  text(
-    // number
-    fill: crimson,
-    size: 100pt,
-    counter(heading).display(),
-  )
-  linebreak()
-  text(
-    // body
-    size: 24pt,
-    it.body,
-  )
-  v(50pt)
-
-  // #it.fields()
+  counter(math.equation).update(0)
+  it
 }
 
-#set page(numbering: "1")
-#counter(page).update(1)
+#set math.equation(
+  numbering: it => {
+    let count = counter(heading.where(level: 1)).at(here()).first()
+    if count > 0 {
+      numbering("(1.1)", count, it)
+    } else {
+      numbering("(1)", it)
+    }
+  },
+)
 
-= Introduction <intro>
+#set cite(style: "alphanumeric.csl")
 
-#lorem(100)
+#let crimson = rgb(68%, 12%, 20%)
+#show ref: it => text(fill: crimson)[#it]
 
-== Hello
-#lorem(100)
+/// Math environments
 
-In @intro
+#import "symbols.typ": *
 
-= Beginnings <beginning>
-In @beginning we prove @pythagoras.
-$ a^2 + b^2 = c^2 $ <pythagoras>
+/// Introduction
 
-Hello @baukeNumberPartitioningRandom2004.
+#include "introduction.typ"
 
-== Meow
+/// Algorithms
 
-#lorem(100)
+#include "algorithms.typ"
 
-#include "chapter1.typ"
+/// Results
 
-// Appendix
+#include "results.typ"
 
-#set heading(numbering: "A.1")
-#counter(heading).update(0)
+= Randomized Rounding Things
 
-= Hello
-= Meow meow
+Claim: no two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
+The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
 
-
-#show heading: it => [
-  #set align(right)
-  #text(size: 20pt, it.body)
+#proposition[
+  Fix distinct points $x,x' in Sigma_N$ with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), for $k=O(1)$, and let $g$ be any instance.
+  Then,
+  $
+    PP(x in Soln(g) "and" x' in Soln(g)) <= exp(-E + O(1)).
+  $
+] <prop_fixed_close_solns_lowprob>
+#proof[
+  For $x != x'$, let $J subeq [N]$ denote the subset of coordinates in which $x,x'$ differ, i.e. $x_J != x'_J$; by assumption, $abs(J) <= k$.
+  In particular, we can write
+  $ x = x_([N] without J) + x_J, #h(5em) x' = x_([N] without J) - x_J. $
+  Thus, for a fixed $x,x'$, if
+  $ -2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E), $
+  we can expand this into
+  $
+    -2^(-E) <= &inn(g,x_([N] without J)) + inn(g,x_J) <= 2^(-E), \
+    -2^(-E) <= &inn(g,x_([N] without J)) - inn(g,x_J) <= 2^(-E).
+  $
+  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives
+  $ abs(inn(g,x_J)) <= 2^(-E), $
+  where $inn(g,x_J)$ is a $Normal(0,k)$ r.v. (note that $k>0$ so it is nondegenerate). Moreover, as $k=O(1)$, we get by the logic in @lem_correlated_solution_lowprob that
+  $
+    PP(x in Soln(g) "and" x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
+  $
 ]
-#show bibliography: set heading(numbering: none)
 
-#bibliography(full: true, "references.bib")
+#theorem[Solutions Can't Be Close][
+  Let $k=O(1)$ and $E >> log N$.
+  Then for any instance $g$, with high probability there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$.
+] <thrm_solutions_repel>
+#proof[
+  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of at most $k$ coordinates $J subset[N]$ of $g$ and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
+  For any $g$, there are at most $2^k=O(1)$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5],
+  $ sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k = O(N^k) $
+  choices of such subsets.
+  Union bounding @prop_fixed_close_solns_lowprob over these $O(N^k)$ choices, we get that
+  $
+    PP multiprob(exists x\,x' "s.t.", (upright(I)) #h(0.5em) norm(x-x') <= 2sqrt(k)\,, (upright(I I)) #h(0.3em) &x\,x' in Soln(g))
+  <= PP multiprob(exists J subset [N]\, x_J in {plus.minus 1}^k "s.t.",
+     (upright(I)) #h(0.65em) abs(J) <= k\,,
+     (upright(I I)) #h(0.3em) abs(inn(g_J,x_J)) <= exp(-E))
+  <= exp(-E + O(log N)) = o(1). #qedhere
+  $
+]
 
-// sw=2 ts=2 sts=2
+Argument:
+- Algorithm $alg$ which is deterministic $RR^N -> RR^N$. Suppose $tilde(A): RR^N -> Sigma^N$ is $alg$ passed through any nontrivial rounding procedure.
+- Say $alg(g) = x$. Let $x^* in Sigma_N$ be closest point to $x$, and $tilde(x)=tilde(A)(g)$ be the rounding of $x$.
+- If $x^* = tilde(x)$, we're done.
+- Else, we know that only one of $x^*$ and $tilde(g)$ are a good solution, by @thrm_solutions_repel. It's $x^*$ with probability $p_"solve"$.
+  - Here, we're assuming randomized rounding changes at most some $O(1)$ amount of coordinates.
+-
 
 
+Meow meow
+Thus, rounding would destroy the solution.
 
 
+- Say we're in the case where rounding changes the solution. (i.e. rounding moves $x$ to point that is not the closest point $x_*$, whp.)
+- Let $p_1,dots,p_N$ be the probabilities of disagreeing with $x_*$ on each coordinate.
+  - We know that $sum p_i$ diverges (this is equivalent to the statement that rounding will changes the solution whp).
+  - Reason: for each coord, chance of staying at that coordinate is $e^(-Theta(p_i))$.
+- For each $i$, flip coin with heads prob $2p_i$, and keep all the heads.
+  - By Borel-Cantelli type argument, typical number of heads will be $omega(1)$.
+- For every coin with a head, change coord with prob 50%, if tails, keep coord.
+  - Randomized rounding in artificially difficult way. (I.e. this multistage procedure accomplishes the same thing as randomized rounding.)
+- Now, randomized rounding is done by choosing a random set of $omega(1)$ coordinates, and making those iid Uniform in ${-1,1}$.
+- Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100\leq omega(1)$, there are at least 100 heads whp.
+- Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
+- Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#bibliography("references.bib", full: true)
