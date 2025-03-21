@@ -117,10 +117,10 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
 #theorem[Solutions Can't Be Close][
   Let $k=O(1)$ and $E >> log N$.
   Then for any instance $g$, with high probability there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$.
-]
+] <thrm_solutions_repel>
 #proof[
-  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of coordinates $J subset[N]$ of $g$ and $k$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
-  For any $g$, there are $2^k=O(1)$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5],
+  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of at most $k$ coordinates $J subset[N]$ of $g$ and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
+  For any $g$, there are at most $2^k=O(1)$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5],
   $ sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k = O(N^k) $
   choices of such subsets.
   Union bounding @prop_fixed_close_solns_lowprob over these $O(N^k)$ choices, we get that
@@ -133,6 +133,13 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
   $
 ]
 
+Argument:
+- Algorithm $alg$ which is deterministic $RR^N -> RR^N$. Suppose $tilde(A): RR^N -> Sigma^N$ is $alg$ passed through any nontrivial rounding procedure.
+- Say $alg(g) = x$. Let $x^* in Sigma_N$ be closest point to $x$, and $tilde(x)=tilde(A)(g)$ be the rounding of $x$.
+- If $x^* = tilde(x)$, we're done.
+- Else, we know that only one of $x^*$ and $tilde(g)$ are a good solution, by @thrm_solutions_repel. It's $x^*$ with probability $p_"solve"$.
+  - Here, we're assuming randomized rounding changes at most some $O(1)$ amount of coordinates.
+-
 
 
 Meow meow

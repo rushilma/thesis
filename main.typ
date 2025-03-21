@@ -155,6 +155,7 @@
   #lorem(100)
 ]
 
+// Outline
 #show outline: it => {
   v(150pt)
   align(right)[#text(size: 30pt)[#it.title]]
