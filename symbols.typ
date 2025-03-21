@@ -35,3 +35,15 @@
       brace.r$,
   )
 )
+
+#let multiprob(..x) = (
+  math.lr(
+    size: 100% + 1em,
+    $paren.l
+      #stack(
+        spacing: 0.7em,
+        ..x.pos().map(it => align(left, it)),
+      )
+      paren.r$,
+  )
+)

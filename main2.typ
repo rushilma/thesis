@@ -81,16 +81,61 @@
 
 /// Results
 
-// #include "results.typ"
-
-#include "results2.typ"
+#include "results.typ"
 
 = Randomized Rounding Things
 
 Claim: no two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
 The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
 
+#proposition[
+  Fix distinct points $x,x' in Sigma_N$ with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), for $k=O(1)$, and let $g$ be any instance.
+  Then,
+  $
+    PP(x in Soln(g) "and" x' in Soln(g)) <= exp(-E + O(1)).
+  $
+] <prop_fixed_close_solns_lowprob>
+#proof[
+  For $x != x'$, let $J subeq [N]$ denote the subset of coordinates in which $x,x'$ differ, i.e. $x_J != x'_J$; by assumption, $abs(J) <= k$.
+  In particular, we can write
+  $ x = x_([N] without J) + x_J, #h(5em) x' = x_([N] without J) - x_J. $
+  Thus, for a fixed $x,x'$, if
+  $ -2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E), $
+  we can expand this into
+  $
+    -2^(-E) <= &inn(g,x_([N] without J)) + inn(g,x_J) <= 2^(-E), \
+    -2^(-E) <= &inn(g,x_([N] without J)) - inn(g,x_J) <= 2^(-E).
+  $
+  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives
+  $ abs(inn(g,x_J)) <= 2^(-E), $
+  where $inn(g,x_J)$ is a $Normal(0,k)$ r.v. (note that $k>0$ so it is nondegenerate). Moreover, as $k=O(1)$, we get by the logic in @lem_correlated_solution_lowprob that
+  $
+    PP(x in Soln(g) "and" x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
+  $
+]
 
+#theorem[Solutions Can't Be Close][
+  Let $k=O(1)$ and $E >> log N$.
+  Then for any instance $g$, with high probability there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$.
+]
+#proof[
+  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of coordinates $J subset[N]$ of $g$ and $k$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
+  For any $g$, there are $2^k=O(1)$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5],
+  $ sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k = O(N^k) $
+  choices of such subsets.
+  Union bounding @prop_fixed_close_solns_lowprob over these $O(N^k)$ choices, we get that
+  $
+    PP multiprob(exists x\,x' "s.t.", (upright(I)) #h(0.5em) norm(x-x') <= 2sqrt(k)\,, (upright(I I)) #h(0.3em) &x\,x' in Soln(g))
+  <= PP multiprob(exists J subset [N]\, x_J in {plus.minus 1}^k "s.t.",
+     (upright(I)) #h(0.65em) abs(J) <= k\,,
+     (upright(I I)) #h(0.3em) abs(inn(g_J,x_J)) <= exp(-E))
+  <= exp(-E + O(log N)) = o(1). #qedhere
+  $
+]
+
+
+
+Meow meow
 Thus, rounding would destroy the solution.
 
 

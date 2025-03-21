@@ -62,7 +62,10 @@ We want to find $x in Sigma_N$ such that we minimize $abs(inn(x, g))$.
 
 Conventions:
 + $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
-+
++ If $x in RR^N$ and $S subeq [N]$, then $x_S$ is vector with
+  $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
+  In particular, for $x,y in RR^N$,
+  $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
 
 Glossary:
 + "instance"/"disorder" - $g$, instance of the NPP problem
