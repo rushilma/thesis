@@ -2,10 +2,6 @@
 
 #import "symbols.typ": *
 
-// TODO:
-// - Write theorems explaining the actual results
-// - Finish algorithms section
-
 = Proof of Strong Low-Degree Hardness
 
 In this section, we prove strong low-degree hardness for both low-degree polynomial algorithms and algorithms with low Efron-Stein degree.
