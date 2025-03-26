@@ -12,12 +12,14 @@
 #let RR = $upright(bold(R))$
 
 #let Unif(x) = $"Unif"lr(paren.l #x paren.r)$
+#let Bern(x) = $"Bern"lr(paren.l #x paren.r)$
 #let Bin(x, y) = $"Bin"lr(paren.l #x, #y paren.r)$
 #let Normal(x, y) = $cal(N)lr(paren.l #x, #y paren.r)$
 #let stdnorm = $Normal(0,I_N)$
 
 #let L2iid = $L^2(RR^N,pi^(times.circle N))$
 #let subeq = $subset.eq$
+#let round = $sans("round")$
 
 #let L2norm = $L^2(RR,gamma)$
 #let L2normN = $L^2(RR^N,gamma^N)$

@@ -38,7 +38,7 @@
   first-line-indent: (amount: 1.2em, all: false),
 )
 
-#show math.equation: set text(font: "STIX Two Math")
+#show math.equation: set text(font: "STIX Two Math", size: 11pt)
 
 // 2 level math numbering
 

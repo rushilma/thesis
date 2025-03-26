@@ -47,6 +47,10 @@
   "theorem",
   "Definition",
 )
+#let remark = thmthesis(
+  "theorem",
+  "Remark",
+)
 #let example = thmthesis(
   "example",
   "Example",
