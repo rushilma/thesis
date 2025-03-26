@@ -5,7 +5,7 @@
 = Introduction
 
 Let $g_1,dots,g_N$ be $N$ real numbers.
-The #emph[number partitioning problem (NPP)] asks: what is the subset $A$ of $[N]:={1,2,dots,N}$ such that the sum of the $g_i$ for $i in A$ and the sum of the remaining $g_i$ are as close as possible?
+The _number partitioning problem (NPP)_ asks: what is the subset $A$ of $[N]:={1,2,dots,N}$ such that the sum of the $g_i$ for $i in A$ and the sum of the remaining $g_i$ are as close as possible?
 More formally, the $A$ we want to find is the one minimizing the discrepancy
 $ abs(sum_(i in A) g_i - sum_(i in.not A) g_i). $
 
@@ -20,11 +20,11 @@ The goal is now to find the $x$ minimizing this discrepancy:
 $ min_(x in Sigma_N) abs(inn(g,x)). $
 
 #definition[
-  Let $x in Sigma_N$. The #emph[energy] of $x$ (with respect to the instance $g$) is
+  Let $x in Sigma_N$. The _energy_ of $x$ (with respect to the instance $g$) is
   $
     E(x;g) := - log_2 abs(inn(g,x)).
   $
-  The #emph[solution set $S(E;g)$] is the set of all $x in Sigma_N$ that have energy at least $E$, i.e. that satisfy
+  The _solution set $S(E;g)$_ is the set of all $x in Sigma_N$ that have energy at least $E$, i.e. that satisfy
   $
     abs(inn(g,x)) <= 2^(-E).
   $ <eq_npp>

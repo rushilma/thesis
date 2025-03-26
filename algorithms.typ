@@ -4,16 +4,16 @@
 
 = Low-Degree Algorithms
 
-For our purposes, an #emph[algorithm] is a function which takes as input a problem instance $g ~ stdnorm$ and outputs some $x in Sigma_N$.
+For our purposes, an _algorithm_ is a function which takes as input a problem instance $g ~ stdnorm$ and outputs some $x in Sigma_N$.
 This definition can be extended to functions giving outputs on $RR^N$ (and rounding to a vertex on the hypercube $Sigma_N$), or to taking as additional input some randomness $omega$, allowing for randomized algorithms.
 However, most of our analysis will focus on the deterministic case.
 
-To further restrict the category of algorithms considered, we specifically restrict to #emph[low-degree algorithms].
+To further restrict the category of algorithms considered, we specifically restrict to _low-degree algorithms_.
 Compared to analytically-defined classes of algorithms (e.g. Lipschitz), these algorithms have a regular algebraic structure that we can exploit to precisely control their stability properties.
-In particular, our goal is to show #emph[strong low-degree hardness], in the sense of @huangStrongLowDegree2025[Def. 3].
+In particular, our goal is to show _strong low-degree hardness_, in the sense of @huangStrongLowDegree2025[Def. 3].
 
 #definition[Strong Low-Degree Hardness][
-  A random search problem, namely a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N(y_N) subeq Sigma_N$, exhibits #emph[strong low-degree hardness up to degree $D <= o(D_N)$] if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  A random search problem, namely a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N(y_N) subeq Sigma_N$, exhibits _strong low-degree hardness up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
   $ PP(alg(y_N) in S_N) <= o(1). $
 ]
 
@@ -26,7 +26,7 @@ For the case of NPP, we consider two distinct notions of degree.
 One is traditional polynomial degree, which has an intuitive interpretation, but the other, which we term Efron-Stein degree, is a more flexible notion which can be applied to a much broader class of algorithms.
 As we will see in @section_proof, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
 
-== Efron-Stein Degree and $L^2$ Stability
+== Coordinate Degree and $L^2$ Stability
 
 First, we consider a very general class of putative algorithms, where the notion of "degree" corresponds to how complex the interactions between the input variables can get.
 Given this notion, deriving stability bounds becomes a straightforward piece of functional analysis.
@@ -47,7 +47,7 @@ To formalize this intuition, we define the following coordinate projection:
 
 // Def. Projection of function.
 #definition[
-  Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$. The #emph[projection of $f$ onto $J$] is the function
+  Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$. The _projection of $f$ onto $J$_ is the function
   $f^(subeq J): RR^N to RR$ given by
   $ f^(subeq J)(x) = EE[f(x_1,dots,x_n) | x_i, i in J]. $
   This is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on $x_J$.
@@ -60,8 +60,8 @@ $ f = sum_(S subeq [N]) f^(= S) $ <eq_efron_stein_decomp>
 where each $f^(=S)$ only depends on the coordinates in $S$, but not any smaller subset.
 That is, if $T subset.eq.not S$ and $g$ depends only on the coordinates in $T$, then $inn(f^(=S), g)=0$.
 
-This decomposition, often called the #emph[Efron-Stein decomposition], does indeed exist, and exhibits the following combinatorial construction.
-Our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3] (who refers to this as the #emph[orthogonal decomposition]).
+This decomposition, often called the _Efron-Stein decomposition_, does indeed exist, and exhibits the following combinatorial construction.
+Our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3] (who refers to this as the _orthogonal decomposition_).
 
 The motivating fact is that we should expect that for any $J subeq [N]$, we should have
 $ f^(subeq J) = sum_(S subeq J) f^(=S). $ <eq_efron_stein_motiv>
@@ -130,7 +130,7 @@ In summary, this desired decomposition of any $L2iid$ function into it's differe
 We can finally define the Efron-Stein notion of "degree":
 
 #definition[
-  The #emph[Efron-Stein degree] of a function $f in L2iid$ is
+  The _Efron-Stein degree_ of a function $f in L2iid$ is
   $ deg_"ES" (f) = max_(S subeq [N] "s.t." f^(=S)!= 0) |S|. $
   If $f=(f_1,dots,f_M): RR^N to RR^M$ is a multivariate function, then the Efron-Stein degree of $f$ is the maximum degree of the $f_i$.
 ]
@@ -141,11 +141,11 @@ As we are interested in how these function behaves under small changes in its in
 First, we need the following notion of distance between problem instances:
 
 #definition[
-  For $p in [0,1]$, and $x in RR^N$, we say $y in RR^N$ is #emph[$p$-resampled from $x$] if $y$ is chosen as follows: for each $i in [N]$, independently,
+  For $p in [0,1]$, and $x in RR^N$, we say $y in RR^N$ is _$p$-resampled from $x$_ if $y$ is chosen as follows: for each $i in [N]$, independently,
   $
     y_i = cases(x_i &"with probability" p, "drawn from" pi #h(2em)&"with probability" 1-p).
   $
-  We say $(x,y)$ is a #emph[$p$-resampled pair].
+  We say $(x,y)$ is a _$p$-resampled pair_.
 ] <def_p_resampled>
 
 Note that being $p$-resampled and being $p$-correlated are rather different - for one, there is a nonzero probability that, for $pi$ a continuous probability distribution, $x=y$ when they are $p$-resampled, even though this a.s. never occurs.
@@ -153,7 +153,7 @@ Note that being $p$-resampled and being $p$-correlated are rather different - fo
 // #show sym.EE: math.limits
 
 #definition[
-  For $p in [0,1]$, the #emph[noise operator] is the linear operator $T_p$ on $L2iid$, defined by, for $y$ $p$-resampled from $x$
+  For $p in [0,1]$, the _noise operator_ is the linear operator $T_p$ on $L2iid$, defined by, for $y$ $p$-resampled from $x$
   $ T_p f(x) = EE_(y " " p"-resampled from" x)[f(y)] $
   In particular, $inn(f,T_p f) = EE_((x,y)" " p"-resampled") [f(x) dot f(y)]$.
 ]
@@ -212,20 +212,20 @@ Putting these facts together, we can derive the following stability bound on fun
 
 == Hermite Polynomials
 
-Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of #emph[Hermite polynomials], which enables us to prove similar bounds as @thrm_es_stability.
+Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of _Hermite polynomials_, which enables us to prove similar bounds as @thrm_es_stability.
 This theory is much more classical, so we encourage the interested reader to see @odonnellAnalysisBooleanFunctions2021[#sym.section 11] for details.
 
 To start, we consider the following space of $L^2$ functions:
 
 #definition[
-  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the #emph[$N$-dimensional Gaussian space] is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal random variables.
+  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal random variables.
 ]
 
 Note that under the usual $L^2$ inner product, $inn(f,g) = EE[f dot g]$, this is a separable Hilbert space.
 
 It is a well-known fact that the monomials $1,z,z^2,dots$ form a complete basis for $L2norm$ @odonnellAnalysisBooleanFunctions2021[Thm 11.22].
 However, these are far from an orthonormal "Fourier" basis; for instance, we know $EE[z^2]=1$ for $z ~ Normal(0,1)$.
-By the Gram-Schmidt process, these monomials can be converted into the #emph[(normalized) Hermite polynomials] $h_j$ for $j>=0$, given as
+By the Gram-Schmidt process, these monomials can be converted into the _(normalized) Hermite polynomials_ $h_j$ for $j>=0$, given as
 $
   h_0(z)=1,
 #h(2em)
@@ -264,7 +264,7 @@ Thus, $H^(<= k)$ is the closed linear span of the set ${ h_alpha : abs(alpha) <=
 When working with honest polynomials, the traditional notion of correlation is a much more natural measure of "distance" between inputs:
 
 #definition[
-  Let $(x,y)$ be $N$-dimensional standard Normal vectors. We say $(x,y)$ are #emph[$p$-correlated] if $(x_i,y_i)$ are $p$-correlated for each $i in [N]$, and these pairs are mutually independent.
+  Let $(x,y)$ be $N$-dimensional standard Normal vectors. We say $(x,y)$ are _$p$-correlated_ if $(x_i,y_i)$ are $p$-correlated for each $i in [N]$, and these pairs are mutually independent.
 ]
 
 In a similar way to the Efron-Stein case, we can consider the resulting "noise operator," as a way of measuring a the effect on a function of a small change in the input.
@@ -272,7 +272,7 @@ In a similar way to the Efron-Stein case, we can consider the resulting "noise o
 #show sym.EE: math.limits
 
 #definition[
-  For $p in [0,1]$, the #emph[Gaussian noise operator] $T_p$ is the linear operator on $L2normN$, given by
+  For $p in [0,1]$, the _Gaussian noise operator_ $T_p$ is the linear operator on $L2normN$, given by
   $
     T_p f(x) = EE_(y " " p"-correlated to" x)[f(y)] = EE_(y ~ stdnorm )[ f(p x + sqrt(1-p^2) y)]
   $
@@ -315,19 +315,19 @@ In exchange, being able to use $p$-correlation as a "metric" on the input domain
 With these notions of low-degree functions/polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
-  A #emph[(randomized) algorithm] is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is #emph[deterministic] if it does not depend on $omega$.
+  A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
 
 In practice, we want to consider $RR^N$-valued algorithms as opposed to $Sigma_N$-valued ones to avoid the resulting restrictions on the component functions. These can then be converted to $Sigma_N$-valued algorithms by some rounding procedure. We discuss the necessary extensions to handling this rounding in (section ???).
 
 #definition[
-  A #emph[polynomial algorithm] is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
+  A _polynomial algorithm_ is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
 ]
 
 We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of Efron-Stein degree:
 
 #definition[
-  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the #emph[Efron-Stein degree] of $alg$ is the maximum Efron-Stein degree of each of its coordinate functions.
+  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _Efron-Stein degree_ of $alg$ is the maximum Efron-Stein degree of each of its coordinate functions.
 ]
 
 By the low-degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
