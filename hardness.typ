@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Proof of Strong Low-Degree Hardness
+= Proof of Strong Low-Degree Hardness <section_proof>
 
 In this section, we prove strong low-degree hardness for both low-degree polynomial algorithms and algorithms with low Efron-Stein degree.
 
@@ -27,7 +27,7 @@ We start with some setup which will apply, with minor modifications depending on
 After proving some preliminary estimates, we establish the existence of our conditional landscape obstruction, which is of independent interest.
 Finally, we conclude by establishing low-degree hardness in both the linear and sublinear energy regimes.
 
-== Proof Outline and Preliminary Estimates
+== Proof for Low Degree Algorithms
 
 // Degree $D$ polynomials
 
@@ -89,6 +89,117 @@ $ PP(S_"solve") + PP(S_"stable") + PP(S_"cond") <= 2, $
 and rearranging, we get that
 $ p_"solve"^2 <= p_"unstable" + p_"cond" $ <eq_poly_fundamental>
 Our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, we have $p_"unstable",p_"cond" = o(1)$.
+
+=== Conditional obstruction
+First, we consider the conditional probability of any fixed $x in Sigma_N$ solving a $(1-epsilon)$-correlated problem instance $g'$, given $g$:
+
+#lemma[Suppose $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors, and let $x in Sigma_N$. Then
+  $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= exp(-E - 1/2 log(epsilon) + O(log N)). $
+] <lem_correlated_solution_lowprob>
+#proof[
+  Let $tilde(g)$ be an independent Normal vector to $g$, and observe that $g'$ can be represented as
+  $g' = p g + sqrt(1-p^2)tilde(g)$,
+  for $p=1-epsilon$.
+  Thus, $inn(g',x) = p inn(g,x) + sqrt(1-p^2)inn(tilde(g),x)$.
+  Observe $inn(g,x)$ is constant given $g$, and $inn(tilde(g),x)$ is a Normal r.v. with mean 0 and variance $N$, so $inn(g',x) ~ Normal(p inn(g,x), (1-p^2)N)$.
+  This random variable is nondegenerate for $(1-p^2)N > 0$, with density bounded above as
+  $
+    phi_(g)(z) &= 1 / (sqrt(2pi (1-p^2)N)) e^(- (z-p inn(g,x))^2 / (2(1-p^2)N)) <= 1 / sqrt(2 pi (1-p^2) N) \
+    &<= 1 / sqrt(2 pi epsilon N) = exp (-1 / 2 log (epsilon) + O(log N))
+  $
+  Integrating this bound over the interval $abs(z) <= 2^(-E)$, we conclude that
+  $
+    PP(abs(inn(g',x)) <= 2^(-E) | g) = integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= exp(-E - 1/2 log(epsilon) + O(log N)). #qedhere
+  $
+]
+
+Note for instance that $epsilon$ can be exponentially small in $E$ (e.g. $epsilon = exp(-E slash 10)$), which for the case $E = Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
+
+Putting together these bounds, we conclude the following fundamental estimates of $p_"cond"$, i.e. of the failure of our conditional landscape obstruction.
+
+#proposition[Fundamental Estimate -- Correlated Case][
+  Assume that $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors. Then, for any $x$ only depending on $g$,
+  $
+    p_"cond" = PP(
+      multiset(
+        exists x' in Soln(g') "such that",
+        norm(x-x') <= 2sqrt(eta N),
+      )
+    ) <= exp(-E + -1/2 log(epsilon) + 2 eta log(1 / eta) N + O(log N)).
+  $
+] <prop_correlated_fundamental>
+#proof[
+  Observe that
+  $
+    p_"cond" = EE[ PP( // attach(S_"cond", tl: not)
+      multiset(
+        exists x' "s.t.",
+        (upright(I)) #h(0.45em) abs(inn(g',x')) <= exp(-E),
+        (upright(I I)) #h(0.1em) norm(x-x') <= 2sqrt(eta N),
+      )
+      mid(|) g )].
+  $
+  Then, for fixed $x$, we know there are $exp(2 eta log(1 slash eta)N)$-many $x'$ satisfying condition (II), with each having an exponentially small probability of satisfying condition (I).
+  Thus, we conclude by union bounding @lem_correlated_solution_lowprob (which is independent of $g$) over @lem_hypercube_counting.
+]
+
+Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
+This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
+These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low-degree hardness-type result.
+
+#theorem[
+  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
+  Then, for any degree $D <= o(exp(delta N slash 2))$ polynomial algorithm $alg$ (with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_poly_linear>
+#proof[
+  Recall from @eq_poly_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
+  Further, by @prop_correlated_fundamental, we have
+  $ p_"cond" <= exp(-E - 1/2 log(epsilon) + 2 eta log(1 / eta) N + O(log N)) $
+  Thus, first choose $eta$ sufficiently small, such that $2 eta log(1 slash eta) < delta slash 4$ -- this results in $eta$ being independent of $N$.
+  Next, choose $epsilon = exp(- delta N slash 2)$. This gives
+  $
+    p_"cond" <= exp(- delta N - 1/2 (-(delta N)/2) + (delta N) / 4 + O(log N)) = exp(- (delta N)/2 + O(log N)) = o(1).
+  $
+  Moreover, for $D <= o(exp(delta N slash 2))$, we get by @prop_alg_stability that
+  $
+    p_"unstable" <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta asymp D dot exp(- (delta N)/2) -> 0.
+  $
+  By @eq_poly_fundamental, we conclude that $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, thus completing the proof.
+]
+
+Remark that this implies poly algs are really bad, requiring ~double exponential time.
+In this section, we let $omega((log N)^2) <= E <= o(N)$.
+
+#theorem[
+  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
+  Then, for any polynomial algorithm $alg$ with degree $D <= o(exp(E slash 4))$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_poly_sublinear>
+#proof[
+  As in @thrm_sldh_poly_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
+  To do this, we choose
+  $ epsilon = exp(-E/2), #h(5em) eta = E / (16 N log (N slash E)). $
+  With this choice of $eta$, some simple analysis shows that for $E / N << 1$, we have that
+  $ E / (4 N) > 2 eta log(1 slash eta). $
+  Thus, by @prop_correlated_fundamental, we get
+  $
+    p_"cond" &<= exp(-E - 1/2 log(epsilon) + 2 eta log(1/eta) N + O(log N)) \
+    &<= exp(-E + E/4 + E/4 + O(log N)) = exp(-E/2 + O(log N)) = o(1).
+  $
+  where the last equality follows as $E >> log N$.
+  Then, by @prop_alg_stability, the choice of $D = o(exp(E slash 4))$ gives
+  $
+    p_"unstable" &<= (C D epsilon) / (2 eta)
+    asymp (D epsilon N log(N slash E)) / E \
+    &= (D exp(-E slash 2) N log(N slash E)) / E
+    <= (D exp(-E slash 2) N log(N)) / E \
+    &<= D exp(-E/2 + log(N) + log log(N) - log(E)) \
+    &<= exp(-E/4 + log(N) + log log(N) - log(E)) = o(1),
+  $
+  again, as $E >> log N$.
+  Ergo, by @eq_poly_fundamental, $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, as desired.
+]
+
+== Proof for Low Coordinate-Degree Algorithms
 
 // Degree $D$ functions
 
@@ -159,6 +270,129 @@ $ <eq_es_fundamental>
 
 As before, our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, that $p_"unstable",p_"cond" = o(1)$. However, this also requires us to choose $epsilon >> 1/N$, so as to ensure that $g != g'$, as otherwise $p_"unstable",p_"cond"$ would be too large. This restriction on $epsilon$ effectively limits us from showing hardness for algorithms with degree larger than $o(N)$, as we will see shortly.
 
+Our goal is to show that in both cases, whether we consider $g'$ correlated to or resampled from $g$,
+$
+  p_"cond" = PP(
+  multiset(
+    exists x' in Soln(g') "such that",
+    norm(x-x') <= 2sqrt(eta N),
+  ) mid(|) g != g'
+) = o(1).
+$
+(Of course, the condition $g != g'$ is vacuously true for $(g,g')$ $(1-epsilon)$-correlated.
+
+To this end, we start by bounding the size of neighborhoods on $Sigma_N$.
+
+
+#proposition[Hypercube Neighborhood Size][
+  Fix $x in Sigma_N$, and let $eta <= 1/2$. Then the number of $x'$ within distance $2 sqrt(eta N)$ of $x$ is
+  $
+    abs({x' in Sigma_N | norm(x-x') <= 2eta sqrt(N)})
+    <= exp(2 eta log (1 slash eta)N )
+  $
+] <lem_hypercube_counting>
+#proof[
+  Let $k$ be the number of coordinates which differ between $x$ and $x'$ (i.e. the Hamming distance).
+  We have $norm(x-x')^2=4k$, so $norm(x-x') <= 2 sqrt(eta N)$ iff $k <= N eta$.
+  Moreover, for $eta <= 1/2$, $k <= N/2$.
+  Thus, by @lem_chernoff_hoeffding, we get
+  $
+    sum_(k <= N eta) binom(N,k) <= exp(N h(eta))
+    <= exp(2 eta log(1 slash eta)N ). #qedhere
+  $
+]
+
+This shows that within a small neighborhood of any $x in Sigma_N$, the number of nearby points is exponential in $N$, with a more nontrivial dependence on $eta$. The question is how many of these are solutions to a correlated/resampled instance.
+
+Next, we bound the same probability of a fixed $x$ solving a resampled instance. Here, we need to condition on the resampled instance being different, as otherwise the probability in question can be made to be 1 if $x$ was chosen to solve $g$.
+
+#lemma[Suppose $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors, and let $x in Sigma_N$. Then,
+  $ PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= exp(-E + O(1)). $
+] <lem_resampled_solution_lowprob>
+#proof[
+  Let $S={ i in [N] : g_i != g'_i}$ be the set of indices where $g$ and $g'$ differ. We can express
+  $
+    inn(g',x) = sum_(i in [N]) g'_i x_i = sum_(i in.not S)g_i x_i + sum_(i in S) g_i' x_i ~ Normal(sum_(i in.not S)g_i x_i, abs(S)).
+  $
+  The conditional distribution of interest can now be expressed as
+  $PP(abs(inn(g',x)) <= 2^(-E) | g, abs(S)>= 1)$.
+  Given $abs(S) >= 1$, the quantity $inn(g',x')$ is a nondegenerate random variable, with density bounded above as
+  $
+    phi_(g,abs(S))(z) = 1 / (sqrt(2pi abs(S)) )e^(- (z - sum_(i in.not S)g_i x_i )^2 / (2abs(S))) <= 1 / sqrt(2 pi abs(S)) <= 1 / sqrt(2 pi).
+  $
+  Hence, the quantity of interest can be bounded as
+  $
+    PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= sqrt(2/pi) exp(-E) = exp(-E + O(1)). #qedhere
+  $
+]
+
+Note that in contrast to @lem_correlated_solution_lowprob, this bound doesn't involve $epsilon$ at all, but the condition $g!= g'$ requires $epsilon = omega(1 slash N)$ to hold w.p. 1.
+
+By the same proof, using @lem_resampled_solution_lowprob instead of @lem_correlated_solution_lowprob, we show:
+
+#proposition[Fundamental Estimate -- Resampled Case][
+  Assume that $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors. Then, for any $x$ only depending on $g$,
+  $
+    p_"cond" = PP(
+      multiset(
+        exists x' in Soln(g') "such that",
+        norm(x-x') <= 2sqrt(eta N),
+      ) mid(|) g != g'
+    ) <= exp(-E + 2 eta log(1 / eta) N + O(1)).
+  $
+] <prop_resampled_fundamental>
+
+Linear case
+
+#theorem[
+  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_es_linear>
+#proof[
+  Recall from @eq_es_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$.
+  By @lem_sdiff_prob, the latter condition is satisfied for $epsilon = omega(1 slash N)$.
+  Thus, pick $epsilon = log(N slash D) / N$: note that this satisfies $N epsilon = log(N slash D) >> 1$, for $D = o(N)$.
+  Next, choose $eta$ such that $2 eta log(1 slash eta) < delta slash 4$ -- again, this results in $eta$ being independent of $N$.
+  By @prop_resampled_fundamental we get
+  $
+    p_"cond" <= exp(- delta N + (delta N) / 4 + O(1) ) = o(1).
+  $
+  Moreover, for $D <= o(N)$, @prop_alg_stability now gives
+  $
+    p_"unstable" <= (C D epsilon) / (2 eta) asymp D dot log(N slash D) / N -> 0,
+  $
+  as $x log(1 slash x) -> 0$ for $x << 1$.
+  By @eq_es_fundamental, we conclude that $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
+]
+
+Sublinear case
+
+#theorem[
+  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(E slash log^2 N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
+] <thrm_sldh_es_sublinear>
+#proof[
+  As in @thrm_sldh_es_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$ (i.e., with $epsilon= omega(1 slash N)$.
+  As before, pick $epsilon = log(N slash D) slash N$, ensuring that $N epsilon = log(N slash D) >> 1$ (for $D = o(N)$, which holds as $E <= o(N)$).
+  Now recall that by @prop_resampled_fundamental we have
+  $
+    p_"cond" <= exp(- E + 2 eta log(1 slash eta) N + O(1) ).
+  $
+  In particular, if we choose
+  $ eta = E / (16 N log (N slash E)), $
+  we have that
+  $ E / (4 N) > 2 eta log(1 slash eta) $
+  for $E slash N << 1$, thus ensuring $p_"cond" <= exp(-3 E slash 4 + O(1)) = o(1)$ (as $E >> log N$).
+  Finally, the choice of $D <= o(E slash log^2 N)$ combined with @prop_alg_stability now gives
+  $
+    p_"unstable" &<= (C D epsilon) / (2 eta)
+    asymp (D epsilon N log(N slash E)) / E \
+    &= (D log(N slash D) log(N slash E)) / E
+    <= (D log^2 N) / E -> 0
+  $
+  By @eq_es_fundamental, $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
+]
+
 == Summary of Parameters
 
 #figure(
@@ -189,257 +423,3 @@ As before, our proof follows by showing that, for appropriate choices of $epsilo
   caption: [Explanation of Parameters],
 ) <parameter_table>
 
-== Conditional Landscape Obstruction <section_proof>
-
-Our goal is to show that in both cases, whether we consider $g'$ correlated to or resampled from $g$,
-$
-  p_"cond" = PP(
-  multiset(
-    exists x' in Soln(g') "such that",
-    norm(x-x') <= 2sqrt(eta N),
-  ) mid(|) g != g'
-) = o(1).
-$
-(Of course, the condition $g != g'$ is vacuously true for $(g,g')$ $(1-epsilon)$-correlated.
-
-To this end, we start by bounding the size of neighborhoods on $Sigma_N$.
-
-#lemma[
-  Suppose that $K <= N slash 2$, and let $h(x)=-x log(x) - (1-x) log(x)$ be the binary entropy function. Then, for $p := K slash N$,
-  $ sum_(k <= K) binom(N,k) <= exp(N h(p)) <= exp(2 N p log(1/p)). $
-  // https://mathoverflow.net/questions/473730/bounding-a-binomial-coefficient-using-the-binary-entropy-function#mjx-eqn-20
-] <lem_chernoff_hoeffding>
-#proof[
-  Consider a $Bin(N,p)$ random variable $S$. Summing its PMF from $0$ to $K$, we have
-  $
-    1 >= PP(S <= K) = sum_(k <= K) binom(N,k) p^k (1-p)^(N-k) >= sum_(k<= K) binom(N,k) p^K (1-p)^(N-K).
-  $
-  Here, the last inequality follows from the fact that $p <= (1-p)$, and we multiply each term by $(p/(1-p))^(K-k)<1$.
-  Now rearrange to get
-  $
-    sum_(k <= K) binom(N,k) &<= p^(-K) (1-p)^(-(N-K)) \ &= exp(-K log(p) - (N-K) log(1-p)) \
-    &= exp(N dot (-K/N log(p) - ((N-K)/N) log(1-p))) \
-    &= exp(N dot (-p log(p) - (1-p) log (1-p)) ) = exp(N h(p)).
-  $
-  The final equality then follows from the bound $h(p) <= 2 p log(1 slash p)$ for $p <= 1 slash 2$.
-]
-
-#proposition[Hypercube Neighborhood Size][
-  Fix $x in Sigma_N$, and let $eta <= 1/2$. Then the number of $x'$ within distance $2 sqrt(eta N)$ of $x$ is
-  $
-    abs({x' in Sigma_N | norm(x-x') <= 2eta sqrt(N)})
-    <= exp(2 eta log (1 slash eta)N )
-  $
-] <lem_hypercube_counting>
-#proof[
-  Let $k$ be the number of coordinates which differ between $x$ and $x'$ (i.e. the Hamming distance).
-  We have $norm(x-x')^2=4k$, so $norm(x-x') <= 2 sqrt(eta N)$ iff $k <= N eta$.
-  Moreover, for $eta <= 1/2$, $k <= N/2$.
-  Thus, by @lem_chernoff_hoeffding, we get
-  $
-    sum_(k <= N eta) binom(N,k) <= exp(N h(eta))
-    <= exp(2 eta log(1 slash eta)N ). #qedhere
-  $
-]
-
-This shows that within a small neighborhood of any $x in Sigma_N$, the number of nearby points is exponential in $N$, with a more nontrivial dependence on $eta$. The question is how many of these are solutions to a correlated/resampled instance.
-
-First, we consider the conditional probability of any fixed $x in Sigma_N$ solving a $(1-epsilon)$-correlated problem instance $g'$, given $g$:
-
-
-#lemma[Suppose $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors, and let $x in Sigma_N$. Then
-  $ PP(abs(inn(g',x)) <= 2^(-E) | g) <= exp(-E - 1/2 log(epsilon) + O(log N)). $
-] <lem_correlated_solution_lowprob>
-#proof[
-  Let $tilde(g)$ be an independent Normal vector to $g$, and observe that $g'$ can be represented as
-  $g' = p g + sqrt(1-p^2)tilde(g)$,
-  for $p=1-epsilon$.
-  Thus, $inn(g',x) = p inn(g,x) + sqrt(1-p^2)inn(tilde(g),x)$.
-  Observe $inn(g,x)$ is constant given $g$, and $inn(tilde(g),x)$ is a Normal r.v. with mean 0 and variance $N$, so $inn(g',x) ~ Normal(p inn(g,x), (1-p^2)N)$.
-  This random variable is nondegenerate for $(1-p^2)N > 0$, with density bounded above as
-  $
-    phi_(g)(z) &= 1 / (sqrt(2pi (1-p^2)N)) e^(- (z-p inn(g,x))^2 / (2(1-p^2)N)) <= 1 / sqrt(2 pi (1-p^2) N) \
-    &<= 1 / sqrt(2 pi epsilon N) = exp (-1 / 2 log (epsilon) + O(log N))
-  $
-  Integrating this bound over the interval $abs(z) <= 2^(-E)$, we conclude that
-  $
-    PP(abs(inn(g',x)) <= 2^(-E) | g) = integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= exp(-E - 1/2 log(epsilon) + O(log N)). #qedhere
-  $
-]
-
-Note for instance that $epsilon$ can be exponentially small in $E$ (e.g. $epsilon = exp(-E slash 10)$), which for the case $E = Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
-
-Next, we bound the same probability of a fixed $x$ solving a resampled instance. Here, we need to condition on the resampled instance being different, as otherwise the probability in question can be made to be 1 if $x$ was chosen to solve $g$.
-
-#lemma[Suppose $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors, and let $x in Sigma_N$. Then,
-  $ PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= exp(-E + O(1)). $
-] <lem_resampled_solution_lowprob>
-#proof[
-  Let $S={ i in [N] : g_i != g'_i}$ be the set of indices where $g$ and $g'$ differ. We can express
-  $
-    inn(g',x) = sum_(i in [N]) g'_i x_i = sum_(i in.not S)g_i x_i + sum_(i in S) g_i' x_i ~ Normal(sum_(i in.not S)g_i x_i, abs(S)).
-  $
-  The conditional distribution of interest can now be expressed as
-  $PP(abs(inn(g',x)) <= 2^(-E) | g, abs(S)>= 1)$.
-  Given $abs(S) >= 1$, the quantity $inn(g',x')$ is a nondegenerate random variable, with density bounded above as
-  $
-    phi_(g,abs(S))(z) = 1 / (sqrt(2pi abs(S)) )e^(- (z - sum_(i in.not S)g_i x_i )^2 / (2abs(S))) <= 1 / sqrt(2 pi abs(S)) <= 1 / sqrt(2 pi).
-  $
-  Hence, the quantity of interest can be bounded as
-  $
-    PP(abs(inn(g',x)) <= 2^(-E) | g, g != g') <= integral_(abs(z)<=-2^(-E)) phi_(g,abs(S))(z) dif z <= sqrt(2/pi) exp(-E) = exp(-E + O(1)). #qedhere
-  $
-]
-
-Note that in contrast to @lem_resampled_solution_lowprob, this bound doesn't involve $epsilon$ at all, but the condition $g!= g'$ requires $epsilon = omega(1 slash N)$ to hold w.p. 1.
-
-Putting together these bounds, we conclude the following fundamental estimates of $p_"cond"$, i.e. of the failure of our conditional landscape obstruction.
-
-#proposition[Fundamental Estimate -- Correlated Case][
-  Assume that $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors. Then, for any $x$ only depending on $g$,
-  $
-    p_"cond" = PP(
-      multiset(
-        exists x' in Soln(g') "such that",
-        norm(x-x') <= 2sqrt(eta N),
-      )
-    ) <= exp(-E + -1/2 log(epsilon) + 2 eta log(1 / eta) N + O(log N)).
-  $
-] <prop_correlated_fundamental>
-#proof[
-  Observe that
-  $
-    p_"cond" = EE[ PP( // attach(S_"cond", tl: not)
-      multiset(
-        exists x' "s.t.",
-        (upright(I)) #h(0.45em) abs(inn(g',x')) <= exp(-E),
-        (upright(I I)) #h(0.1em) norm(x-x') <= 2sqrt(eta N),
-      )
-      mid(|) g )].
-  $
-  Then, for fixed $x$, we know there are $exp(2 eta log(1 slash eta)N)$-many $x'$ satisfying condition (II), with each having an exponentially small probability of satisfying condition (I).
-  Thus, we conclude by union bounding @lem_correlated_solution_lowprob (which is independent of $g$) over @lem_hypercube_counting.
-]
-
-By the same proof, using @lem_resampled_solution_lowprob instead of @lem_correlated_solution_lowprob, we show:
-
-#proposition[Fundamental Estimate -- Resampled Case][
-  Assume that $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors. Then, for any $x$ only depending on $g$,
-  $
-    p_"cond" = PP(
-      multiset(
-        exists x' in Soln(g') "such that",
-        norm(x-x') <= 2sqrt(eta N),
-      ) mid(|) g != g'
-    ) <= exp(-E + 2 eta log(1 / eta) N + O(1)).
-  $
-] <prop_resampled_fundamental>
-
-== Hardness in the Linear Energy Regime
-
-Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
-This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
-These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low-degree hardness-type result.
-
-#theorem[
-  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
-  Then, for any degree $D <= o(exp(delta N slash 2))$ polynomial algorithm $alg$ (with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
-] <thrm_sldh_poly_linear>
-#proof[
-  Recall from @eq_poly_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
-  Further, by @prop_correlated_fundamental, we have
-  $ p_"cond" <= exp(-E - 1/2 log(epsilon) + 2 eta log(1 / eta) N + O(log N)) $
-  Thus, first choose $eta$ sufficiently small, such that $2 eta log(1 slash eta) < delta slash 4$ -- this results in $eta$ being independent of $N$.
-  Next, choose $epsilon = exp(- delta N slash 2)$. This gives
-  $
-    p_"cond" <= exp(- delta N - 1/2 (-(delta N)/2) + (delta N) / 4 + O(log N)) = exp(- (delta N)/2 + O(log N)) = o(1).
-  $
-  Moreover, for $D <= o(exp(delta N slash 2))$, we get by @prop_alg_stability that
-  $
-    p_"unstable" <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta asymp D dot exp(- (delta N)/2) -> 0.
-  $
-  By @eq_poly_fundamental, we conclude that $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, thus completing the proof.
-]
-
-Remark that this implies poly algs are really bad, requiring ~double exponential time.
-
-#theorem[
-  Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
-  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
-] <thrm_sldh_es_linear>
-#proof[
-  Recall from @eq_es_fundamental that it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$.
-  By @lem_sdiff_prob, the latter condition is satisfied for $epsilon = omega(1 slash N)$.
-  Thus, pick $epsilon = log(N slash D) / N$: note that this satisfies $N epsilon = log(N slash D) >> 1$, for $D = o(N)$.
-  Next, choose $eta$ such that $2 eta log(1 slash eta) < delta slash 4$ -- again, this results in $eta$ being independent of $N$.
-  By @prop_resampled_fundamental we get
-  $
-    p_"cond" <= exp(- delta N + (delta N) / 4 + O(1) ) = o(1).
-  $
-  Moreover, for $D <= o(N)$, @prop_alg_stability now gives
-  $
-    p_"unstable" <= (C D epsilon) / (2 eta) asymp D dot log(N slash D) / N -> 0,
-  $
-  as $x log(1 slash x) -> 0$ for $x << 1$.
-  By @eq_es_fundamental, we conclude that $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
-]
-
-== Hardness in the Sublinear Regime
-
-In this section, we let $omega((log N)^2) <= E <= o(N)$.
-
-#theorem[
-  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
-  Then, for any polynomial algorithm $alg$ with degree $D <= o(exp(E slash 4))$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
-] <thrm_sldh_poly_sublinear>
-#proof[
-  As in @thrm_sldh_poly_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero.
-  To do this, we choose
-  $ epsilon = exp(-E/2), #h(5em) eta = E / (16 N log (N slash E)). $
-  With this choice of $eta$, some simple analysis shows that for $E / N << 1$, we have that
-  $ E / (4 N) > 2 eta log(1 slash eta). $
-  Thus, by @prop_correlated_fundamental, we get
-  $
-    p_"cond" &<= exp(-E - 1/2 log(epsilon) + 2 eta log(1/eta) N + O(log N)) \
-    &<= exp(-E + E/4 + E/4 + O(log N)) = exp(-E/2 + O(log N)) = o(1).
-  $
-  where the last equality follows as $E >> log N$.
-  Then, by @prop_alg_stability, the choice of $D = o(exp(E slash 4))$ gives
-  $
-    p_"unstable" &<= (C D epsilon) / (2 eta)
-    asymp (D epsilon N log(N slash E)) / E \
-    &= (D exp(-E slash 2) N log(N slash E)) / E
-    <= (D exp(-E slash 2) N log(N)) / E \
-    &<= D exp(-E/2 + log(N) + log log(N) - log(E)) \
-    &<= exp(-E/4 + log(N) + log log(N) - log(E)) = o(1),
-  $
-  again, as $E >> log N$.
-  Ergo, by @eq_poly_fundamental, $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, as desired.
-]
-
-
-#theorem[
-  Let $omega(log^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
-  Then, for any algorithm $alg$ with Efron-Stein degree $D <= o(E slash log^2 N)$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
-] <thrm_sldh_es_sublinear>
-#proof[
-  As in @thrm_sldh_es_linear, it suffices to show that both $p_"cond"$ and $p_"unstable"$ go to zero, while $PP(S_"diff") approx 1$ (i.e., with $epsilon= omega(1 slash N)$.
-  As before, pick $epsilon = log(N slash D) slash N$, ensuring that $N epsilon = log(N slash D) >> 1$ (for $D = o(N)$, which holds as $E <= o(N)$).
-  Now recall that by @prop_resampled_fundamental we have
-  $
-    p_"cond" <= exp(- E + 2 eta log(1 slash eta) N + O(1) ).
-  $
-  In particular, if we choose
-  $ eta = E / (16 N log (N slash E)), $
-  we have that
-  $ E / (4 N) > 2 eta log(1 slash eta) $
-  for $E slash N << 1$, thus ensuring $p_"cond" <= exp(-3 E slash 4 + O(1)) = o(1)$ (as $E >> log N$).
-  Finally, the choice of $D <= o(E slash log^2 N)$ combined with @prop_alg_stability now gives
-  $
-    p_"unstable" &<= (C D epsilon) / (2 eta)
-    asymp (D epsilon N log(N slash E)) / E \
-    &= (D log(N slash D) log(N slash E)) / E
-    <= (D log^2 N) / E -> 0
-  $
-  By @eq_es_fundamental, $p_"solve"^2 <= PP(S_"diff")dot (p_"unstable" + p_"cond") = o(1)$, thus completing the proof.
-]
