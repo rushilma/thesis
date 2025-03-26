@@ -6,7 +6,20 @@
 #import "@preview/equate:0.3.1": equate
 
 // page layout
-#set text(font: "Crimson Pro", size: 12pt)
+#set text(
+  font: (
+    /*
+    (
+      name: "STIX Two Math",
+      covers: regex("[0-9]"),
+    ),
+    */
+    "Crimson Pro",
+  ),
+  size: 12pt,
+  weight: "regular",
+  alternates: true,
+)
 #set page(
   paper: "us-letter",
   header: [
@@ -87,6 +100,9 @@
 
 #include "rounding.typ"
 
+/// Litreview
+
+#include "litref.typ"
 
 
 #bibliography("references.bib", full: true)

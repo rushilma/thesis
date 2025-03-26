@@ -58,16 +58,19 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
 
 Fix some $k=O(1)$. Let the event that the $RR^N$-valued $alg$ succeeds on a random instance $g$ be
 $
-  S_"solve" = multiset(
-  exists hat(x) in S(E;g) "s.t.",
-  alg(g) in B_(L^1)(hat(x), k)
-)
+  S_"close" = multiset(
+    exists hat(x) in S(E;g) "s.t.",
+    alg(g) in B_(L^1)(hat(x), k)
+  )
 $
 That is, we ask that $alg$ output a point which is $O(1)$-close to a solution in $L^1$. For $k$ fixed in advance, this implies we can convert $alg$ into a $Sigma_N$-valued algorithm by computing the energy of the $O(1)$ corners near the output of $alg(g)$ and minimizing over this set, which only takes $O(N)$ additional operations.
 
+Let
+
+
 === No solve case -- rounding is truly random.
 
-$inn(g,x) tilde Normal(0,N)$
+$inn(g,x) ~ Normal(0,N)$
 $
   PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp(-E - 1/2 log(N) + O(1))
 $
@@ -76,22 +79,38 @@ By conditioning, this implies that if $x$ is random and independent from $g$, th
 Thus, if you truly had a random point, then it's almost certainly not a solution; that is, if your randomized rounding destroys your algorithms output, then whp you fail to find a solution.
 
 First, assume $attach(S_"solve", tl: not)$. In that case, $x:=alg(g)$ is far from any solution, and randomized rounding fails with high probability.
-That is, $PP(tilde(x) in S(E;g)) = 0$
+That is, $PP(tilde(x) in S(E;g)) = o(1)$
 
 To see this, let $x^*$ be the point on $Sigma_N$ closest to $x$ (in principle, this is the vector which is coordinatewise $plus.minus 1$ depending on whether each coordinate of $x$ is positive or negative).
 
 Let $p_1,dots,p_N$ be the probability of $tilde(x)$ disagreeing with $x_*$ on each coordinate.
 - Require that no $p_i = 0$ (i.e. all coordinates have a chance to disagree)
-- Then, for $x in [0,1]$, exists universal constant $C$ such that $-log(1-x) <= C x$.
+- Then, for $x in [0,1)$, exists universal constant $C$ such that $-log(1-x) <= C x$.
 - Probability that $tilde(x)=x_*$ is
-  $ product (1-p_i) = exp( sum log(1-p_i) ) <= exp(- C sum p_i) $
+  $ product (1-p_i) = exp( sum log(1-p_i) ) <= exp(- C sum p_i). $
 - If we assume that randomized rounding changes solution, then that requires this probability to go to zero, i.e. $sum p_i = omega(1)$.
 
 In this case, consider following construction. For each $1 <= i <= N$, flip an independent coin $H_i$ which lands heads with probability $2 p_i$, and keep all the heads.
-- By Second Borel-Cantelli lemma, $E_i = { H_i "heads"}$, the $E_i$ are independent, and $sum_{ i>= 0} PP(E_i) = sum 2 p_i = infinity$, so $PP(limsup E_i) = 1$, i.e., get heads infinitely often.
+- By Second Borel-Cantelli lemma, $E_i = { H_i "heads"}$, the $E_i$ are independent, and $ sum_( i>= 0 ) PP(E_i) = sum 2 p_i = infinity, $ so $PP(limsup E_i) = 1$, i.e., get heads infinitely often.
 - That is, number of heads is $omega(1)$.
 - For every coin with a head, round $x^*$ by changing coord with probability $1/2$; if tails keep coord.
 - That is, randomized rounding done by choosing random set of $omega(1)$ coordinates and resampling them as iid Uniform in ${-1,1}$.
+
+Because number of coordinates being changed is $omega(1)$, can pick large constant $K$ such that whp there are at least $K$ coordinates being changed.
+- Only randomize first $K$ heads, condition on the others. Thus, $tilde(x)$ has $K$ i.i.d., random coordinates.
+- $tilde(x)$ is random point in $K$-dimensional subcube, but by @prop_fixed_close_solns_lowprob, only one out of the $2^K$ such points is a good solution.
+
+Thus, probability for rounding to give a good solution is
+$$
+
+
+- Randomized rounding in artificially difficult way. (I.e. this multistage procedure accomplishes the same thing as randomized rounding.)
+- Now, randomized rounding is done by choosing a random set of $omega(1)$ coordinates, and making those iid Uniform in ${-1,1}$.
+- Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100 >= omega(1)$, there are at least 100 heads whp.
+- Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
+- Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
+
+
 
 
 
@@ -122,19 +141,6 @@ Argument:
 
 Thus, rounding would destroy the solution.
 
-
-- Say we're in the case where rounding changes the solution. (i.e. rounding moves $x$ to point that is not the closest point $x_*$, whp.)
-- Let $p_1,dots,p_N$ be the probabilities of disagreeing with $x_*$ on each coordinate.
-  - We know that $sum p_i$ diverges (this is equivalent to the statement that rounding will changes the solution whp).
-  - Reason: for each coord, chance of staying at that coordinate is $e^(-Theta(p_i))$.
-- For each $i$, flip coin with heads prob $2p_i$, and keep all the heads.
-  - By Borel-Cantelli type argument, typical number of heads will be $omega(1)$.
-- For every coin with a head, change coord with prob 50%, if tails, keep coord.
-  - Randomized rounding in artificially difficult way. (I.e. this multistage procedure accomplishes the same thing as randomized rounding.)
-- Now, randomized rounding is done by choosing a random set of $omega(1)$ coordinates, and making those iid Uniform in ${-1,1}$.
-- Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100 >= omega(1)$, there are at least 100 heads whp.
-- Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
-- Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
 
 
 === Solve case - rounding might help us

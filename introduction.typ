@@ -4,15 +4,41 @@
 
 = Introduction
 
+Let $g_1,dots,g_N$ be $N$ real numbers.
+The #emph[number partitioning problem (NPP)] asks: what is the subset $A$ of $[N]:={1,2,dots,N}$ such that the sum of the $g_i$ for $i in A$ and the sum of the remaining $g_i$ are as close as possible?
+More formally, the $A$ we want to find is the one minimizing the discrepancy
+$ abs(sum_(i in A) g_i - sum_(i in.not A) g_i). $
+
+When rephrased as a decision problem (i.e., whether there in an $A$ such that the discrepancy is below a certain threshold, or even zero), the NPP is one of the six basic NP-complete problems of Garey and Johnson, and of those, the only one to deal with numbers @gareyComputersIntractabilityGuide1979[#sym.section 3.1].
+
+(talk about modifications and variants?)
+
+The number partitioning problem can be rephrased in the following way.
+Let our instance $g_1,dots,g_N$ be identified with a point $g in RR^N$.
+Then, a choice of $A subset.eq [N]$ is equivalent to choosing a point $x$ in the $N$-dimensional binary hypercube $Sigma_N := {plus.minus 1}^N$, and the discrepancy of $x$ is now $abs(inn(g,x))$.
+The goal is now to find the $x$ minimizing this discrepancy:
+$ min_(x in Sigma_N) abs(inn(g,x)). $
+
+#definition[
+  Let $x in Sigma_N$. The #emph[energy] of $x$ (with respect to the instance $g$) is
+  $
+    E(x;g) := - log_2 abs(inn(g,x)).
+  $
+  The #emph[solution set $S(E;g)$] is the set of all $x in Sigma_N$ that have energy at least $E$, i.e. that satisfy
+  $
+    abs(inn(g,x)) <= 2^(-E).
+  $ <eq_npp>
+] <def_npp_statement>
+
+- This terminology is motivated by the statistical physics literature, wherein random optimiztation problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
+- Observe that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
+
 Overview of number partitioning problem.
 
 Application: randomized control trials.
 
 Other applications.
 - Circuit design, etc.
-
-Importance as a basic NP-complete problem.
-- One of the six basic NP-complete problems of Garey and Johnson @gareyComputersIntractabilityGuide1979, and the only one to deal with numbers.
 
 Two questions of interest:
 + What is optimal solution.
@@ -26,31 +52,6 @@ Two questions of interest:
 
 
 Low degree heuristic: degree $D$ algorithms are a proxy for the class of $e^(tilde(O)(D))$-time algorithms.
-
-
-== Number Packing Problem
-
-Let $N$ be the dimensionality, and $Sigma_N := { plus.minus 1}$ be the binary cube.
-Suppose we're given $g ~ #stdnorm$.
-We want to find $x in Sigma_N$ such that we minimize $abs(inn(x, g))$.
-
-
-#definition[
-  Let $x in Sigma_N$. The #emph[energy of $x$ (with respect to the instance $g$)] is
-  $
-    E(x;g) := - log abs(inn(g,x)).
-  $
-  The #emph[solution set $S(E;g)$] is the set of all $x in Sigma_N$ that have energy at least $E$, i.e. that satisfy
-  $
-    abs(inn(g,x)) <= 2^(-E).
-  $ <eq_npp>
-] <def_npp_statement>
-
-- This terminology is motivated by the statistical physics literature, wherein random optimiztation problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
-- Observe that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
-
-
-@eq_npp Hi
 
 
 == Existing Results
@@ -71,305 +72,44 @@ We want to find $x in Sigma_N$ such that we minimize $abs(inn(x, g))$.
 + For $epsilon in (0,1/5)$, no stable algorithm can solve $omega(n log^(-1/5 + epsilon) n) <= E_n <= o(n)$
 + Possible to strengthen to $E_n=Theta(n)$ (as $2^(-Theta(n)) <= 2^(-o(n))$)
 
-== Glossary and conventions
+== Our Results <subsection_intro_results>
+
+== Notation and Conventions
 
 Conventions:
-+ $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
++ On $RR^N$ we write $norm(dot)_2 = norm(dot)$ for the Euclidean norm, and $norm(dot)_1$ for the $ell^1$ norm.
+// + $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
 + If $x in RR^N$ and $S subeq [N]$, then $x_S$ is vector with
   $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
   In particular, for $x,y in RR^N$,
   $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
++ $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $L^2$ unit ball.
 
-Glossary:
+Throughout we will make key use of the following lemma:
+
+#lemma[Normal Small-Probability Estimate][
+  Let $E,sigma^2 > 0$, and $mu,Z$ be random variables with $Z | mu ~ Normal(mu,sigma^2)$.
+  for $sigma^2$ a constant. Then
+  $
+    PP(abs(Z) <= 2^(-E) | mu) <= exp_2(-E - 1 / 2 log_2(sigma^2) + O(1)).
+  $ <eq_normal_smallprob>
+] <lem_normal_smallprob>
+#proof[
+  Observe that conditional on $mu$, the distribution of $Z$ is bounded as
+  $
+    phi_(Z|mu) (z) <= 1 / sqrt(2 pi sigma^2) e^(-(z-mu)^2 / (2 sigma^2)) <= (2 pi sigma^2)^(-1 slash 2).
+  $
+  Integrating over $abs(z)<= 2^(-E)$ then gives @eq_normal_smallprob, via
+  $
+    PP(abs(Z) <= 2^(-E)) = integral_(abs(z) <= 2^(-E)) (2 pi sigma^2)^(-1 slash 2) dif z <= 2^(-E - 1 / 2 log_2(2 pi sigma^2) + 1). #qedhere
+  $
+]
+
+Note that this is decreasing function of $sigma^2$, e.g. it's bounded by $exp_2(-E - 1/2 log_2( min sigma^2))$ (this bound is trivial unless $sigma^2 => gamma > 0$).
+
+=== Glossary:
 + "instance"/"disorder" - $g$, instance of the NPP problem
 + "discrepancy" - for a given $g$, value of $min _(x in Sigma_N) abs(inn(g,x))$
 + "energy" - negative exponent of discrepancy, i.e. if discrepancy is $2^(-E)$, then energy is $E$. Lower energy indicates "worse" discrepancy.
 + "near-ground state"/"approximate solution"
 
-
-== Literature Review
-
-@achlioptasAlgorithmicBarriersPhase2008
-- Phase transitions for random constraint satisfaction
-- S2C gap for random constraint satisfaction
-
-@achlioptasSolutionSpaceGeometryRandom2006
-- Random constraint satisfaction
-
-@addario-berryLocalOptimaSherringtonKirkpatrick2017
-- Local algorithms for SK.
-
-@alidaeeNewModelingSolution2005
-- NPP as unconstrained quadratic binary problem, and efficient metaheuristic algorithm.
-
-@arguelloRandomizedMethodsNumber1996
-- Randomized differencing heuristic for NPP; computational simulations.
-
-@asproniAccuracyMinorEmbedding2020
-- Quantum hardware for solving NPP.
-
-@aubinStorageCapacitySymmetric2019
-- OGP for SBPs.
-
-@bandeiraNotesComputationaltostatisticalGaps2018
-- Computational gaps in terms of signal-to-noise and S2C for Bayesian inference.
-
-@bansalConstructiveAlgorithmsDiscrepancy2010
-- Generalized version of NPP with multiple sets
-
-@barakNearlyTightSumofSquares2016
-- Sum of squares bound
-
-@baukeNumberPartitioningRandom2004
-- REM approach to NPP (Derrida model)
-
-@bayatiCombinatorialApproachInterpolation2013
-- S2C for random graphs
-
-@berthetComputationalLowerBounds2013
-- S2C for sparce PCA
-
-@bismuthPartitioningProblemsSplittings2024
-- Generalization of NPP allowing some numbers to be split up
-
-@boettcherAnalysisKarmarkarKarpDifferencing2008
-- Fix constant $alpha$ in KK algorithm discrepancy
-
-@borgsPhaseTransitionFinitesize2001
-- Phase transitions for integral NPP
-
-@brennanOptimalAverageCaseReductions2019
-- Strong hardness for sparse PCA
-
-@brennanReducibilityComputationalLower2019
-- S2C in sparce problems via planted clique
-- Spiritually similar to conditional landscape obstructions, in that you fix one instance and study how it changes??
-
-@chandrasekaranIntegerFeasibilityRandom2013
-- Random polytopes
-
-@chenSuboptimalityLocalAlgorithms2019
-- Local algorithms fail for max-cut
-
-@coffmanjr.ApplicationBinPackingMultiprocessor1978
-- Motivation for bin packing application to multiprocessor scheduling
-
-@coffmanProbabilisticAnalysisPacking1991
-- Book summarizing results of Karmarkar-Karp
-
-@coja-oghlanIndependentSetsRandom2015
-- Independent sets in random graphs
-
-@corusArtificialImmuneSystems2019
-- Evolutionary algorithms for NP hard NPP
-
-@deshpandeImprovedSumofSquaresLower2015
-- Sum of squares bounds
-
-@diakonikolasStatisticalQueryLower2017
-- Estimation of Gaussian mixtures
-
-@feldmanStatisticalAlgorithmsLower2016
-- Planted clique detection
-
-@ferreiraProbabilisticAnalysisNumber1998
-- Physics perspective for uniform instances
-
-@gamarnikAlgorithmicObstructionsRandom2021b
-- prove OGP and stable hardness for NPP
-
-@gamarnikAlgorithmsBarriersSymmetric2022
-- Barriers in Symmetric Binary Perceptron
-
-@gamarnikComputingPartitionFunction2021
-- Average hardness of computing SK partition function
-
-@gamarnikHardnessRandomOptimization2022a
-- GJW22, low degree poly algorithms for Boolean circuits
-- Lemma 3.4!
-
-@gamarnikHighDimensionalRegressionBinary2019
-- Phase transition in high-dim regression with binary coeffs
-
-@gamarnikLandscapePlantedClique2019
-- Planted clique: OGP for dense subgraphs
-
-@gamarnikLimitsLocalAlgorithms2013
-- Original OGP paper with Gamarnik-Sudan
-
-@gamarnikOverlapGapProperty2019
-- OGP and AMP
-
-@gamarnikOverlapGapProperty2021
-- Overview/summary of OGP
-
-@gamarnikOverlapGapProperty2021a
-- Principal submatrix recovery
-
-@gamarnikPerformanceSequentialLocal2017
-- Local algorithms for NAE-k-SAT
-
-@gamarnikSparseHighDimensionalLinear2019
-- Local search for sparse high-dim regression
-
-@gareyComputersIntractabilityGuide1979
-- Garey-Johnson book on NP hardness
-
-@gentAnalysisHeuristicsNumber1998
-- Phase transitions for NPP: performance of algorithms depends on their constrainedness.
-- i.e. number of their solutions, e.g. if on state space of $2^N$ states, this parameter is > 1, you're screwed
-  $ kappa := 1 - log("# of solns") / N $
-
-@gentPhaseTransitionsAnnealed2000
-- Phase transitions in simulated annealing
-
-@harshawBalancingCovariatesRandomized2023
-- Application of NPP to radomized control testing
-
-@hastieElementsStatisticalLearning2009
-- Textbook
-
-@hatamiLimitsLocallyGlobally2014
-- Local-global study of sparse graphs
-
-@hobergNumberBalancingHard2016
-- Hardness of number balancing (diff from NPP) by reduction to Minkowski/shortest vector.
-
-@hopkinsPowerSumofsquaresDetecting2017
-- Signal recovery using sum-of-squares semidefinite programming
-- Early suggestion of low-degree heuristic
-
-@hopkinsStatisticalInferenceSum2018
-- Hopkins thesis - intoduced low-degree hypothesis
-
-@hopkinsTensorPrincipalComponent2015
-- Tensor PCA via sum of squares
-
-@huangStrongLowDegree2025
-- SLDH paper
-
-@jerrumLargeCliquesElude1992
-- MCMC can't find cliques; algorithm failure
-
-@johnsonOptimizationSimulatedAnnealing1989b
-- Overview of simulated annealing
-
-@johnsonOptimizationSimulatedAnnealing1991
-- Failure of sim annealing for NPP
-
-@karmarkarProbabilisticAnalysisOptimum1986
-- original analysis of hardness
-
-@karmarkerDifferencingMethodSet1983
-- KK algorithm - time $O(N log N)$
-
-@kearnsEfficientNoisetolerantLearning1998
-- Classification and learning in presence of noise
-
-@kizildagPlantedRandomNumber2023
-- Planted version of NPP, with explicit analysis + hardness results
-
-@kojicIntegerLinearProgramming2010
-- Using linear programing solver for NPP.
-
-@korfApproximateOptimalSolutions1995
-- Initial work on CKK
-
-@korfCompleteAnytimeAlgorithm1998
-- Extend KK to complete algorithm; will get better
-
-@korfMultiwayNumberPartitioning2009
-- CKK for larger sets
-
-@kothariSumSquaresLower2017
-- Sum of squares for constraint satisfaction.
-
-@kraticaTwoMetaheuristicApproaches2014
-- Heuristics for multidimensional NPP
-
-@kriegerNearlyRandomDesigns2019
-- NPP for randomized contorl testing
-
-@kuniskyNotesComputationalHardness2019
-- Kunisky, Wein, Banderia - discussion on low-degree heuristic for hypothesis testing.
-
-@lauerLargeIndependentSets2007
-- Independent sets in regular graphs of girth
-
-@levyDeterministicDiscrepancyMinimization2017
-- Discrepancy coloring - poly time algorithm
-
-@lovettConstructiveDiscrepancyMinimization2012
-- Constructive proof of discrepancy minimizing coloring
-
-@luekerNoteAveragecaseBehavior1987
-- PDM heuristic fails
-
-@mekaSumofsquaresLowerBounds2015
-- Sum of squares in planted case
-
-@merkleHidingInformationSignatures1978
-- Using NPP for cryptography
-
-@mertensEasiestHardProblem2003
-- Phase transition and overview of NPP
-
-@mertensPhysicistsApproachNumber2001
-- Physics notation as applied to NPP
-- "Any heuristic that exploits a fraction of the domain, generating and evaluating a series of feasible configurations, cannot be significantly better than random search." section 4.3
-
-@mezardClusteringSolutionsRandom2005
-- Random k-SAT/CSP clustering
-
-@michielsPerformanceRatiosDifferencing2003
-- Worst case performance of KK algorithm when attempting balanced Number Partitioning
-
-@odonnellAnalysisBooleanFunctions2021
-- Textbook on Boolean functions
-
-@raghavendraHighdimensionalEstimationSumofsquares2019
-- Hidh dimensional estimation for SoS - more SoS stuff
-
-@rahmanLocalAlgorithmsIndependent2017
-- Failure of local algorithm for independent sets in graphs
-
-@rothvossConstructiveDiscrepancyMinimization2016
-- Partial coloring of sets (discrepancy min)
-
-@santucciImprovedMemeticAlgebraic2021
-- Memetic algebraic diffeq for NPP
-- Evolutionary algorithm
-- Experimental calculation
-
-@storerProblemSpaceLocal1996
-- Several order of magnitude improvement over annealing, but with greater commputation time, by modifying differencing heuristic.
-
-@tsaiAsymptoticAnalysisAlgorithm1992
-- Application of NPP to process scheduling
-
-@turnerBalancingGaussianVectors2020
-- Multidimensional NPP - poly time algorithm achieving $e^(-Omega(log^2 N/m))$, for $m = O(sqrt(log n))$.
-
-@vafaSymmetricPerceptronsNumber2025
-- Assuming hardness of shortest vector on lattice, derived polynomial-time hardness for NPP;
-- Prove KK is tight; no poly time algorithm achieves energy of $Omega(log^3 N)$
-
-@vershyninHighDimensionalProbabilityIntroduction2018
-- Textbook on high dim probability
-
-@wainwrightHighDimensionalStatisticsNonAsymptotic2019
-- Textbook on high dim statistics
-
-@weinOptimalLowDegreeHardness2020
-- Low degree polynomial hardness for max independent set.
-
-@wenOpticalExperimentalSolution2023
-- Experimental solution using quantum computing.
-
-@yakirDifferencingAlgorithmLDM1996
-- Showed LDM achieves $n^log(n)$ performance despite being a simple heuristic, for uniform instance.
-
-@zdeborovaStatisticalPhysicsInference2016
-- Inference using algorithms - overview of pedagogy using statistical physics framework.
-
-== Our Results <subsection_intro_results>
