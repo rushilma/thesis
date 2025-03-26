@@ -83,7 +83,7 @@ Conventions:
   $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
   In particular, for $x,y in RR^N$,
   $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
-+ $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $L^2$ unit ball.
++ $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $ell^2$ unit ball.
 
 Throughout we will make key use of the following lemma:
 
@@ -104,6 +104,27 @@ Throughout we will make key use of the following lemma:
     PP(abs(Z) <= 2^(-E)) = integral_(abs(z) <= 2^(-E)) (2 pi sigma^2)^(-1 slash 2) dif z <= 2^(-E - 1 / 2 log_2(2 pi sigma^2) + 1). #qedhere
   $
 ]
+
+#lemma[
+  Suppose that $K <= N slash 2$, and let $h(x)=-x log(x) - (1-x) log(x)$ be the binary entropy function. Then, for $p := K slash N$,
+  $ sum_(k <= K) binom(N,k) <= exp(N h(p)) <= exp(2 N p log(1/p)). $
+  // https://mathoverflow.net/questions/473730/bounding-a-binomial-coefficient-using-the-binary-entropy-function#mjx-eqn-20
+] <lem_chernoff_hoeffding>
+#proof[
+  Consider a $Bin(N,p)$ random variable $S$. Summing its PMF from $0$ to $K$, we have
+  $
+    1 >= PP(S <= K) = sum_(k <= K) binom(N,k) p^k (1-p)^(N-k) >= sum_(k<= K) binom(N,k) p^K (1-p)^(N-K).
+  $
+  Here, the last inequality follows from the fact that $p <= (1-p)$, and we multiply each term by $(p/(1-p))^(K-k)<1$.
+  Now rearrange to get
+  $
+    sum_(k <= K) binom(N,k) &<= p^(-K) (1-p)^(-(N-K)) \ &= exp(-K log(p) - (N-K) log(1-p)) \
+    &= exp(N dot (-K/N log(p) - ((N-K)/N) log(1-p))) \
+    &= exp(N dot (-p log(p) - (1-p) log (1-p)) ) = exp(N h(p)).
+  $
+  The final equality then follows from the bound $h(p) <= 2 p log(1 slash p)$ for $p <= 1 slash 2$.
+]
+
 
 Note that this is decreasing function of $sigma^2$, e.g. it's bounded by $exp_2(-E - 1/2 log_2( min sigma^2))$ (this bound is trivial unless $sigma^2 => gamma > 0$).
 
