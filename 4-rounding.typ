@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Randomized Rounding Things <section_rounding>
+= Extending to Rounded Algorithms <section_rounding>
 
 == Solutions repel
 
@@ -10,52 +10,58 @@ Claim: no two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) w
 The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
 
 #proposition[
-  Fix distinct points $x,x' in Sigma_N$ with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), for $k=O(1)$, and let $g$ be any instance.
+  Fix distinct points $x,x' in Sigma_N$ and let $g ~ stdnorm$ be any instance.
+  // with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), and let $g$ be any instance.
   Then,
   $
-    PP(x in Soln(g) "and" x' in Soln(g)) <= exp(-E + O(1)).
+    PP(x, x' in Soln(g)) <= exp(-E + O(1)).
   $
 ] <prop_fixed_close_solns_lowprob>
 #proof[
-  For $x != x'$, let $J subeq [N]$ denote the subset of coordinates in which $x,x'$ differ, i.e. $x_J != x'_J$; by assumption, $abs(J) <= k$.
+  For $x != x'$, let $J subeq [N]$ denote the subset of coordinates in which $x,x'$ differ, i.e. $x_J != x'_J$.
+  // by assumption, $abs(J) <= k$.
   In particular, we can write
   $ x = x_([N] without J) + x_J, #h(5em) x' = x_([N] without J) - x_J. $
-  Thus, for a fixed $x,x'$, if
-  $ -2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E), $
+  Thus, for a fixed pair $(x,x')$, if $-2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E)$,
   we can expand this into
   $
     -2^(-E) <= &inn(g,x_([N] without J)) + inn(g,x_J) <= 2^(-E), \
     -2^(-E) <= &inn(g,x_([N] without J)) - inn(g,x_J) <= 2^(-E).
   $
-  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives
-  $ abs(inn(g,x_J)) <= 2^(-E), $
-  // where $inn(g,x_J)$ is a $Normal(0,k)$ r.v. (note that $k>0$ so it is nondegenerate). Moreover, as $k=O(1)$, we get by the logic in @lem_correlated_solution_lowprob that
+  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives $abs(inn(g,x_J)) <= 2^(-E)$.
+  Note that $inn(g,x_J)~Normal(0,abs(J))$ (and is nondegenerate, as $abs(J)>0$). By @lem_normal_smallprob and the following remark, it follows that
   $
-    PP(x in Soln(g) "and" x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
+    PP(x,x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
   $
 ]
 
 #theorem[Solutions Can't Be Close][
-  Let $k=O(1)$ and $E >> log N$.
-  Then for any instance $g$, with high probability there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$.
+  Consider any distances $k = Omega(1)$ and energy levels $E >> k log_2  N$.
+  Then for any instance $g$, there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$ (i.e. within $k$ coordinate flips of each other) with high probability.
 ] <thrm_solutions_repel>
 #proof[
   Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of at most $k$ coordinates $J subset[N]$ of $g$ and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
-  For any $g$, there are at most $2^k=O(1)$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5],
-  $ sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k = O(N^k) $
+  For any $g$, there are at most $2^k$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5], there are
+  $
+    sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k <= (e N)^k = 2^(O(k log_2 N))
+  $
   choices of such subsets.
-  Union bounding @prop_fixed_close_solns_lowprob over these $O(N^k)$ choices, we get that
+  Union bounding @prop_fixed_close_solns_lowprob over these $exp_2 O(k log_2 N)$ choices, we get
   $
-    PP multiprob(exists x\,x' "s.t.", (upright(I)) #h(0.5em) norm(x-x') <= 2sqrt(k)\,, (upright(I I)) #h(0.3em) &x\,x' in Soln(g))
-  <= PP multiprob(exists J subset [N]\, x_J in {plus.minus 1}^k "s.t.",
-     (upright(I)) #h(0.65em) abs(J) <= k\,,
-     (upright(I I)) #h(0.3em) abs(inn(g_J,x_J)) <= exp(-E))
-  <= exp(-E + O(log N)) = o(1). #qedhere
-  $
+    PP multiprob(
+      exists x\,x' "s.t.",
+      (upright(a))  &norm(x-x') <= 2sqrt(k)\,,
+      (upright(b)) #h(0.3em) &x\,x' in Soln(g)
+    ) <= PP multiprob(
+      exists J subset [N]\, x_J in {plus.minus 1}^abs(J) "s.t.",
+      (upright(a)) &abs(J) <= k\,,
+      (upright(b)) &abs(inn(g_J,x_J)) <= exp(-E))
+    <= exp(-E + O(k log_2  N)) = o(1).
+  $ <eq_solutions_repel>
+  Note that the last equality holds as $E >> k log_2 N$.
 ]
 
-== Proof of Randomized Hardness
-
+== Proof of Hardness for Close Algorithms
 
 Fix some $k=O(1)$. Let the event that the $RR^N$-valued $alg$ succeeds on a random instance $g$ be
 $
@@ -79,7 +85,7 @@ $
   S_"diff" &= { g != g'} \
   S_"solve" &= { hat(alg)_k (g) in Soln(g), hat(alg)_k (g') in Soln(g')} \
   S_"stable" &= { norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
-  S_"cond" &= multiset(
+  S_"cond" (x) &= multiset(
     exists.not x' in Soln(g') "such that",
     norm(x-x') <= 2sqrt(eta N),
   )
@@ -92,7 +98,7 @@ is unique as our process for choosing $hat(x)$ implies taking the one which maxi
 Stability analysis:
 for $g,g'$ being $(1-epsilon)$-resampled/correlated, it still holds that, conditional on $hat(alg)(g)$ and $hat(alg)(g')$ being defined, then
 $
-  EE norm(hat(alg(g)) - hat(alg(g')))^2 <= EE 2norm(hat(alg(g)) - alg(g))^2 + EE norm(alg(g) - alg(g')) <= 2 O(1)^2 + 2 C epsilon D N + O(1)
+  EE norm(hat(alg(g)) - hat(alg(g')))^2 <= EE 2norm(hat(alg(g)) - alg(g))^2 + EE norm(alg(g) - alg(g'))^2 <= 2 O(1)^2 + 2 C epsilon D N + O(1)
 $
 
 Thus,
@@ -105,14 +111,14 @@ $
 
 $inn(g,x) ~ Normal(0,N)$
 $
-  PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp(-E - 1/2 log(N) + O(1))
+  PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp(-E - 1/2 log_2 (N) + O(1))
 $
 Follows by @lem_normal_smallprob.
-i.e., for $E >> log N$, any fixed $x$ is not solution to random instance whp.
+i.e., for $E >> log_2  N$, any fixed $x$ is not solution to random instance whp.
 By conditioning, this implies that if $x$ is random and independent from $g$, then it's a solution with $o(1)$ probability.
 Thus, if you truly had a random point, then it's almost certainly not a solution; that is, if your randomized rounding destroys your algorithms output, then whp you fail to find a solution.
 
-Note: we should assume $log^2 N << E <= N$.
+Note: we should assume $log_2 ^2 N << E <= N$.
 Also, getting algorithms for polynomial discrepancy ($n^-1$, etc.) is basically trivial.
 
 Let $x := alg(g)$.
@@ -173,7 +179,7 @@ Intuitively, the landscape of solutions is so fractured that any rounding proced
 #proof[
   Observe that as each coordinate is rounded independently, we can compute
   $
-    PP(tilde(x) = x^*) = product_i (1-p_i) = exp(sum_i log(1-p_i)) <= exp(- sum_i p_i).
+    PP(tilde(x) = x^*) = product_i (1-p_i) = exp(sum_i log_2 (1-p_i)) <= exp(- sum_i p_i).
   $
   For $sum_i p_i = omega(1)$, we get $PP(tilde(x)=x^*) <= e^(-omega(1)) = o(1)$, as claimed.
 ]
@@ -191,7 +197,7 @@ By @thrm_solutions_repel, at most one of these points is in $S(E;g)$, so the pro
 
 
 $
-  PP(abs(inn(g,tilde(x))) <= 2^(-E) | g, x_([N] without S)) <= exp_2 (-E - 1 / 2 log abs(S) + O(1)).
+  PP(abs(inn(g,tilde(x))) <= 2^(-E) | g, x_([N] without S)) <= exp_2 (-E - 1 / 2 log_2 abs(S) + O(1)).
 $
 
 First, assume $attach(S_"solve", tl: not)$. In that case, $x:=alg(g)$ is far from any solution, and randomized rounding fails with high probability.
@@ -201,7 +207,7 @@ To see this, let $x^*$ be the point on $Sigma_N$ closest to $x$ (in principle, t
 
 Let $p_1,dots,p_N$ be the probability of $tilde(x)$ disagreeing with $x_*$ on each coordinate.
 - Require that no $p_i = 0$ (i.e. all coordinates have a chance to disagree)
-- Then, for $x in [0,1)$, exists universal constant $C$ such that $-log(1-x) <= C x$.
+- Then, for $x in [0,1)$, exists universal constant $C$ such that $-log (1-x) <= C x$.
 - Probability that $tilde(x)=x_*$ is
   $ product (1-p_i) = exp( sum log(1-p_i) ) <= exp(- C sum p_i). $
 - If we assume that randomized rounding changes solution, then that requires this probability to go to zero, i.e. $sum p_i = omega(1)$.
