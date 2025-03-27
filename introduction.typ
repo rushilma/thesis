@@ -83,7 +83,9 @@ Conventions:
   $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
   In particular, for $x,y in RR^N$,
   $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
++ meow
 + $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $ell^2$ unit ball.
+
 
 Throughout we will make key use of the following lemma:
 

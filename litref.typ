@@ -65,7 +65,7 @@
 == Low-Degree Heuristic
 
 @kuniskyNotesComputationalHardness2019
-- Kunisky, Wein, Banderia - discussion on low-degree heuristic for hypothesis testing.
+- Kunisky, Wein, Banderia - discussion on low degree heuristic for hypothesis testing.
 
 ----------------
 
@@ -212,10 +212,10 @@
 
 @hopkinsPowerSumofsquaresDetecting2017
 - Signal recovery using sum-of-squares semidefinite programming
-- Early suggestion of low-degree heuristic
+- Early suggestion of low degree heuristic
 
 @hopkinsStatisticalInferenceSum2018
-- Hopkins thesis - intoduced low-degree hypothesis
+- Hopkins thesis - intoduced low degree hypothesis
 
 @hopkinsTensorPrincipalComponent2015
 - Tensor PCA via sum of squares

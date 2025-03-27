@@ -104,19 +104,54 @@ $
 == No solve case -- rounding is truly random.
 
 $inn(g,x) ~ Normal(0,N)$
-Hi
 $
   PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp(-E - 1/2 log(N) + O(1))
 $
+Follows by @lem_normal_smallprob.
 i.e., for $E >> log N$, any fixed $x$ is not solution to random instance whp.
 By conditioning, this implies that if $x$ is random and independent from $g$, then it's a solution with $o(1)$ probability.
 Thus, if you truly had a random point, then it's almost certainly not a solution; that is, if your randomized rounding destroys your algorithms output, then whp you fail to find a solution.
 
-Note: we should assume $log N << E <= N$.
+Note: we should assume $log^2 N << E <= N$.
 Also, getting algorithms for polynomial discrepancy ($n^-1$, etc.) is basically trivial.
 
-Let $sans("round"):RR^N to Sigma_N$ denote a randomized rounding function, with randomness independent of the input.
+Let $x := alg(g)$.
+We write $x^*$ for the coordinate-wise signs of $x$, i.e.
+$ x^*_i := cases(+1 #h(1em) &x_i > 0\,, -1 &x_i <= 0.) $
 
+Let $round(x,omega):RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input.
+We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
+
+#remark[
+  Meow $alg^*$ fails and is still degree $D$ lcdf, even if it stops being a polynomial. Bounds on $D$ worsen, but only to what you'd expect.
+]
+
+Given such a randomized rounding function, we can describe it in the following way.
+Let $p_1,dots,p_N$ be the probabilities of $round(x)_i != (x^*)_i$.
+We assume without loss of generality that each $p_i <= 1/2$.
+
+#lemma[
+  Draw $N$ coin flips $I_i ~ Bern(2p_i)$ and N$N$_N_ signs $S_i ~ "Unif"{plus.minus 1}$, all mutually independent, and define the random variable $tilde(x) in Sigma_N$ by
+  $ tilde(x)_i := S_i I_i + (1-I_i) x^*_i. $
+  Then $tilde(x) ~ round(x)$.
+] <lem_random_rounding_altdef>
+#proof[
+  Conditioning on $I_i$, we can check that
+  $
+    PP(tilde(x)_i != x_i) &= 2 p_i dot PP(tilde(x)_i = x_i | I_i = 1) + (1-2p_i ) dot PP(tilde(x)_i != x_i | I_i = 0) \
+    &= 2 p_i dot 1 / 2 + 0 = p_i.
+  $
+  Thus, $tilde(x)$ has the same probability of equalling $x^*$ in each coordinate as $round(x)$ does, as claimed.
+]
+
+By @lem_random_rounding_altdef, we can redefine $round(x)$ to be $tilde(x)$ as constructed without loss of generality.
+
+// What is tilde(x)?
+
+By @lem_random_rounding_altdef, it makes sense to define $tilde(alg)(g) := round(alg(g))$, which is now (a) $Sigma_N$-valued and (b) randomized only in the transition from $RR^N$ to $Sigma_N$ (i.e., the rounding doesn't depend directly on $g$, only the output $x = alg(g)$).
+
+
+TODO: explain why we want to consider $tilde(alg)(g) = round(alg(g))$
 #definition[
   Given $alg$, we can define two $Sigma_N$-valued algorithms. Let $x := alg(g)$. Then
   $
@@ -124,7 +159,7 @@ Let $sans("round"):RR^N to Sigma_N$ denote a randomized rounding function, with 
   $
 ]
 
-Note that if $alg$ has coordinate degree $D$, then $alg^*$ also has coordinate degree $D$. As a deterministic $Sigma_N$-valued algorithm, strong low-degree hardness as proved in the previous section applies.
+Note that if $alg$ has coordinate degree $D$, then $alg^*$ also has coordinate degree $D$. As a deterministic $Sigma_N$-valued algorithm, strong low degree hardness as proved in the previous section applies.
 
 However, we still want to show that $tilde(x) := tilde(alg)(g)$ fails to solve $g$ with high probability.
 Intuitively, the landscape of solutions is so fractured that any rounding procedure which produces results different from $x^*$ will effectively be selecting a random point, and because any fixed point has such a low probability of being a solution, hardness still follows.
@@ -190,10 +225,6 @@ $$
 - Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100 >= omega(1)$, there are at least 100 heads whp.
 - Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
 - Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
-
-
-
-
 
 Let $tilde(x)$ be the point on $Sigma_N$ after randomized rounding.
 

@@ -4,7 +4,7 @@
 
 = Proof of Strong Low-Degree Hardness <section_proof>
 
-In this section, we prove strong low-degree hardness for both low-degree polynomial algorithms and algorithms with low Efron-Stein degree.
+In this section, we prove strong low degree hardness for both low degree polynomial algorithms and algorithms with low Efron-Stein degree.
 
 For now, we consider $Sigma_N$-valued deterministic algorithms.
 We discuss the extension to random, $RR^N$-valued algorithms later on in (section ???).
@@ -14,7 +14,7 @@ The key argument is as follows.
 Fix some energy levels $E$, depending on $N$.
 Suppose we have a $Sigma_N$-valued, deterministic algorithm $alg$ given by a degree $D$ polynomial (resp. an Efron-Stein degree $D$ function), and we have two instances $g,g'~stdnorm$ which are $(1-epsilon)$-correlated (resp. $(1-epsilon)$-resampled), for $epsilon>0$.
 Say $alg(g)=x in Sigma_N$ is a solution with energy at least $E$, i.e. it "solves" this NPP instance.
-For $epsilon$ close to 0, $alg(g')=x'$ will be close to $x$, by low-degree stability.
+For $epsilon$ close to 0, $alg(g')=x'$ will be close to $x$, by low degree stability.
 However, by adjusting parameters carefully, we can make it so that with high probability (exponential in $E$), there are no solutions to $g'$ close to $x$.
 By application of a correlation bound on the probability of solving any fixed instance, we can conclude that with high probability, $alg$ can't find solutions to NPP with energy $E$.
 
@@ -25,7 +25,7 @@ This is an instance of the "brittleness," so to speak, that makes NPP so frustra
 
 We start with some setup which will apply, with minor modifications depending on the nature of the algorithm in consideration, to all of the energy regimes in discussion.
 After proving some preliminary estimates, we establish the existence of our conditional landscape obstruction, which is of independent interest.
-Finally, we conclude by establishing low-degree hardness in both the linear and sublinear energy regimes.
+Finally, we conclude by establishing low degree hardness in both the linear and sublinear energy regimes.
 
 == Proof for Low Degree Algorithms
 
@@ -143,9 +143,9 @@ Putting together these bounds, we conclude the following fundamental estimates o
   Thus, we conclude by union bounding @lem_correlated_solution_lowprob (which is independent of $g$) over @lem_hypercube_counting.
 ]
 
-Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low-degree algorithms achieving these energy levels.
+Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low degree algorithms achieving these energy levels.
 This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
-These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low-degree hardness-type result.
+These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low degree hardness-type result.
 
 #theorem[
   Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.

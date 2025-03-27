@@ -7,6 +7,8 @@
 #let inn(x, y) = $lr(angle.l #x, #y angle.r)$
 #let vol(x) = $"vol"lr(paren.l #x paren.r)$
 
+#let cdeg = "cdeg"
+
 #let PP = $upright(bold(P))$
 #let EE = $upright(bold(E))$
 #let RR = $upright(bold(R))$

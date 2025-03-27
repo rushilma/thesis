@@ -4,31 +4,32 @@
 
 = Low-Degree Algorithms
 
-For our purposes, an _algorithm_ is a function which takes as input a problem instance $g ~ stdnorm$ and outputs some $x in Sigma_N$.
-This definition can be extended to functions giving outputs on $RR^N$ (and rounding to a vertex on the hypercube $Sigma_N$), or to taking as additional input some randomness $omega$, allowing for randomized algorithms.
+For our purposes, an _algorithm_ is a function which takes as input a problem instance $g in RR^N$ and outputs some $x in Sigma_N$.
+This definition can be extended to functions giving outputs on $RR^N$, and rounding to a vertex on the hypercube $Sigma_N$.
+Alternatively, we could consider _randomized algorithms_ via taking as additional input some randomness $omega$ independent of the problem instance.
 However, most of our analysis will focus on the deterministic case.
 
-To further restrict the category of algorithms considered, we specifically restrict to _low-degree algorithms_.
+To further restrict the category of algorithms considered, we specifically restrict to _low degree algorithms_.
 Compared to analytically-defined classes of algorithms (e.g. Lipschitz), these algorithms have a regular algebraic structure that we can exploit to precisely control their stability properties.
-In particular, our goal is to show _strong low-degree hardness_, in the sense of @huangStrongLowDegree2025[Def. 3].
+In particular, our goal is to show _strong low degree hardness_, in the sense of @huangStrongLowDegree2025[Def. 3].
 
 #definition[Strong Low-Degree Hardness][
-  A random search problem, namely a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N(y_N) subeq Sigma_N$, exhibits _strong low-degree hardness up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  A random search problem, namely a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N(y_N) subeq Sigma_N$, exhibits _strong low degree hardness up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
   $ PP(alg(y_N) in S_N) <= o(1). $
 ]
 
-// Why study low-degree algorithms (poly time heuristic + simple)
+// Why study low degree algorithms (poly time heuristic + simple)
 
 In addition, degree $D$ polynomials are a heuristic proxy for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018 @kothariSumSquaresLower2017.
-Thus, strong low-degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential (i.e. $e^Omega(N)$) time to find globally optimal solutions.
+Thus, strong low degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential (i.e. $e^Omega(N)$) time to find globally optimal solutions.
 
 For the case of NPP, we consider two distinct notions of degree.
-One is traditional polynomial degree, which has an intuitive interpretation, but the other, which we term Efron-Stein degree, is a more flexible notion which can be applied to a much broader class of algorithms.
+One is traditional polynomial degree, which has an intuitive interpretation, but the other, known in the ltierature as "coordinate degree," is a more flexible notion which can be applied to a much broader class of algorithms.
 As we will see in @section_proof, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
 
 == Coordinate Degree and $L^2$ Stability
 
-First, we consider a very general class of putative algorithms, where the notion of "degree" corresponds to how complex the interactions between the input variables can get.
+First, we consider a general class of putative algorithms, where the notion of "degree" corresponds to how many variables can interact nonlinearly with each other.
 Given this notion, deriving stability bounds becomes a straightforward piece of functional analysis.
 To start, recall the notion of $L^2$ functions:
 
@@ -41,34 +42,36 @@ To start, recall the notion of $L^2$ functions:
   Alternatively, this is the space of $L^2$ functions of $N$ i.i.d. random variables $x_i$, distributed as $pi$.
 ] <def_L2_iid>
 
+Note that this is an extremely broad class of functions; for instance, all bounded functions are $L^2$.
+
 Given any function $f in L2iid$, we can consider how it depends on various subsets of the $N$ input coordinates.
-In principle, everything we want to know about $f$ should be reflected in how it acts on all possible such subsets.
-To formalize this intuition, we define the following coordinate projection:
+In principle, everything about $f$ should be reflected in how it acts on all possible such subsets.
+To formalize this intuition, define the following coordinate projection:
 
 // Def. Projection of function.
 #definition[
-  Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$. The _projection of $f$ onto $J$_ is the function
-  $f^(subeq J): RR^N to RR$ given by
-  $ f^(subeq J)(x) = EE[f(x_1,dots,x_n) | x_i, i in J]. $
-  This is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on $x_J$.
-] <def_es_proj>
+  Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$.
+  The _projection of $f$ onto $J$_ is the function $f^(subeq J): RR^N to RR$ given by
+  $ f^(subeq J)(x) = EE[f(x_1,dots,x_n) | x_i, i in J] = EE[f(x) | x_J] $
+  // This is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on $x_J$.
+] <def_subset_proj>
 
-Intuitively $f^(subeq J)$ is the part of $f$ which only depends on the coordinates in $J$.
+Intuitively $f^(subeq J)$ is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on the coordinates in $J$.
 However, depending on how $f$ accounts for higher-order interactions, it might be the case that $f^(subeq J)$ is fully described by some $f^(subeq J')$, for $J' subset.neq J$.
 What we really want is to decompose $f$ as
 $ f = sum_(S subeq [N]) f^(= S) $ <eq_efron_stein_decomp>
 where each $f^(=S)$ only depends on the coordinates in $S$, but not any smaller subset.
 That is, if $T subset.eq.not S$ and $g$ depends only on the coordinates in $T$, then $inn(f^(=S), g)=0$.
 
-This decomposition, often called the _Efron-Stein decomposition_, does indeed exist, and exhibits the following combinatorial construction.
-Our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3] (who refers to this as the _orthogonal decomposition_).
+This decomposition, often called the _Efron-Stein_, _orthogonal_, or _Hoeffding_ decomposition, does indeed exist, and exhibits the following combinatorial construction.
+Our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3], as well as the paper @kuniskyLowCoordinateDegree2024a.
 
-The motivating fact is that we should expect that for any $J subeq [N]$, we should have
+The motivating fact is that for any $J subeq [N]$, we should have
 $ f^(subeq J) = sum_(S subeq J) f^(=S). $ <eq_efron_stein_motiv>
 Intuitively, $f^(subeq J)$ captures everything about $f$ depending on the coordinates in $J$, and each $f^(subeq S)$ captures precisely the interactions within each subset $S$ of $J$.
 The construction of $f^(= S)$ proceeds by inverting this formula.
 
-First, we consider the case $J=emptyset$. It is clear that $f^(=emptyset) = f^(subeq emptyset)$, which, by @def_es_proj is the constant function $EE[f]$.
+First, we consider the case $J=emptyset$. It is clear that $f^(=emptyset) = f^(subeq emptyset)$, which, by @def_subset_proj is the constant function $EE[f]$.
 Next, if $J={j}$ is a singleton, @eq_efron_stein_motiv gives
 $ f^(subeq {j}) = f^(=emptyset) + f^(= {j}), $
 and as $f^(subeq {j})(x) = EE[f | x_j]$, we get
@@ -113,7 +116,7 @@ To see that these functions are indeed orthogonal, we need the following computa
 */
 
 #theorem[@odonnellAnalysisBooleanFunctions2021[Thm 8.35]][
-  Let $f in L2iid$. Then $f$ has a unique decomposition as
+  Let $f in L2iid$. Then $f$ has a unique _Efron-Stein decomposition_ as
   $ f = sum_(S subeq [N]) f^(=S) $
   where the functions $f^(=S) in L2iid$ satisfy
   + $f^(=S)$ depends only on the coordinates in $S$;
@@ -125,42 +128,57 @@ To see that these functions are indeed orthogonal, we need the following computa
   + For each $S subeq [N]$, $f mapsto f^(=S)$ is a linear operator.
 ] <thrm_efron_stein>
 
-In summary, this desired decomposition of any $L2iid$ function into it's different interaction levels not only uniquely exists, but is an orthogonal decomposition, enabling us to apply tools from elementary Fourier analysis.
+In summary, this decomposition of any $L2iid$ function into it's different interaction levels not only uniquely exists, but is an orthogonal decomposition, enabling us to apply tools from elementary Fourier analysis.
 
-We can finally define the Efron-Stein notion of "degree":
+@thrm_efron_stein further implies that we can define subspaces of $L2iid$ (see also @kuniskyLowCoordinateDegree2024a[#sym.section 1.3])
+$
+  V_J &:= { f in L2iid : f = f^(subeq J) }, \
+  V_(<= D) &:= sum_(J subeq [N] \ abs(J) <= D) V_T.
+$ <eq_es_subspaces>
+These capture functions which only depend on some subset of coordinates, or some bounded number of coordinates. Note that $V_[N] = V_(<= N) = L2iid$.
+
+With this, we can define the notion of "coordinate degree":
 
 #definition[
-  The _Efron-Stein degree_ of a function $f in L2iid$ is
-  $ deg_"ES" (f) = max_(S subeq [N] "s.t." f^(=S)!= 0) |S|. $
-  If $f=(f_1,dots,f_M): RR^N to RR^M$ is a multivariate function, then the Efron-Stein degree of $f$ is the maximum degree of the $f_i$.
+  The _coordinate degree_ of a function $f in L2iid$ is
+  $
+    cdeg(f) := max { abs(S) : S subeq [N]\, f^(=S)!=0 } = min {D : f in V_(<= D) }
+  $
+  If $f=(f_1,dots,f_M): RR^N to RR^M$ is a multivariate function, then
+  $ cdeg(f) := max_(i in [M]) cdeg(f_i). $
 ]
 
-Intuitively, the Efron-Stein degree is the maximum size of multivariate interaction that $f$ accounts for. Of course, this degree is also bounded by $N$, very much unlike polynomial degree. Note as a special case that any multivariate polynomial of degree $D$ has Efron-Stein degree at most $D$.
+Intuitively, the coordinate degree is the maximum size of (nonlinear) multivariate interaction that $f$ accounts for.
+Of course, this degree is also bounded by $N$, very much unlike polynomial degree.
+Note as a special case that any multivariate polynomial of degree $D$ has Efron-Stein degree at most $D$.
+As an example, the function $x_1 + x_2$ has both polynomial degree and coordinate degree 1, while $x_1+x_2^2$ has polynomial degree 2 and coordinate degree 1.
+We are especially interested in algorithms coming from functions in $V_(<= D)$, which we term _low coordinate degree algorithms_.
 
-As we are interested in how these function behaves under small changes in its input, we are led to consider the following "noise operator," which lets us measures the effect of small changes in the input on the Efron-Stein decomposition.
+
+As we are interested in how these function behaves under small changes in its input, we are led to consider the following "noise operator," which lets us measures the effect of small changes in the input on the coordinate decomposition.
 First, we need the following notion of distance between problem instances:
 
 #definition[
-  For $p in [0,1]$, and $x in RR^N$, we say $y in RR^N$ is _$p$-resampled from $x$_ if $y$ is chosen as follows: for each $i in [N]$, independently,
+  For $p in [0,1]$, and $x in RR^N$, we say $y in RR^N$ is _$p$-resampled from $x$_, denoted $y~pi^(times.circle N)_p (x)$, if $y$ is chosen as follows: for each $i in [N]$, independently,
   $
     y_i = cases(x_i &"with probability" p, "drawn from" pi #h(2em)&"with probability" 1-p).
   $
-  We say $(x,y)$ is a _$p$-resampled pair_.
+  We say $(x,y)$ are a _$p$-resampled pair_.
 ] <def_p_resampled>
 
-Note that being $p$-resampled and being $p$-correlated are rather different - for one, there is a nonzero probability that, for $pi$ a continuous probability distribution, $x=y$ when they are $p$-resampled, even though this a.s. never occurs.
+Note that being $p$-resampled and being $p$-correlated are rather different - for one, there is a nonzero probability that, for $pi$ a continuous probability distribution, $x=y$ when they are $p$-resampled, even though this a.s. never occurs if they were $p$-correlated.
 
 // #show sym.EE: math.limits
 
 #definition[
-  For $p in [0,1]$, the _noise operator_ is the linear operator $T_p$ on $L2iid$, defined by, for $y$ $p$-resampled from $x$
-  $ T_p f(x) = EE_(y " " p"-resampled from" x)[f(y)] $
+  For $p in [0,1]$, the _noise operator_ $T_p$ is the linear operator on $L2iid$ defined by
+  $ T_p f(x) = EE_(y ~ pi^(times.circle N)_p (x))[f(y)] $
   In particular, $inn(f,T_p f) = EE_((x,y)" " p"-resampled") [f(x) dot f(y)]$.
 ]
 
 // #show sym.EE: math.scripts
 
-As claimed, we can compute how this operator changes the Efron-Stein decomposition:
+This noise operator changes the Efron-Stein decomposition, and hence the behavior of low coordinate degree functions, in a controlled way:
 
 #lemma[
   Let $p in [0,1]$ and $f in L2iid$ have Efron-Stein decomposition $f=sum_(S subeq [N]) f^(=S)$. Then
@@ -176,10 +194,10 @@ As claimed, we can compute how this operator changes the Efron-Stein decompositi
   since for a fixed $S subeq [N]$, the probability that $S subeq J$ is $p^abs(S)$.
 ]
 
-Putting these facts together, we can derive the following stability bound on functions of bounded Efron-Stein degree.
+Thus, we can derive the following stability bound on low coordinate degree functions.
 
 #theorem[
-  Let $p in [0,1]$ and let $f=(f_1,dots,f_M):RR^N arrow RR^M$ be a multivariate function with Efron-Stein degree $D$ and each $f_i in L2iid$.
+  Let $p in [0,1]$ and let $f=(f_1,dots,f_M):RR^N arrow RR^M$ be a multivariate function with coordinate degree $D$ and each $f_i in L2iid$.
   Suppose that $(x,y)$ are a $p$-resampled pair under $pi^(times.circle N)$, and $EE norm(f(x))^2 = 1$. Then
   $ EE norm(f(x)-f(y))^2 <= 2(1-p^D) <= 2(1-p)D. $ <eq_es_stability>
 ] <thrm_es_stability>
@@ -189,25 +207,22 @@ Putting these facts together, we can derive the following stability bound on fun
     EE norm(f(x)-f(y))^2 &= EE norm(f(x))^2 + EE norm(f(y))^2 - 2 EE inn(f(x),f(y)) \ &= 2 - 2(sum_i EE[f_i (x) f_i (y)])
     \ &= 2 - 2(sum_i inn(f_i,T_p f_i)).
   $ <eq_thrm_es_stability_1>
-  Here, we have for each $i in [N]$ that
+  Here, we have for each $i in [M]$ that
   $
     inn(f_i,T_p f_i) = inn(sum_(S subeq [N]) f_i^(=S), sum_(S subeq [N]) p^abs(S) f_i^(=S))= sum_(S subeq [N]) p^abs(S) norm(f_i^(=S) )^2,
   $
   by @lem_es_noise_op and orthogonality.
-  Now, as each $f_i$ has Efron-Stein degree at most $D$, the sum above can be taken only over $S subeq [N]$ with $0 <= abs(S) <= D$, giving the bound
+  Now, as each $f_i$ has coordinate degree at most $D$, the sum above can be taken only over $S subeq [N]$ with $0 <= abs(S) <= D$, giving the bound
   $
     p^D EE [f_i (x)^2] <= inn(f_i,T_p f_i)=EE[f_i (x) dot T_p f_i (x)] <= EE[f_i (x)^2].
   $
   Summing up over $i$, and using that $EE norm(f(x))^2 = 1$, gives
   $ p^D <= sum_i inn(f_i,T_p f_i) = EE inn(f(x),f(y)) <= 1. $
   Finally, we can substitute into @eq_thrm_es_stability_1 to get
+  #footnote[The last inequality follows from the identity $(1-p^D) = (1-p)(1+p+p^2+ dots p^(D-1))$; the bound is tight for $p approx 1$.]
   $
-    EE norm(f(x) - f(y))^2 <= 2 - 2 p^D = 2(1-p^D) <=
-  #footnote[This follows from the identity $(1-p^D) = (1-p)(1+p+p^2+ dots p^(D-1))$; the bound is tight for $p approx 1$.]
-  #h(0.4em)
-  2(1-p)D,
+    EE norm(f(x) - f(y))^2 <= 2 - 2 p^D = 2(1-p^D) <= 2(1-p)D. #qedhere
   $
-  as desired.
 ]
 
 == Hermite Polynomials
@@ -312,7 +327,7 @@ In exchange, being able to use $p$-correlation as a "metric" on the input domain
 
 == Stability of Low-Degree Algorithms
 
-With these notions of low-degree functions/polynomials in hand, we can consider algorithms based on such functions.
+With these notions of low degree functions/polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
   A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
@@ -330,7 +345,7 @@ We can broaden the notion of polynomial algorithms (with their obvious notion of
   Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _Efron-Stein degree_ of $alg$ is the maximum Efron-Stein degree of each of its coordinate functions.
 ]
 
-By the low-degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
+By the low degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
 
 // Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
 
