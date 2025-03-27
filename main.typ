@@ -86,23 +86,23 @@
 
 /// Introduction
 
-#include "introduction.typ"
+#include "1-introduction.typ"
 
 /// Algorithms
 
-#include "algorithms.typ"
+#include "2-algorithms.typ"
 
 /// Hardness
 
-#include "hardness.typ"
+#include "3-hardness.typ"
 
 /// Rounding
 
-#include "rounding.typ"
+#include "4-rounding.typ"
 
 /// Litreview
 
-#include "litref.typ"
+#include "5-litref.typ"
 
 
 #bibliography("references.bib", full: true)

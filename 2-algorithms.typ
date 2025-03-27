@@ -150,10 +150,9 @@ With this, we can define the notion of "coordinate degree":
 
 Intuitively, the coordinate degree is the maximum size of (nonlinear) multivariate interaction that $f$ accounts for.
 Of course, this degree is also bounded by $N$, very much unlike polynomial degree.
-Note as a special case that any multivariate polynomial of degree $D$ has Efron-Stein degree at most $D$.
+Note as a special case that any multivariate polynomial of degree $D$ has coordinate degree at most $D$.
 As an example, the function $x_1 + x_2$ has both polynomial degree and coordinate degree 1, while $x_1+x_2^2$ has polynomial degree 2 and coordinate degree 1.
 We are especially interested in algorithms coming from functions in $V_(<= D)$, which we term _low coordinate degree algorithms_.
-
 
 As we are interested in how these function behaves under small changes in its input, we are led to consider the following "noise operator," which lets us measures the effect of small changes in the input on the coordinate decomposition.
 First, we need the following notion of distance between problem instances:
@@ -230,7 +229,7 @@ Thus, we can derive the following stability bound on low coordinate degree funct
 Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of _Hermite polynomials_, which enables us to prove similar bounds as @thrm_es_stability.
 This theory is much more classical, so we encourage the interested reader to see @odonnellAnalysisBooleanFunctions2021[#sym.section 11] for details.
 
-To start, we consider the following space of $L^2$ functions:
+To start, we consider the space of $L^2$ functions under the Normal measure.
 
 #definition[
   Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal random variables.
@@ -243,14 +242,14 @@ However, these are far from an orthonormal "Fourier" basis; for instance, we kno
 By the Gram-Schmidt process, these monomials can be converted into the _(normalized) Hermite polynomials_ $h_j$ for $j>=0$, given as
 $
   h_0(z)=1,
-#h(2em)
-h_1(z)=z,
-#h(2em)
-h_2(z)=(z^2-1)/sqrt(2),
-#h(2em)
-h_3(z)=(z^3-3z)/sqrt(6),
-#h(2em)
-...
+  #h(2em)
+  h_1(z)=z,
+  #h(2em)
+  h_2(z)=(z^2-1)/sqrt(2),
+  #h(2em)
+  h_3(z)=(z^3-3z)/sqrt(6),
+  #h(2em)
+  ...
 $ <eq_hermite_polys>
 Note here that each $h_j$ is a degree $j$ polynomial.
 

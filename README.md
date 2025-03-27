@@ -1,5 +1,7 @@
 # Rushil Mallarapu - Senior Thesis
 
+**NOTE: `5-litref.typ` is fake chapter - just there for my sake to organize writing for chapter 1.**
+
 # How to build
 
 Main file is `main.typ`.
