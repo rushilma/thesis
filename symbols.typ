@@ -51,3 +51,16 @@
       paren.r$,
   )
 )
+
+#let multiprobcond(y, ..x) = (
+  math.lr(
+    size: 100% + 1em,
+    $paren.l
+      #stack(
+        spacing: 0.7em,
+        ..x.pos().map(it => align(left, it)),
+      )
+      mid(|) #y
+      paren.r$,
+  )
+)

@@ -25,7 +25,7 @@ Thus, strong low degree hardness up to $o(N)$ can be thought of as evidence of r
 
 For the case of NPP, we consider two distinct notions of degree.
 One is traditional polynomial degree, which has an intuitive interpretation, but the other, known in the ltierature as "coordinate degree," is a more flexible notion which can be applied to a much broader class of algorithms.
-As we will see in @section_proof, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
+As we will see in @section_hardness, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
 
 == Coordinate Degree and $L^2$ Stability
 
@@ -218,7 +218,7 @@ Thus, we can derive the following stability bound on low coordinate degree funct
   Summing up over $i$, and using that $EE norm(f(x))^2 = 1$, gives
   $ p^D <= sum_i inn(f_i,T_p f_i) = EE inn(f(x),f(y)) <= 1. $
   Finally, we can substitute into @eq_thrm_es_stability_1 to get
-  #footnote[The last inequality follows from the identity $(1-p^D) = (1-p)(1+p+p^2+ dots p^(D-1))$; the bound is tight for $p approx 1$.]
+  #footnote[The last inequality follows from $(1-p^D) = (1-p)(1+p+p^2+ dots p^(D-1))$; the bound is tight for $p approx 1$.]
   $
     EE norm(f(x) - f(y))^2 <= 2 - 2 p^D = 2(1-p^D) <= 2(1-p)D. #qedhere
   $
@@ -229,10 +229,8 @@ Thus, we can derive the following stability bound on low coordinate degree funct
 Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of _Hermite polynomials_, which enables us to prove similar bounds as @thrm_es_stability.
 This theory is much more classical, so we encourage the interested reader to see @odonnellAnalysisBooleanFunctions2021[#sym.section 11] for details.
 
-To start, we consider the space of $L^2$ functions under the Normal measure.
-
 #definition[
-  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal random variables.
+  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal r.v.s.
 ]
 
 Note that under the usual $L^2$ inner product, $inn(f,g) = EE[f dot g]$, this is a separable Hilbert space.
@@ -251,9 +249,7 @@ $
   #h(2em)
   ...
 $ <eq_hermite_polys>
-Note here that each $h_j$ is a degree $j$ polynomial.
-
-It is then straightforward to show the following:
+Note here that each $h_j$ is a degree $j$ polynomial. With these, we have:
 
 #theorem([@odonnellAnalysisBooleanFunctions2021[Prop 11.30]])[
   The Hermite polynomials $(h_j)_(j >= 0)$ form a complete orthonormal basis for $L2norm$.
@@ -320,9 +316,8 @@ With this in hand, we can prove a similar stability bound to @thrm_es_stability.
   From there, the proof proceeds as before.
 ]
 
-As a comparision to the case for functions with Efron-Stein degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
-For instance, the function $f(x)=x_1^2 x_2^4$ has Efron-Stein degree 2, but polynomial degree 6.
-In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant benefits in the arguments which follow, justifying equal consideration of both classes of functions.
+As a comparision to the case for functions with coordinate degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
+In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant strengthenings in the arguments which follow, justifying equal consideration of both classes of functions.
 
 == Stability of Low-Degree Algorithms
 
@@ -332,16 +327,19 @@ With these notions of low degree functions/polynomials in hand, we can consider 
   A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
 
-In practice, we want to consider $RR^N$-valued algorithms as opposed to $Sigma_N$-valued ones to avoid the resulting restrictions on the component functions. These can then be converted to $Sigma_N$-valued algorithms by some rounding procedure. We discuss the necessary extensions to handling this rounding in (section ???).
+// TODO: rephrase this paragraph
+In practice, we want to consider $RR^N$-valued algorithms as opposed to $Sigma_N$-valued ones to avoid the resulting restrictions on the component functions.
+These can then be converted to $Sigma_N$-valued algorithms by some rounding procedure.
+We discuss the necessary extensions to handling this rounding in @section_rounding.
 
 #definition[
   A _polynomial algorithm_ is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
 ]
 
-We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of Efron-Stein degree:
+We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of coordinate degree:
 
 #definition[
-  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _Efron-Stein degree_ of $alg$ is the maximum Efron-Stein degree of each of its coordinate functions.
+  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _coordinate degree_ of $alg$ is the maximum coordinate degree of each of its coordinate functions.
 ]
 
 By the low degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
@@ -349,8 +347,8 @@ By the low degree heuristic, these algorithms can be interpreted as a proxy for 
 // Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
 
 #proposition[Low-Degree Stability -- @huangStrongLowDegree2025[Prop. 1.9]][
-  Suppose we have a deterministic algorithm $alg$ with degree (or Efron-Stein degree) $<= D$ and norm $EE norm(alg(g))^2 <= C N$.
-  Then, for inputs $g,g'$ which are $(1-epsilon)$-correlated,
+  Suppose we have a deterministic algorithm $alg$ with degree (resp. coordinate degree) $<= D$ and norm $EE norm(alg(g))^2 <= C N$.
+  Then, for inputs $g,g'$ which are $(1-epsilon)$-correlated (resp. $(1-epsilon)$-resampled),
   $ EE norm(alg(g) - alg(g'))^2 <= 2C D epsilon N, $ <eq_alg_expected_stability>
   and thus
   $
@@ -358,12 +356,12 @@ By the low degree heuristic, these algorithms can be interpreted as a proxy for 
   $ <eq_alg_stability>
 ] <prop_alg_stability>
 #proof[
-  Let $C' := EE norm(alg(g))^2$, and define the rescaling $alg' := alg slash sqrt(C')$. Then, by @thrm_poly_stability (or @thrm_es_stability, in the Efron-Stein case), we have
+  Let $C' := EE norm(alg(g))^2$, and define the rescaling $alg' := alg slash sqrt(C')$. Then, by @thrm_poly_stability (or @thrm_es_stability, in the low coordinate degree case), we have
   $
     EE norm(alg'(g) - alg'(g'))^2 = 1 / (C') EE norm(alg(g) - alg(g'))^2 <= 2 D epsilon.
   $
-  Multiplying by $C'$, and using that $C' <= C N$, we get @eq_alg_expected_stability.
-  Finally, @eq_alg_stability follows immediately from Markov's inequality.
+  Multiplying by $C'$ gives @eq_alg_expected_stability (as $C' <= C N$).
+  Finally, @eq_alg_stability follows from Markov's inequality.
 ]
 
 /*

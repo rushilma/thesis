@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Randomized Rounding Things
+= Randomized Rounding Things <section_rounding>
 
 == Solutions repel
 
@@ -29,7 +29,7 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
   $
   Multiplying the lower equation by $-1$ and adding the resulting inequalities gives
   $ abs(inn(g,x_J)) <= 2^(-E), $
-  where $inn(g,x_J)$ is a $Normal(0,k)$ r.v. (note that $k>0$ so it is nondegenerate). Moreover, as $k=O(1)$, we get by the logic in @lem_correlated_solution_lowprob that
+  // where $inn(g,x_J)$ is a $Normal(0,k)$ r.v. (note that $k>0$ so it is nondegenerate). Moreover, as $k=O(1)$, we get by the logic in @lem_correlated_solution_lowprob that
   $
     PP(x in Soln(g) "and" x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
   $
