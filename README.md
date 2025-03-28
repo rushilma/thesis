@@ -13,3 +13,6 @@ $ typst watch main.typ --font-path fonts/
 
 ## Organization:
 - `fonts/`: Directory of fonts.
+
+## TODO:
+- In Ch. 3 and 4, change $p_"solve"$, etc to have superscripts for (1) poly, (2) low coord degree (LCD), and (3) hat algorithms $hat(p)^lcd _"solve"
