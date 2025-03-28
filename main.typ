@@ -105,4 +105,8 @@
 #include "5-litref.typ"
 
 
-#bibliography("references.bib", full: true)
+#bibliography(
+  "references.bib",
+  style: "alphanumeric.csl",
+  // style: "springer-lecture-notes-in-computer-science",
+)

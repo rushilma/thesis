@@ -377,7 +377,7 @@ Sublinear case. We now consider sublinear energy levels, ranging from $(log_2 N)
   Let $omega((log_2 N)^2) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
   Then, for any algorithm $alg$ with coordinate degree $D <= o(E slash (log_2 N)^2)$ and $EE norm(alg(g))^2 <= C N$,
   there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
-] <thrm_sldh_es_sublinear>
+] <thrm_sldh_lcd_sublinear>
 #proof[
   As in @thrm_sldh_lcd_linear, choose $epsilon$ as in @eq_def_lcd_epsilon, so that $epsilon=omega(1 slash N)$ and $PP(S_"diff") approx 1$.
   However, to account for $E <= o(N)$, we need to adjust $eta$ as $N -> infinity$.
