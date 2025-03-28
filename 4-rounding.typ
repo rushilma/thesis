@@ -2,19 +2,50 @@
 
 #import "symbols.typ": *
 
-= Extending to Rounded Algorithms <section_rounding>
+#pagebreak()
 
-== Solutions repel
+#show math.equation: set text(font: "New Computer Modern Math")
 
-Claim: no two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
-The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
+= Extensions to Real-Valued Algorithms <section_rounding>
+
+#show math.equation: set text(font: "STIX Two Math")
+
+With @section_hardness, we have established strong low degree hardness for both low degree polynomial algorithms and low coordinate degree algorithms.
+However, our stability analysis assumed that the algorithms in question were $Sigma_N$-valued.
+In this section, we show that this assumption is not in fact as restrictive as it might appear.
+
+Throughout, let $alg$ denote an $RR^N$-valued algorithm.
+We want to show that
+#enum(
+  numbering: "I.",
+  indent: 1.2em,
+  [No low degree $alg$ can reliably output points _close_ -- within constant distance -- to a solution,],
+  [No $Sigma_N$-valued algorithm $tilde(alg)$ coming from randomly rounding the output of $alg$, which changes an $omega(1)$ number of coordinates, can find a solution with nonvanishing probability.],
+)
+In principle, the first possibility fails via the same analysis as in @section_hardness, while the second fails because because the landscape of solutions to any given NPP instance is sparse.
+
+Why are these the only two possibilities? For $alg$ to provide a way to actually solve the NPP, we must be able to turn its outputs on $RR^N$ into points on $Sigma_N$. If $alg$ could output points within an constant distance (independent of the instance) of a solution, then we could convert $alg$ into a $Sigma_N$-valued algorithm by manually computing the energy of all points close to its output and returning the energy-maximizing point.
+
+However, the more common way to convert a $RR^N$-valued algorithm into a $Sigma_N$-valued one is by rounding the outputs, as in @huangStrongLowDegree2025.
+Doing this directly can lead to difficulties in performing the stability analysis.
+In our case, though, if we know no $alg$ can reliably output points within constant distance of a solution, then any rounding scheme which only flips $O(1)$ many coordinates will assuredly fail.
+Thus, the only rounding schemes worth considering are those which flip $omega(1)$ many coordinates.
+
+We first describe a landscape obstruction to finding multiple solutions at the same energy level for a random NPP instance. Then, we show hardness in both of the aforementioned cases. meow.
+
+== Solutions repel meow
+
+Introduce section meow.
+
+No two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
+// The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
 
 #proposition[
-  Fix distinct points $x,x' in Sigma_N$ and let $g ~ stdnorm$ be any instance.
+  Fix distinct points $x,x' in Sigma_N$ and let $g ~ stdnorm$ be a random instance.
   // with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), and let $g$ be any instance.
   Then,
   $
-    PP(x, x' in Soln(g)) <= exp(-E + O(1)).
+    PP(x, x' in Soln(g)) <= exp_2 (-E + O(1)).
   $
 ] <prop_fixed_close_solns_lowprob>
 #proof[
@@ -31,9 +62,11 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
   Multiplying the lower equation by $-1$ and adding the resulting inequalities gives $abs(inn(g,x_J)) <= 2^(-E)$.
   Note that $inn(g,x_J)~Normal(0,abs(J))$ (and is nondegenerate, as $abs(J)>0$). By @lem_normal_smallprob and the following remark, it follows that
   $
-    PP(x,x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp(-E + O(1)). #qedhere
+    PP(x,x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp_2 (-E + O(1)). #qedhere
   $
 ]
+
+Remarks on theorem below meow.
 
 #theorem[Solutions Can't Be Close][
   Consider any distances $k = Omega(1)$ and energy levels $E >> k log_2  N$.
@@ -55,13 +88,14 @@ The reason is that this would require a subset of $k$ signed coordinates $± g_{
     ) <= PP multiprob(
       exists J subset [N]\, x_J in {plus.minus 1}^abs(J) "s.t.",
       (upright(a)) &abs(J) <= k\,,
-      (upright(b)) &abs(inn(g_J,x_J)) <= exp(-E))
-    <= exp(-E + O(k log_2  N)) = o(1).
+      (upright(b)) &abs(inn(g_J,x_J)) <= exp_2 (-E))
+    <= exp_2 (-E + O(k log_2 N)) = o(1).
   $ <eq_solutions_repel>
   Note that the last equality holds as $E >> k log_2 N$.
 ]
 
 == Proof of Hardness for Close Algorithms
+
 
 Fix some $k=O(1)$. Let the event that the $RR^N$-valued $alg$ succeeds on a random instance $g$ be
 $
@@ -89,7 +123,7 @@ $
     exists.not x' in Soln(g') "such that",
     norm(x-x') <= 2sqrt(eta N),
   )
-$ <eq_es_events>
+$ <eq_lcd_rounded_events>
 
 We can consider the partially defined algorithm $hat(alg)$ which, given an instance $g$ such that $S_"close"$ holds, sets $hat(alg)(g) := hat(x) in S(E;g)$ to be the (unique) nearby good solution.
 This function is
@@ -111,7 +145,7 @@ $
 
 $inn(g,x) ~ Normal(0,N)$
 $
-  PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp(-E - 1/2 log_2 (N) + O(1))
+  PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp_2 (-E - 1 / 2 log_2 (N) + O(1))
 $
 Follows by @lem_normal_smallprob.
 i.e., for $E >> log_2  N$, any fixed $x$ is not solution to random instance whp.
@@ -179,7 +213,7 @@ Intuitively, the landscape of solutions is so fractured that any rounding proced
 #proof[
   Observe that as each coordinate is rounded independently, we can compute
   $
-    PP(tilde(x) = x^*) = product_i (1-p_i) = exp(sum_i log_2 (1-p_i)) <= exp(- sum_i p_i).
+    PP(tilde(x) = x^*) = product_i (1-p_i) = exp_2 (sum_i log_2 (1-p_i)) <= exp_2 (- sum_i p_i).
   $
   For $sum_i p_i = omega(1)$, we get $PP(tilde(x)=x^*) <= e^(-omega(1)) = o(1)$, as claimed.
 ]
@@ -209,7 +243,7 @@ Let $p_1,dots,p_N$ be the probability of $tilde(x)$ disagreeing with $x_*$ on ea
 - Require that no $p_i = 0$ (i.e. all coordinates have a chance to disagree)
 - Then, for $x in [0,1)$, exists universal constant $C$ such that $-log (1-x) <= C x$.
 - Probability that $tilde(x)=x_*$ is
-  $ product (1-p_i) = exp( sum log(1-p_i) ) <= exp(- C sum p_i). $
+  $ product (1-p_i) = exp_2 ( sum log(1-p_i) ) <= exp_2 (- C sum p_i). $
 - If we assume that randomized rounding changes solution, then that requires this probability to go to zero, i.e. $sum p_i = omega(1)$.
 
 In this case, consider following construction. For each $1 <= i <= N$, flip an independent coin $H_i$ which lands heads with probability $2 p_i$, and keep all the heads.
