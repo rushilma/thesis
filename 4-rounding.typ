@@ -152,8 +152,7 @@ Recall from @section_algorithm_stability that if $alg$ is low degree (or low coo
 ]
 
 Of course, computing $hat(alg)_r$ is certainly never polynomial, and does not preserve any low coordinate degree assumptions in a controllable way.
-Thus, we cannot directly hope for @thrm_sldh_poly_linear, @thrm_sldh_poly_sublinear, @thrm_sldh_lcd_linear, or @thrm_sldh_lcd_sublinear to hold.
-Meow
+Thus, we cannot directly hope for @thrm_sldh_poly_linear, @thrm_sldh_poly_sublinear, @thrm_sldh_lcd_linear, or @thrm_sldh_lcd_sublinear to hold meow
 
 // lcd hat alg is still hard
 
@@ -238,156 +237,99 @@ Observe that as $p_"cond"$ makes no reference to any algorithm, the bound in @pr
 
 Talk about implications meow.
 
-== No solve case -- rounding is truly random.
+== Truly Random Rounding
 
-$inn(g,x) ~ Normal(0,N)$
-$
-  PP(abs(inn(g,x)) <= 2^(-E)) <= 2^(-E+1) / sqrt(2 pi N) = exp_2 (-E - 1 / 2 log_2 (N) + O(1))
-$
-Follows by @lem_normal_smallprob.
-i.e., for $E >> log_2  N$, any fixed $x$ is not solution to random instance whp.
-By conditioning, this implies that if $x$ is random and independent from $g$, then it's a solution with $o(1)$ probability.
-Thus, if you truly had a random point, then it's almost certainly not a solution; that is, if your randomized rounding destroys your algorithms output, then whp you fail to find a solution.
+At this point, one might wonder whether, while deterministic algorithms fail, perhaps a randomized rounding scheme could save us, maybe by assiging small values to coordinates which it was less confident in.
+However, this approach is blunted by the same brittleness of the NPP landscape that established the conditional obstruction of @prop_correlated_fundamental and @prop_resampled_fundamental.
+In particular, by @thrm_solutions_repel, if you have a subcube of $Sigma_N$ nonconstant but bounded dimension, then with high probability at most one of those points will be a solution.
 
-Note: we should assume $log_2 ^2 N << E <= N$.
-Also, getting algorithms for polynomial discrepancy ($n^-1$, etc.) is basically trivial.
+For this section, again let $alg$ be a deterministic $RR^N$-valued algorithm.
+Moreover, assume we are searching for solutions with energy between $(log_2 N)^2 << E <= N$; note that for lower values of $E$, algorithms like @karmarkerDifferencingMethodSet1983 already achieve discrepancies of $N^(O(log_2 N))$ energy in polynomial time.
 
-Let $x := alg(g)$.
-We write $x^*$ for the coordinate-wise signs of $x$, i.e.
+To start, for any $x in RR^N$, we write $x^*$ for the coordinate-wise signs of $x$, i.e.
 $ x^*_i := cases(+1 #h(1em) &x_i > 0\,, -1 &x_i <= 0.) $
-
-Let $round(x,omega):RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input.
-We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
+We can define the modified alg $alg^*(g) := alg(g)^*$.
 
 #remark[
-  Meow $alg^*$ fails and is still degree $D$ lcdf, even if it stops being a polynomial. Bounds on $D$ worsen, but only to what you'd expect.
+  meow $alg^*$ fails and is still degree $D$ lcdf, even if it stops being a polynomial. Bounds on $D$ worsen, but only to what you'd expect.
+  Note that if $alg$ has coordinate degree $D$, then $alg^*$ also has coordinate degree $D$. As a deterministic $Sigma_N$-valued algorithm, strong low degree hardness as proved in the previous section applies.
 ]
 
+In contrast to deterministically taking signs of the outputs of $alg$ (which corresponds to deterministically rounding the outputs of $alg$ to $Sigma_N$), we can consider passing the output of $alg$ through a randomized rounding scheme. Let $round(x,omega):RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input. We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
 Given such a randomized rounding function, we can describe it in the following way.
-Let $p_1,dots,p_N$ be the probabilities of $round(x)_i != (x^*)_i$.
-We assume without loss of generality that each $p_i <= 1/2$.
+Let $p_1 (x),dots,p_N (x)$ be defined by
+$ p_i (x) := max(PP(round(x)_i != x^*_i), 1/2). $ <eq_rounding_changed_coord>
+
+We need to guarantee that each $p_i (x) <= 1 slash 2$ for the following alternative description of $round(x)$:
 
 #lemma[
-  Draw $N$ coin flips $I_i ~ Bern(2p_i)$ and N$N$_N_ signs $S_i ~ "Unif"{plus.minus 1}$, all mutually independent, and define the random variable $tilde(x) in Sigma_N$ by
-  $ tilde(x)_i := S_i I_i + (1-I_i) x^*_i. $
+  Fix $x in RR^N$, and draw $N$ coin flips $I_(x,i) ~ Bern(2p_i (x))$ and $N$ signs $S_i ~ "Unif"{plus.minus 1}$, all mutually independent, and define the random variable $tilde(x) in Sigma_N$ by
+  $ tilde(x)_i := S_i I_(x,i) + (1-I_(x,i)) x^*_i. $
   Then $tilde(x) ~ round(x)$.
 ] <lem_random_rounding_altdef>
 #proof[
-  Conditioning on $I_i$, we can check that
+  Conditioning on $I_(x,i)$, we can check that
   $
-    PP(tilde(x)_i != x_i) &= 2 p_i dot PP(tilde(x)_i = x_i | I_i = 1) + (1-2p_i ) dot PP(tilde(x)_i != x_i | I_i = 0) \
-    &= 2 p_i dot 1 / 2 + 0 = p_i.
+    PP(tilde(x)_i != x_i) &= 2 p_i (x) dot PP(tilde(x)_i = x_i | I_(x,i) = 1) + (1-2p_i (x) ) dot PP(tilde(x)_i != x_i | I_(x,i) = 0)
+    // = 2 p_i (x) dot 1 / 2
+    = p_i (x).
   $
-  Thus, $tilde(x)$ has the same probability of equalling $x^*$ in each coordinate as $round(x)$ does, as claimed.
+  Thus, $PP(tilde(x)_i = x^*_i) = PP(round(x)_i = x^*_i)$, as claimed.
+  // $tilde(x)$ has the same probability of equalling $x^*$ in each coordinate as $round(x)$ does, as claimed.
 ]
 
 By @lem_random_rounding_altdef, we can redefine $round(x)$ to be $tilde(x)$ as constructed without loss of generality.
 
 // What is tilde(x)?
 
-By @lem_random_rounding_altdef, it makes sense to define $tilde(alg)(g) := round(alg(g))$, which is now (a) $Sigma_N$-valued and (b) randomized only in the transition from $RR^N$ to $Sigma_N$ (i.e., the rounding doesn't depend directly on $g$, only the output $x = alg(g)$).
+It thus makes sense to define $tilde(alg)(g) := round(alg(g))$, which is now (a) $Sigma_N$-valued and (b) randomized only in the transition from $RR^N$ to $Sigma_N$ (i.e., the rounding doesn't depend directly on $g$, only the output $x = alg(g)$).
+We should expect that if $tilde(alg)=alg^*$ (e.g., if $alg$ outputs values far outside the cube $[-1,1]^N$) with high probability, then low degree hardness will still apply, as $alg^*$ is deterministic.
+However, in general, any $tilde(alg)$ which differs from $alg^*$ will fail to solve $g$ with high probability.
+This is independent of any assumptions on $alg$: any rounding scheme will introduce so much randomness that $tilde(x)$ will be effectively a random point, which has a vanishing probability of being a solution because of how sparse and disconnected the NPP landscape is.
 
-
-TODO: explain why we want to consider $tilde(alg)(g) = round(alg(g))$
-#definition[
-  Given $alg$, we can define two $Sigma_N$-valued algorithms. Let $x := alg(g)$. Then
-  $
-    alg^*(g)_i := 2 I(x_i > 0) - 1 #h(2em)"and"#h(2em) tilde(alg)(g) =: sans("round")(alg(g)).
-  $
-]
-
-Note that if $alg$ has coordinate degree $D$, then $alg^*$ also has coordinate degree $D$. As a deterministic $Sigma_N$-valued algorithm, strong low degree hardness as proved in the previous section applies.
-
-However, we still want to show that $tilde(x) := tilde(alg)(g)$ fails to solve $g$ with high probability.
-Intuitively, the landscape of solutions is so fractured that any rounding procedure which produces results different from $x^*$ will effectively be selecting a random point, and because any fixed point has such a low probability of being a solution, hardness still follows.
+To see this, we first show that any randomized rounding scheme as in @lem_random_rounding_altdef which a.s.~differs from picking the closest point deterministically will resample a diverging number of coordinates.
 
 #lemma[
-  Suppose $p_1,dots,p_N$ are the probabilities of $tilde(x)$ and $x^*$ differing in each coordinate.
-  // Assume $p_i <= 1 slash 2$
-  Assume $sum_i p_i = omega(1)$.
-  Then $tilde(x) != x^*$ with high probability.
+  Fix $x in RR^N$, and let $p_1 (x),dots,p_N (x)$ be defined as in @eq_rounding_changed_coord.
+  Then $tilde(x) != x^*$ with high probability iff $sum_i p_i (x) = omega(1)$.
+  Moreover, assuming that $sum_i p_i (x)= omega(1)$, the number of coordinates in which $tilde(x)$ is resampled diverges almost surely.
 ] <lem_rounding_changes_soln>
 #proof[
-  Observe that as each coordinate is rounded independently, we can compute
+  Recall that for $x in [0,1 slash 2]$, $log_2 (1-x) = Theta(x)$.
+  Thus, as each coordinate of $x$ is rounded independently, we can compute
   $
-    PP(tilde(x) = x^*) = product_i (1-p_i) = exp_2 (sum_i log_2 (1-p_i)) <= exp_2 (- sum_i p_i).
+    PP(tilde(x) = x^*) = product_i (1-p_i (x)) = exp_2 (sum_i log_2 (1-p_i (x))) <= exp_2 (- Theta(sum_i p_i (x))).
   $
-  For $sum_i p_i = omega(1)$, we get $PP(tilde(x)=x^*) <= e^(-omega(1)) = o(1)$, as claimed.
+  Thus, $PP(tilde(x)=x^*) = o(1)$ iff $sum_i p_i (x) = omega(1)$, as claimed.
+
+  Next, following the construction of $tilde(x)$ in @lem_random_rounding_altdef, let $E_i = {I_(x,i) = 1}$ be the event that $tilde(x)_i$ is resampled from $ "Unif"{plus.minus 1}$, independently of $x^*_i$.
+  The $E_i$ are independent, so by Borel-Cantelli, $sum_i PP(E_i) = 2 sum_i p_i (x) = omega(1)$ implies $tilde(x)_i$ is resampled infinitely often with probability 1, thus completing the proof.
 ]
 
+With this, we can apply @thrm_solutions_repel, which shows that solutions resist clustering at a rate related to their energy level (i.e. higher energy solutions are push each other further apart), to conclude that any $tilde(alg)$ which is not equal to $alg^*$ with high probability fails to find solutions.
 
+#theorem[
+  Let $x= alg(g)$, and define $x^*, tilde(x)$, etc., as previously.
+  Moreover, assume that for any $x$ in the possible outputs of $alg$, we have $sum_i p_i (x) = omega(1)$.
+  Then, for any $E >= omega((log_2 N)^2)$, we have
+  $ PP(tilde(alg)(g) in S(E;g)) = PP(tilde(x) in S(E;g)) <= o(1). $
+]
+#proof[
+  Following the characterization of $tilde(x)$ in @lem_random_rounding_altdef, let $K := max(log_2 N, sum_i I_(x,i))$.
+  By assumption on $sum_i p_i (x)$ and @lem_rounding_changes_soln, we know $K$, which is at least the number of coordinates which are resampled, is bounded as $1 << K <= log_2 N$, for any possible $x = alg(g)$.
+  Now, let $S subeq [N]$ denote the set of the first $K$ coordinates to be resampled, so that $K = abs(S)$.
+  Consider now
+  $ PP(tilde(x) in S(E;g) | tilde(x)_([N] without S)), $
+  where we fix the coordinates outside of $S$ and let $tilde(x)$ be uniformly sampled from a $K$-dimensional subcube of $Sigma_N$.
+  All such $tilde(x)$ are within distance $2sqrt(K)$ of each other, so by @thrm_solutions_repel, the probability there is more than one such $tilde(x) in S(E;g)$ is bounded by
+  $ exp_2 (-E + O(K log_2 N)) <= exp_2(-E + O((log_2 N)^2)) = o(1), $
+  by assumption on $E$. Thus, the probability that any of the $tilde(x)$ is in $S(E;g)$ is bounded by $2^(-K)$, whence
+  $
+    PP(tilde(x) in S(E;g)) =
+    EE[ PP(tilde(x) in S(E;g) | tilde(x)_([N] without S)) ] <= 2^(-K) <= o(1). #qedhere
+  $
+  // This should work as the rounding bounds are independent of the bounds pertaining to g, by assumption that sum_i p_i (x) = omega(1) for all x; can't have alg throw a bunch of x's where K = O(1).
+]
 
-- Flip coin with prob $2p_i$
-- If heads, randomize $tilde(x)$ with probability $1/2$; if tails keep coord.
-- Then,
-  $ PP(tilde(x)_i = x^*_i) = 2p_i * 1 / 2 + (1-2p_i) * 0 = p_i. $
-
-Let $K$ be a large constant, and let $S subeq [N]$ denote the coordinates of the first $K$ coordinates to be randomized.
-Then, we can condition on $x_([N] without S)$, given which $tilde(x)$ is a uniformly random point within a $K$-dimensional subcube of $Sigma_N$.
-By @thrm_solutions_repel, at most one of these points is in $S(E;g)$, so the probability of $tilde(x)$ being a solution is at most $2^(-K)$.
-
-
-$
-  PP(abs(inn(g,tilde(x))) <= 2^(-E) | g, x_([N] without S)) <= exp_2 (-E - 1 / 2 log_2 abs(S) + O(1)).
-$
-
-First, assume $attach(S_"solve", tl: not)$. In that case, $x:=alg(g)$ is far from any solution, and randomized rounding fails with high probability.
-That is, $PP(tilde(x) in S(E;g)) = o(1)$
-
-To see this, let $x^*$ be the point on $Sigma_N$ closest to $x$ (in principle, this is the vector which is coordinatewise $plus.minus 1$ depending on whether each coordinate of $x$ is positive or negative).
-
-Let $p_1,dots,p_N$ be the probability of $tilde(x)$ disagreeing with $x_*$ on each coordinate.
-- Require that no $p_i = 0$ (i.e. all coordinates have a chance to disagree)
-- Then, for $x in [0,1)$, exists universal constant $C$ such that $-log (1-x) <= C x$.
-- Probability that $tilde(x)=x_*$ is
-  $ product (1-p_i) = exp_2 ( sum log(1-p_i) ) <= exp_2 (- C sum p_i). $
-- If we assume that randomized rounding changes solution, then that requires this probability to go to zero, i.e. $sum p_i = omega(1)$.
-
-In this case, consider following construction. For each $1 <= i <= N$, flip an independent coin $H_i$ which lands heads with probability $2 p_i$, and keep all the heads.
-- By Second Borel-Cantelli lemma, $E_i = { H_i "heads"}$, the $E_i$ are independent, and $ sum_( i>= 0 ) PP(E_i) = sum 2 p_i = infinity, $ so $PP(limsup E_i) = 1$, i.e., get heads infinitely often.
-- That is, number of heads is $omega(1)$.
-- For every coin with a head, round $x^*$ by changing coord with probability $1/2$; if tails keep coord.
-- That is, randomized rounding done by choosing random set of $omega(1)$ coordinates and resampling them as iid Uniform in ${-1,1}$.
-
-Because number of coordinates being changed is $omega(1)$, can pick large constant $K$ such that whp there are at least $K$ coordinates being changed.
-- Only randomize first $K$ heads, condition on the others. Thus, $tilde(x)$ has $K$ i.i.d., random coordinates.
-- $tilde(x)$ is random point in $K$-dimensional subcube, but by @prop_fixed_close_solns_lowprob, only one out of the $2^K$ such points is a good solution.
-
-Thus, probability for rounding to give a good solution is
-$$
-
-
-- Randomized rounding in artificially difficult way. (I.e. this multistage procedure accomplishes the same thing as randomized rounding.)
-- Now, randomized rounding is done by choosing a random set of $omega(1)$ coordinates, and making those iid Uniform in ${-1,1}$.
-- Pick a large constant (e.g. 100), and only randomize the first 100 heads, and condition on the others (i.e. choose the others arbitrarily). Note that since $100 >= omega(1)$, there are at least 100 heads whp.
-- Now rounded point is random point in 100 dimensional subcube, but at most one of them is a good solution by the claim at the top of the page.
-- Combining, the probability for rounding to give a good solution is at most $o(1) + 2^{-100}$. Since $100$ is arbitrary, this is $o(1)$ by sending parameters to $0$ and/or infinity in the right order.
-
-Let $tilde(x)$ be the point on $Sigma_N$ after randomized rounding.
-
-Moreover, let $tilde(x)$ be the point
-
-consider the case where
-
-What could go wrong? It could be that all deterministic $Sigma_N$ algorithms fail, but an algorithm which is allowed to output a continuous point and then round it (potentially in a randomized way) could succeed.
-Such an algorithm would have to do more than just deterministically round, because
-
-Let $p_"solve"$ be probability that $alg$ outputs a point $x$ which is $k$ close in $L^1$ to a vertex and a good solution $x^*$ exists in nbhd of that corner.
-Because solutions repel, such $x^*$ is unique, so only hope is that $x$ gets rounded to $x^*$ with reasonable probability.
-
-
-(Weaker than traditional solution case).
-
-Then, either $tilde(alg)$ finds this good solution with reasonable probability, or
-
-Argument:
-- Algorithm $alg$ which is deterministic $RR^N -> RR^N$. Suppose $tilde(A): RR^N -> Sigma^N$ is $alg$ passed through any nontrivial rounding procedure.
-- Say $alg(g) = x$. Let $x^* in Sigma_N$ be closest point to $x$, and $tilde(x)=tilde(A)(g)$ be the rounding of $x$.
-- If $x^* = tilde(x)$, we're done.
-- Else, we know that only one of $x^*$ and $tilde(g)$ are a good solution, by @thrm_solutions_repel. It's $x^*$ with probability $p_"solve"$.
-  - Here, we're assuming randomized rounding changes at most some $O(1)$ amount of coordinates.
--
-
-Thus, rounding would destroy the solution.
-
+meow discuss possible extensions of randomization schemes and whether you expect those to work instead.
 
