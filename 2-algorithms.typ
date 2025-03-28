@@ -319,7 +319,7 @@ With this in hand, we can prove a similar stability bound to @thrm_es_stability.
 As a comparision to the case for functions with coordinate degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
 In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant strengthenings in the arguments which follow, justifying equal consideration of both classes of functions.
 
-== Stability of Low-Degree Algorithms
+== Stability of Low-Degree Algorithms <section_algorithm_stability>
 
 With these notions of low degree functions/polynomials in hand, we can consider algorithms based on such functions.
 

@@ -45,7 +45,7 @@ No two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which ar
   // with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), and let $g$ be any instance.
   Then,
   $
-    PP(x, x' in Soln(g)) <= exp_2 (-E + O(1)).
+    PP(x, x' in Soln(g)) <= exp_2 (-E + O(1)) = exp2(-E + O(1)).
   $
 ] <prop_fixed_close_solns_lowprob>
 #proof[
@@ -97,48 +97,89 @@ Remarks on theorem below meow.
 == Proof of Hardness for Close Algorithms
 
 
-Fix some $k=O(1)$. Let the event that the $RR^N$-valued $alg$ succeeds on a random instance $g$ be
+
+Throughout this section, fix some distance $r=O(1)$.
+Consider the event that the $RR^N$-valued $alg$ outputs a point close to a solution for an instance $g$:
 $
-  S_"close" = multiset(
+  S_"close" (r) = multiset(
     exists hat(x) in S(E;g) "s.t.",
-    alg(g) in B_(L^1)(hat(x), k)
-  )
+    alg(g) in B(hat(x), r)
+  ) = {B(alg(g), r) inter S(E;g) != emptyset }
 $
-That is, we ask that $alg$ output a point which is $O(1)$-close to a solution in $L^1$. For $k$ fixed in advance, this implies we can convert $alg$ into a $Sigma_N$-valued algorithm by computing the energy of the $O(1)$ corners near the output of $alg(g)$ and minimizing over this set, which only takes $O(N)$ additional operations.
 
-=== Solve case - rounding might help us
+Note that as $r$ is fixed (potentially depending on $alg$, but independent of $N$ or $g$), we can convert $alg$ into a $Sigma_N$-valued algorithm by considering the corners of $Sigma_N$ within constant distance of $alg(g)$.
 
-For this section, let $alg$ be an $RR^N$-valued algorithm with coordinate degree $D$. For a constant $k$ fixed in advance, we can consider the partially-defined algorithm $hat(alg)_k$ given by
-$
-  hat(alg)_k (g) := limits("argmin")_(x' in Sigma_N \ norm(x'-alg(g)) <= 2sqrt(k)) abs(inn(g,x'))
-$ <eq_hat_alg>
-Observe that $S_"close"$, as defined above, implies that $hat(alg)_k$ finds a solution for $g$.
+// definition of hat alg
 
-Let $g,g'$ be $(1-epsilon)$-resampled standard Normal vectors. Define the following events:
+#definition[
+  Let $r>0$ and $alg$ be an $RR^N$-valued algorithm. Define $hat(alg)_r$ to be the $Sigma_N$-valued algorithm defined by
+  $
+    hat(alg)_r (g) := limits("argmin")_(x' in B(alg(g),r) inter Sigma_N) abs(inn(g,x')).
+  $ <eq_hat_alg>
+  If $B(alg(g),r) inter Sigma_N = emptyset$, then set $hat(alg)_r (g) := (1 slash g_1,0,dots)$, which always has energy 0.
+] <def_hat_alg>
+
+Note that practically speaking, computing $hat(alg)_r$ requires additionally computing the energy of $O(1)$-many points on $Sigma_N$.
+This requires an additional $O(N)$ operations.
+
+Recall from @section_algorithm_stability that if $alg$ is low degree (or low coordinate degree) then we can derive useful stability bounds for its outputs. Luckily, this modification $hat(alg)_r$ of $alg$ also are stable, with slightly modified bounds.
+
+// hat alg is still stable
+
+#lemma[
+  Suppose that $EE norm(alg(g))^2 <= C N$ and that $alg$ has degree $<= D$ (resp. coordinate degree $<= D$), and let $(g,g')$ be $(1-epsilon)$-correlated (resp. $(1-epsilon)$-resampled).
+  Then $hat(alg)_r$ as defined above has
+  $
+    EE norm(hat(alg)_r (g) - hat(alg)_r (g'))^2 <= 6C D epsilon N + 6 r^2.
+  $
+  In particular, we have
+  $
+    PP (norm(hat(alg)_r (g) - hat(alg)_r (g')) >= 2 sqrt(eta N)) <= (3 C D epsilon) / (2 eta) + (3 r^2) / (2 eta N).
+  $
+  <eq_hat_alg_stability>
+] <lem_hat_alg_stability>
+#proof[
+  Observe by the triangle inequality, as per @eq_squared_triangle_ineq, that
+  $
+    norm(hat(alg)_r (g) - hat(alg)_r (g'))^2 <=
+    3( norm(hat(alg)_r (g) - alg(g))^2 +
+      norm(alg(g) - alg(g'))^2 +
+      norm(alg(g') - hat(alg)_r (g'))^2 ).
+  $
+  By @prop_alg_stability, we know $EE norm(alg(g)-alg(g'))^2 <= 6 C D epsilon N$.
+  Moreover, we know that $norm(hat(alg)_r (g) - alg(g)) <= r$ by definition, so the remaining terms can be bounded by $3r^2$ each deterministically. Finally, @eq_hat_alg follows from Markov's inequality.
+]
+
+Of course, computing $hat(alg)_r$ is certainly never polynomial, and does not preserve any low coordinate degree assumptions in a controllable way.
+Thus, we cannot directly hope for @thrm_sldh_poly_linear, @thrm_sldh_poly_sublinear, @thrm_sldh_lcd_linear, or @thrm_sldh_lcd_sublinear to hold.
+Meow
+
+// lcd hat alg is still hard
+
+We show for $alg$ being a $RR^N$-valued, low coordinate degree algorithm and any $r=O(1)$, low degree hardness still holds for $hat(alg)_r$.
+Note that by a similar argument, we can show hardness in the case that $alg$ is a low degree polynomial algorithm, but we omit the proof meow.
+
+We recall the setup from @section_hardness_lcd.
+Let $g,g'$ be $(1-epsilon)$-resampled standard Normal vectors.
+Define the following events:
 $
   S_"diff" &= { g != g'} \
-  S_"solve" &= { hat(alg)_k (g) in Soln(g), hat(alg)_k (g') in Soln(g')} \
-  S_"stable" &= { norm(alg(g) - alg(g')) <= 2 sqrt(eta N) } \
+  S_"solve" &= { hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')} \
+  S_"stable" &= { norm(hat(alg)_r (g) - hat(alg)_r (g')) <= 2 sqrt(eta N) } \
   S_"cond" (x) &= multiset(
     exists.not x' in Soln(g') "such that",
     norm(x-x') <= 2sqrt(eta N),
   )
-$ <eq_lcd_rounded_events>
+$ <eq_lcd_hat_events>
 
-We can consider the partially defined algorithm $hat(alg)$ which, given an instance $g$ such that $S_"close"$ holds, sets $hat(alg)(g) := hat(x) in S(E;g)$ to be the (unique) nearby good solution.
-This function is
-is unique as our process for choosing $hat(x)$ implies taking the one which maximizes energy, and two solutions have the same energy with low probability.
+These are the same events as in @eq_lcd_events, just adapted to $hat(alg)_r$. In particular, @lem_lcd_solve_disjoint holds unchanged. Moreover, ()
 
-Stability analysis:
-for $g,g'$ being $(1-epsilon)$-resampled/correlated, it still holds that, conditional on $hat(alg)(g)$ and $hat(alg)(g')$ being defined, then
+Observe that $S_"close"$, as defined above, occuring for $g$ is the same as $hat(alg)_k$ finding a solution for $g$.
+In particular, we can define
 $
-  EE norm(hat(alg(g)) - hat(alg(g')))^2 <= EE 2norm(hat(alg(g)) - alg(g))^2 + EE norm(alg(g) - alg(g'))^2 <= 2 O(1)^2 + 2 C epsilon D N + O(1)
-$
+  p_"solve" = PP(hat(alg)_r (g) in Soln(g)) = PP(S_"close").
+$ <eq_def_lcd_hat_psolve>
 
-Thus,
-$
-  p_"unstable" = PP(norm(hat(alg)(g) - hat(alg)(g')) >= 2 sqrt(eta N)) <= (C epsilon D) / 4 + O(1) / (eta N)
-$
 
 
 == No solve case -- rounding is truly random.

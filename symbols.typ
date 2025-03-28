@@ -1,13 +1,16 @@
 /// Module for symbols in thesis
 
+// #import "environments.typ": *
+
 #let alg = $cal(A)$
 #let to = math.arrow
 
 #let abs(x) = $lr(bar.v #x bar.v)$
 #let inn(x, y) = $lr(angle.l #x, #y angle.r)$
-#let vol(x) = $"vol"lr(paren.l #x paren.r)$
+#let exp2(x) = $exp_2 lr(paren.l #x paren.r)$
+#let log2(x) = $log_2 lr(paren.l #x paren.r)$
 
-#let cdeg = "cdeg"
+#let cdeg(x) = $"cdeg"lr(paren.l #x paren.r)$
 
 #let PP = $upright(bold(P))$
 #let EE = $upright(bold(E))$
@@ -64,3 +67,22 @@
       paren.r$,
   )
 )
+
+/*
+// #let theoremrefs(..thms) = {
+#let theoremrefs(it, it2) = {
+  //let thms = its.pos().map(x => x.element)
+  // its.at(0).fields()
+  context {
+    let elem = query(it).first()
+    if elem.func() == theorem {
+      panic("meow")
+    }
+    link(it, elem.body)
+
+    // query(it2).at(0)
+  }
+
+  [meow]
+}
+*/

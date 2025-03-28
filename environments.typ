@@ -3,8 +3,10 @@
 #import "@preview/ctheorems:1.1.3": *
 // #show: thmrules.with(qed-symbol: $square$)
 
+#let thmpadding = (top: 0em, bottom: 0.4em)
+
 #let thmthesis = thmbox.with(
-  padding: (top: 0em, bottom: 0em),
+  padding: thmpadding,
   breakable: true,
   inset: 0em,
   //namefmt: none, // name => emph([(#name)]),
@@ -57,7 +59,12 @@
 ).with(numbering: none)
 
 
-#let proof = thmproof("proof", "Proof", inset: 0em)
+#let proof = thmproof(
+  "proof",
+  "Proof",
+  inset: 0em,
+  padding: thmpadding,
+)
 
 
 

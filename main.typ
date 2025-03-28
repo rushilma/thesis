@@ -34,7 +34,7 @@
 )
 #set par(
   justify: true,
-  spacing: 1em,
+  spacing: 1.2em,
   first-line-indent: (amount: 1.2em, all: false),
 )
 
@@ -108,5 +108,4 @@
 #bibliography(
   "references.bib",
   style: "alphanumeric.csl",
-  // style: "springer-lecture-notes-in-computer-science",
 )

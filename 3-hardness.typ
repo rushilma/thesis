@@ -89,10 +89,12 @@ Then, we have the following correlation bound, which allows us to avoid union bo
   where the last line follows by Jensen's inequality.
 ]
 
+// TODO: should we rearrange this?
+
 Moreover, let us define $p_"unstable"$ and $p_"cond" (x)$ by
-$ PP(S_"stable") = 1- p_"unstable" $
-and
-$ PP(S_"cond" (x)) = 1 - p_"cond" (x). $
+$
+  p_"unstable" = 1 - PP(S_"stable"), #h(5em)  p_"cond" (x) = 1 - PP(S_"cond" (x)).
+$
 In addition, define
 $ p_"cond" := max_(x in Sigma_N) p_"cond" (x). $ <eq_def_pcond>
 By @lem_solve_disjoint, we know that for $x := alg(g)$
@@ -100,8 +102,6 @@ $ PP(S_"solve") + PP(S_"stable") + PP(S_"cond" (x)) <= 2, $
 and rearranging, we get that
 $ p_"solve"^2 <= p_"unstable" + p_"cond" $ <eq_poly_fundamental>
 Our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, we have $p_"unstable",p_"cond" = o(1)$.
-
-=== Conditional obstruction
 
 To this end, we start by bounding the size of neighborhoods on $Sigma_N$.
 
@@ -165,12 +165,13 @@ Putting together these bounds, we conclude the following fundamental estimates o
 
 Note for instance that $epsilon$ can be exponentially small in $E$ (e.g. $epsilon = exp_2 (-E slash 10)$), which for the case $E = Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
 
-=== Hardness proof
+Transition para meow.
 
 Throughout this section, we let $E= delta N$ for some $delta > 0$, and aim to rule out the existence of low degree algorithms achieving these energy levels.
 This corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
 These results roughly correspond to those in @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2], although their result applies to stable algorithms more generally, and does not show a low degree hardness-type result.
 
+// linear poly low degree hardness
 #theorem[
   Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
   Then, for any degree $D <= o(exp_2 (delta N slash 2))$ polynomial algorithm $alg$ (with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
@@ -197,6 +198,7 @@ Remark that this implies poly algs are really bad, requiring ~double exponential
 
 Next, we let $omega(log_2  N ) <= E <= o(N)$.
 
+// sublinear poly low degree hardness
 #theorem[
   Let $omega(log_2 ^2 N) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s.
   Then, for any polynomial algorithm $alg$ with degree $D <= o(exp_2 (E slash 4))$ (and with $EE norm(alg(g))^2 <= C N$), there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
@@ -228,7 +230,7 @@ Next, we let $omega(log_2  N ) <= E <= o(N)$.
   Ergo, by @eq_poly_fundamental, $p_"solve"^2 <= p_"unstable" + p_"cond" = o(1)$, as desired.
 ]
 
-== Proof for Low Coordinate-Degree Algorithms
+== Proof for Low Coordinate-Degree Algorithms <section_hardness_lcd>
 
 // Degree $D$ functions
 
@@ -283,12 +285,12 @@ The previous definition of $p_"solve"$ in @eq_def_psolve remains valid. In parti
 
 // define p_"unstable" and p_"cond"
 Let us slightly redefine $p_"unstable"$ and $p_"cond" (x)$ by
-$ PP(S_"stable" | S_"diff") = 1- p_"unstable" $
-and
-$ PP(S_"cond" (x)|S_"diff") = 1 - p_"cond" (x). $
-This is necessary as $p_"unstable",p_"cond" (x) = 1$ given $g=g'$.
-Note however that for $PP(S_"diff") = 1$, which is always the case for $g,g'$ being $(1-epsilon)$-correlated, these definitions agree with what we had in @eq_poly_fundamental.
-Again, we can define $p_"cond"$ via @eq_def_pcond to be the maximum of $p_"cond" (x)$ over $Sigma_N$.
+$
+  p_"unstable" = 1 - PP(S_"stable" | S_"diff"), #h(5em)  p_"cond" (x) = 1 - PP(S_"cond" (x) | S_"diff").
+$ <eq_def_lcd_punstablecond>
+This is necessary as when $g=g'$, $S_"stable"$ always holds and $S_"cond" (x)$ always fails.
+Note however that if we knew that $PP(S_"diff") = 1$, which is always the case for $g,g'$ being $(1-epsilon)$-correlated, these definitions agree with what we had in @eq_poly_fundamental.
+Again, we can define $p_"cond"$ via @eq_def_pcond, i.e. as the maximum of $p_"cond" (x)$ over $Sigma_N$.
 
 // fundamental equation
 Now, by @lem_lcd_solve_disjoint, we know that for $x = alg(g)$, $PP(S_"solve",S_"stable",S_"cond" (x) |S_"diff") = 0$, so
@@ -348,6 +350,7 @@ Note that in contrast to @prop_correlated_fundamental, this bound doesn't involv
 // Linear case
 With this, we can show strong low degree hardness for low coordinate degree algorithms at energy levels $E=Theta(N)$.
 
+// linear lcdf low degree hardness
 #theorem[
   Let $delta > 0$ and $E = delta N$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
   Then, for any algorithm $alg$ with coordinate degree $D <= o(N)$ and $EE norm(alg(g))^2 <= C N$, there exist $epsilon, eta > 0$ such that $p_"solve" = o(1)$.
@@ -373,6 +376,7 @@ With this, we can show strong low degree hardness for low coordinate degree algo
 
 Sublinear case. We now consider sublinear energy levels, ranging from $(log_2 N)^2 << E << N$. Note here that we have to increase our lower bound to $(log_2 N)^2$ as opposed to $log_2 N$ from @thrm_sldh_poly_sublinear, to address the requirement that $epsilon=omega(1 slash N)$.
 
+// sublinear lcdf low degree hardness
 #theorem[
   Let $omega((log_2 N)^2) <= E <= o(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
   Then, for any algorithm $alg$ with coordinate degree $D <= o(E slash (log_2 N)^2)$ and $EE norm(alg(g))^2 <= C N$,

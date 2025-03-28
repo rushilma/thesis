@@ -85,6 +85,12 @@ Conventions:
   $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
 + meow
 + $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $ell^2$ unit ball.
++ Recall by Jensen's inequality that for any real numbers $d_1,dots,d_n$, we have
+  $ (sum_(i = 1)^n d_i)^2 <= n sum_(i=1)^n d_i^2. $
+  We will use this in the following way: suppose $x^((1)), dots, x^((n)), x^((n+1))$ are $n$ vectors in $RR^N$. Then
+  $
+    norm(x^((1)) - x^((n+1)))^2 <= ( sum_(i=1)^n norm(x^((i)) - x^((i+1))) )^2 <= n sum_(i=1)^n norm(x^((i)) - x^((i+1)))^2
+  $ <eq_squared_triangle_ineq>
 
 
 Throughout we will make key use of the following lemma:
@@ -107,6 +113,8 @@ Throughout we will make key use of the following lemma:
   $
 ]
 
+Note that this is decreasing function of $sigma^2$, e.g. it's bounded by $exp_2(-E - 1/2 log_2( min sigma^2))$ (this bound is trivial unless $sigma^2 => gamma > 0$).
+
 #lemma[
   Suppose that $K <= N slash 2$, and let $h(x)=-x log_2 (x) - (1-x) log_2 (x)$ be the binary entropy function. Then, for $p := K slash N$,
   $ sum_(k <= K) binom(N,k) <= exp_2 (N h(p)) <= exp_2 (2 N p log_2 (1 / p)). $
@@ -127,7 +135,7 @@ Throughout we will make key use of the following lemma:
   The final equality then follows from the bound $h(p) <= 2 p log_2 (1 slash p)$ for $p <= 1 slash 2$.
 ]
 
-Note that this is decreasing function of $sigma^2$, e.g. it's bounded by $exp_2(-E - 1/2 log_2( min sigma^2))$ (this bound is trivial unless $sigma^2 => gamma > 0$).
+
 
 === Glossary:
 + "instance"/"disorder" - $g$, instance of the NPP problem
