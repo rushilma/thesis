@@ -5,6 +5,11 @@
 
 #import "@preview/equate:0.3.1": equate
 
+#import "thesisize.typ": *
+
+#show: thesisize
+
+/*
 // page layout
 #set text(
   font: (
@@ -84,6 +89,7 @@
 
 #let crimson = rgb(68%, 12%, 20%)
 #show ref: it => text(fill: crimson)[#it]
+*/
 
 /// Math environments
 
@@ -116,6 +122,6 @@
 
 #bibliography(
   "references.bib",
-  style: "ieee", // "alphanumeric.csl",
+  style: "chicago-author-date", // "alphanumeric.csl",
   full: true,
 )

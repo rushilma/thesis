@@ -418,7 +418,7 @@ Sublinear case. We now consider sublinear energy levels, ranging from $(log_2 N)
     [Large], [Showing hardness _asymptotically_, want "bad behavior" to pop up in low dimensions.],
 
     [$E$], [Solution energy; want to find $x$ such that $abs(inn(g,x)) <= 2^(-E)$],
-    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by @karmarkerDifferencingMethodSet1983],
+    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by @karmarkarDifferencingMethodSet1983],
 
     [$D$], [Algorithm degree (in either Efron-Stein sense or usual polynomial sense.)],
     [Large], [Higher degree means more complexity. Want to show even complex algorithms fail.],

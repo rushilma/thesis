@@ -230,7 +230,7 @@
 @karmarkarProbabilisticAnalysisOptimum1986
 - original analysis of hardness
 
-@karmarkerDifferencingMethodSet1983
+@karmarkarDifferencingMethodSet1983
 - KK algorithm - time $O(N log N)$
 
 @kearnsEfficientNoisetolerantLearning1998

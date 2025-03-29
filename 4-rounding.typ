@@ -242,7 +242,7 @@ However, this approach is blunted by the same brittleness of the NPP landscape t
 In particular, by @thrm_solutions_repel, if you have a subcube of $Sigma_N$ nonconstant but bounded dimension, then with high probability at most one of those points will be a solution.
 
 For this section, again let $alg$ be a deterministic $RR^N$-valued algorithm.
-Moreover, assume we are searching for solutions with energy between $(log_2 N)^2 << E <= N$; note that for lower values of $E$, algorithms like @karmarkerDifferencingMethodSet1983 already achieve discrepancies of $N^(O(log_2 N))$ energy in polynomial time.
+Moreover, assume we are searching for solutions with energy between $(log_2 N)^2 << E <= N$; note that for lower values of $E$, algorithms like @karmarkarDifferencingMethodSet1983 already achieve discrepancies of $N^(O(log_2 N))$ energy in polynomial time.
 
 To start, for any $x in RR^N$, we write $x^*$ for the coordinate-wise signs of $x$, i.e.
 $ x^*_i := cases(+1 #h(1em) &x_i > 0\,, -1 &x_i <= 0.) $
