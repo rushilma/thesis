@@ -85,8 +85,8 @@
   </macro>
   <macro name="author">
     <names variable="author">
-      <name and="text" et-al-min="7" et-al-use-first="1" initialize-with=". "/>
-      <label form="short" prefix=", " text-case="capitalize-first"/>
+      <name and="text" et-al-min="7" et-al-use-first="1" initialize="false" initialize-with=". "/>
+      <label form="long" prefix=", " text-case="capitalize-first"/>
       <et-al font-style="italic"/>
       <substitute>
         <names variable="editor"/>
@@ -287,11 +287,8 @@
 
   <!-- citation -->
   <citation collapse="citation-number" after-collapse-delimiter="; "
-    disambiguate-add-year-suffix="true">
-    <sort>
-      <key variable="author" />
-      <key variable="issued" />
-    </sort>
+    disambiguate-add-year-suffix="true"> 
+  <!-- <citation et-al-min = "3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="false" disambiguate-add-givenname="false" collapse="year"> -->
     <layout prefix="[" suffix="]" delimiter=", ">
       <group delimiter=", ">
         <text variable="citation-label"/>
@@ -415,6 +412,7 @@
           <group delimiter=", " suffix=".">
             <text macro="title"/>
             <text variable="container-title"/>
+            <text macro="issued"/>
           </group>
           <text macro="access"/>
         </else-if>

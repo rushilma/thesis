@@ -5,6 +5,9 @@
 #let alg = $cal(A)$
 #let to = math.arrow
 
+#let cor = $upright("cor")$
+#let res = $upright("res")$
+
 #let abs(x) = $lr(bar.v #x bar.v)$
 #let inn(x, y) = $lr(angle.l #x, #y angle.r)$
 #let exp2(x) = $exp_2 lr(paren.l #x paren.r)$

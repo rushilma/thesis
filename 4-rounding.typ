@@ -4,11 +4,11 @@
 
 #pagebreak()
 
-#show math.equation: set text(font: "New Computer Modern Math")
+// #show math.equation: set text(font: "New Computer Modern Math")
 
 = Extensions to Real-Valued Algorithms <section_rounding>
 
-#show math.equation: set text(font: "STIX Two Math")
+// #show math.equation: set text(font: "STIX Two Math")
 
 With @section_hardness, we have established strong low degree hardness for both low degree polynomial algorithms and low coordinate degree algorithms.
 However, our stability analysis assumed that the algorithms in question were $Sigma_N$-valued.
@@ -96,8 +96,6 @@ Remarks on theorem below meow.
 
 == Proof of Hardness for Close Algorithms
 
-
-
 Throughout this section, fix some distance $r=O(1)$.
 Consider the event that the $RR^N$-valued $alg$ outputs a point close to a solution for an instance $g$:
 $
@@ -121,7 +119,7 @@ Note that as $r$ is fixed (potentially depending on $alg$, but independent of $N
 
 Observe that $S_"close"(r)$ occuring is the same as $hat(alg)_r$ finding a solution for $g$.
 In addition, note that practically speaking, computing $hat(alg)_r$ requires additionally computing the energy of $O(1)$-many points on $Sigma_N$.
-This requires an additional $O(N)$ operations.
+This requires only an additional $O(N)$ operations.
 
 Recall from @section_algorithm_stability that if $alg$ is low degree (or low coordinate degree) then we can derive useful stability bounds for its outputs. Luckily, this modification $hat(alg)_r$ of $alg$ also are stable, with slightly modified bounds.
 
@@ -176,20 +174,20 @@ These are the same events as in @eq_lcd_events, just adapted to $hat(alg)_r$. In
 
 Moreover, we can define
 $
-  p_"solve" = PP(hat(alg)_r (g) in Soln(g)) = PP(S_"close" (r)),
+  hat(p)^cor_"solve" = PP(hat(alg)_r (g) in Soln(g)) = PP(S_"close" (r)),
 $ <eq_def_lcd_hat_psolve>
 as well as
 $
-  p_"unstable" = 1 - PP(S_"stable" | S_"diff"), #h(5em)  p_"cond" (x) = 1 - PP(S_"cond" (x) | S_"diff"),
+  hat(p)^cor _"unstable" = 1 - PP(S_"stable" | S_"diff"), #h(5em)  hat(p)^cor _"cond" (x) = 1 - PP(S_"cond" (x) | S_"diff"),
 $
-along with $p_"cond" := max_(x in Sigma_N) p_"cond" (x)$, echoing @eq_def_lcd_punstablecond.
+along with $hat(p)^cor _"cond" := max_(x in Sigma_N) hat(p)^cor _"cond" (x)$, echoing @eq_def_lcd_punstablecond.
 
-Observe that as $p_"cond"$ makes no reference to any algorithm, the bound in @prop_resampled_fundamental holds without change. Moreover, @lem_hat_alg_stability lets us control $p_"unstable"$. The final piece needed is an appropriate analog of @lem_resampled_solve_prob.
+Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bound in @prop_resampled_fundamental holds without change. Moreover, @lem_hat_alg_stability lets us control $hat(p)^cor _"unstable"$. The final piece needed is an appropriate analog of @lem_resampled_solve_prob.
 
 #lemma[
   For $g,g'$ being $(1-epsilon)$-resampled, we have
   $
-    PP(S_"solve") = PP(hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')) >= p_"solve"^2
+    PP(S_"solve") = PP(hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')) >= (hat(p)^cor_"solve")^2
   $
 ] <lem_hat_resampled_solve_prob>
 #proof[
@@ -210,12 +208,12 @@ Observe that as $p_"cond"$ makes no reference to any algorithm, the bound in @pr
     [if $(log_2 N)^2 << E << N$, then $alg$ has coordinate degree $D <= o(E slash (log_2 N)^2)$.],
   )
   Let $hat(alg)_r$ be defined as in @def_hat_alg. Then there exist $epsilon, eta > 0$ such that
-  $ p_"solve" = PP(hat(alg)_r (g) in Soln(g)) = o(1). $
+  $ hat(p)^cor_"solve" = PP(hat(alg)_r (g) in Soln(g)) = o(1). $
 ] <thrm_sldh_hat_lcd>
 #proof[
   First, by @lem_lcd_solve_disjoint, the appropriate adjustment of @eq_lcd_fundamental holds, namely that
   $
-    p_"solve"^2 <= PP(S_"diff") dot (p_"unstable" + p_"cond").
+    (hat(p)^cor_"solve")^2 <= PP(S_"diff") dot (hat(p)^cor_"unstable" + hat(p)^cor_"cond").
   $ <eq_hat_lcd_fundamental>
   To ensure $PP(S_"diff") approx 1$, we begin by following @eq_def_lcd_epsilon and choosing $epsilon = log_2 (N slash D) slash N$. Moreover, following the proof of @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear, we know that choosing
   $
@@ -226,13 +224,13 @@ Observe that as $p_"cond"$ makes no reference to any algorithm, the bound in @pr
   $
   in conjunction with @prop_resampled_fundamental, guarantees that
   $
-    p_"cond" <= exp_2 (- (3 E) / 4 + O(1)) = o(1).
+    hat(p)^cor_"cond" <= exp_2 (- (3 E) / 4 + O(1)) = o(1).
   $
   Finally, note that in the linear case, when $eta = O(1)$, $r^2/(eta N) = o(1)$ trivially. In the sublinear case, for $eta= E slash (16 N log_2 (N slash E))$, we instead get
   $ eta N = E / (16 log_2 (N slash E)) >= E / (16 log_2 N) = omega(1), $
   as $E >> (log_2 N)^2$.
-  Thus, applying the properly modified @lem_hat_alg_stability with these choices of $epsilon,eta$, we see that $p_"unstable" = o(1)$.
-  By @eq_hat_lcd_fundamental, we conclude that $p_"solve" = o(1)$, as desired.
+  Thus, applying the properly modified @lem_hat_alg_stability with these choices of $epsilon,eta$, we see that $hat(p)^cor _"unstable" = o(1)$.
+  By @eq_hat_lcd_fundamental, we conclude that $hat(p)^cor _"solve" = o(1)$, as desired.
 ]
 
 Talk about implications meow.

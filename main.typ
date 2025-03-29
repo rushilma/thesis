@@ -29,7 +29,7 @@
     #line(length: 100%, stroke: 0.5pt)
   ],
   numbering: "1",
-  number-align: bottom + right,
+  number-align: bottom + center,
   margin: (x: 1in, y: 1in),
 )
 #set par(
@@ -38,7 +38,12 @@
   first-line-indent: (amount: 1.2em, all: false),
 )
 
-#show math.equation: set text(font: "STIX Two Math", size: 11pt)
+// #show math.equation: set text(font: "STIX Two Math", size: 11pt)
+#show math.equation: set text(size: 11pt)
+// #show math.text: set text(font: "Crimson Pro", size: 11pt)
+#set math.accent(size: 150%)
+// #let hat(x) = math.accent(x, hat, size: 150%)
+#show math.equation: set block(breakable: true)
 
 // 2 level math numbering
 
@@ -75,7 +80,7 @@
   },
 )
 
-#set cite(style: "alphanumeric.csl")
+// #set cite(style: "alphanumeric.csl")
 
 #let crimson = rgb(68%, 12%, 20%)
 #show ref: it => text(fill: crimson)[#it]
@@ -102,10 +107,15 @@
 
 /// Litreview
 
-#include "5-litref.typ"
+// #include "5-litref.typ"
+
+/// Conclusion
+
+#include "5-conclusion.typ"
 
 
 #bibliography(
   "references.bib",
-  style: "alphanumeric.csl",
+  style: "ieee", // "alphanumeric.csl",
+  full: true,
 )
