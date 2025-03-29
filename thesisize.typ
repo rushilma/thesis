@@ -1,4 +1,23 @@
-#let thesisize(doc) = [
+#let titlepage(title, subtitle, abstract) = {
+  pad(
+    left: -0.01in,
+    top: 0.7in,
+    text(
+      weight: "medium",
+      size: 30pt,
+      title,
+    ),
+  )
+  pad(top: 0.05in, text(size: 17pt, style: "italic", subtitle))
+  pad(
+    top: 5em,
+    text[Rushil Mallarapu #footnote[Written under the joint supervision of Professor Mark Sellke and Professor Subhabrata Sen.]],
+  )
+  pad(top: -0.05in, text[Harvard University, Cambridge, MA 02138])
+  pad(top: 0.7in, text(size: 11pt)[*Abstract.* #abstract])
+}
+
+#let thesisize(doc, title: none, subtitle: none, abstract: none) = [
   #set text(
     font: "Crimson Pro",
     size: 12pt,
@@ -18,7 +37,7 @@
   )
 
   // math equation stuff
-  #show math.equation: set text(font: "STIX Two Math", size: 11pt)
+  // #show math.equation: set text(font: "STIX Two Math", size: 11pt)
   #set math.equation(
     supplement: none,
     numbering: (..nums) => numbering("(1.1)", ..nums),
@@ -35,41 +54,28 @@
   #set math.accent(size: 150%)
   #show math.equation: set block(breakable: true)
 
-  // citations
-  #set cite(style: "alphanumeric.csl")
+  // references
   #let crimson = rgb(68%, 12%, 20%)
   #show ref: it => text(fill: crimson)[#it]
 
   // title page
-  #pad(
-    left: -0.01in,
-    top: 0.7in,
-    text(
-      weight: "medium",
-      size: 30pt,
-    )[Strong Low Degree Hardness of the \ Number Partitioning Problem],
-  )
-  //#pad(top: 0.05in, text(size: 17pt, style: "italic")[Subtitle Meow])
-  #pad(
-    top: 5em,
-    text[Rushil Mallarapu #footnote[Written under the joint supervision of Professor Mark Sellke and Professor Subhabrata Sen.]],
-  )
-  #pad(top: -0.05in, text[Harvard University, Cambridge, MA 02138])
-  #pad(top: 0.7in, text(size: 11pt)[*Abstract.* Meow #lorem(100)])
-  #pagebreak()
+  #titlepage(title, subtitle, abstract)
   #set page(numbering: "1")
 
   // for Jarell: how to add spacing after top level headers
-  #show heading.where(level: 1): it => pad(it, bottom: 5em)
+  #show heading.where(level: 1): it => {
+    pagebreak()
+    pad(it, bottom: 5em)
+  }
 
   // acknowledgments
   #include "acknowledgements.typ"
-  #pagebreak()
 
   // outline
   #show outline.entry.where(level: 1): set outline.entry(fill: " ")
+  #show outline.entry.where(level: 1): set block(above: 1.2em)
+
   #outline()
-  #pagebreak()
 
   // math numbering
   #set heading(numbering: "1.1")
@@ -77,6 +83,7 @@
     counter(math.equation).update(0)
     it
   }
+
   #set math.equation(
     numbering: it => {
       let count = counter(heading.where(level: 1)).at(here()).first()
@@ -87,8 +94,6 @@
       }
     },
   )
-
-
 
   #doc
 ]
