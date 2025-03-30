@@ -37,7 +37,6 @@
   )
 
   // math equation stuff
-  // #show math.equation: set text(font: "STIX Two Math", size: 11pt)
   #set math.equation(
     supplement: none,
     numbering: (..nums) => numbering("(1.1)", ..nums),

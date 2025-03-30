@@ -20,6 +20,11 @@ In particular, our goal is to show _strong low degree hardness_, in the sense of
 
 // Why study low degree algorithms (poly time heuristic + simple)
 
+Low degree heuristic: @kuniskyLowCoordinateDegree2024a @kuniskyLowCoordinateDegree2024 for extensions
+@montanariEquivalenceApproximateMessage2024
+
+Sometimes it fails: @huangOptimalLowDegree2025
+
 In addition, degree $D$ polynomials are a heuristic proxy for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018 @kothariSumSquaresLower2017.
 Thus, strong low degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential (i.e. $e^Omega(N)$) time to find globally optimal solutions.
 
@@ -37,7 +42,7 @@ To start, recall the notion of $L^2$ functions:
 #definition[
   Let $pi$ be a probability distribution on $RR$. The $L^2$ space $L2iid$ is the space of functions $f:RR^N to RR$ with finite $L^2$ norm.
   $
-    EE[f^2] := integral_(x=(x_1,dots,x_n) in RR^N) f(x)^2 dif pi^(times.circle N)(x) < infinity.
+    EE[f^2] := integral_(RR^N) f(x)^2 dif pi^(times.circle N)(x) < infinity.
   $
   Alternatively, this is the space of $L^2$ functions of $N$ i.i.d. random variables $x_i$, distributed as $pi$.
 ] <def_L2_iid>
@@ -52,7 +57,7 @@ To formalize this intuition, define the following coordinate projection:
 #definition[
   Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$.
   The _projection of $f$ onto $J$_ is the function $f^(subeq J): RR^N to RR$ given by
-  $ f^(subeq J)(x) = EE[f(x_1,dots,x_n) | x_i, i in J] = EE[f(x) | x_J] $
+  $ f^(subeq J)(x) := EE[f(x_1,dots,x_n) | x_i, i in J] = EE[f(x) | x_J] $
   // This is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on $x_J$.
 ] <def_subset_proj>
 
@@ -90,35 +95,12 @@ $
   f^(= J) := sum_(S subeq J) (-1)^(abs(J)-abs(S))f^(subeq S) = sum_(S subeq J) (-1)^(abs(J)-abs(S)) EE[f | x_S].
 $
 
-This construction, along with some direct calculations, leads to the following theorem on Efron-Stein decompositions:
-
-/*
-To see that these functions are indeed orthogonal, we need the following computation:
-
-#lemma[
-  Let $f,g in L2iid$ and $I,J subeq [n]$ be subsets of coordinates.
-  Assume that $f$ only depends on coordinates in $I$ and likewise for $g$ and $J$.
-  Then $inn(f,g) = inn(f^(subeq I inter J), g^(subeq I inter J))$.
-]
-#proof[
-  Assume without loss of generality that $I union J = [n]$.
-  Then, given $x in RR^N$, we can split it into $(x_(I inter J), x_(I without J), x_(J without I))$. Abusing notation slightly to only include the coordinates a function actually depends on, we have
-  $
-    inn(f,g) &= EE_(x_(I inter J), x_(I without J), x_(J without I))[f(x_(I inter J), x_(I without J)) dot g(x_(I inter J), x_(J without I))] \
-    &= EE_(x_(I inter J))[ EE_(x_(I without J))[f(x_(I inter J), x_(I without J))] dot
-      EE_(x_(J without I))[g(x_(I inter J), x_(J without I))] ] \
-    &= EE_(x_(I inter J))[ f^(subset I inter J)(x_(I inter J)) dot
-      g^(subset I inter J)(x_(I inter J)) ] \
-    &= inn(f^(subeq I inter J), g^(subeq I inter J)).
-  $
-  The first line follows from Adam's law and independence of $x_(I without J)$ and $x_(J without I)$, while the second follows from definition of $f^(subset I inter J)$ and $g^(subset I inter J)$.
-]
-*/
+This construction, along with some direct calculations, leads to the following:
 
 #theorem[@odonnellAnalysisBooleanFunctions2021[Thm 8.35]][
-  Let $f in L2iid$. Then $f$ has a unique _Efron-Stein decomposition_ as
-  $ f = sum_(S subeq [N]) f^(=S) $
-  where the functions $f^(=S) in L2iid$ satisfy
+  Let $f in L2iid$. Then $f$ has a unique decomposition as
+  $ f = sum_(S subeq [N]) f^(=S), $
+  known as the _Efron-Stein decomposition_, where the functions $f^(=S) in L2iid$ satisfy
   + $f^(=S)$ depends only on the coordinates in $S$;
   + if $T subset.neq S$ and $g in L2iid$ only depends on coordinates in $T$, then $inn(f^(=S),g)=0$.
   In addition, this decomposition has the following properties:

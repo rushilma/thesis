@@ -123,7 +123,7 @@
 
 @brennanReducibilityComputationalLower2019
 - S2C in sparce problems via planted clique
-- Spiritually similar to conditional landscape obstructions, in that you fix one instance and study how it changes??
+// - Spiritually similar to conditional landscape obstructions, in that you fix one instance and study how it changes??
 
 @chandrasekaranIntegerFeasibilityRandom2013
 - Random polytopes
