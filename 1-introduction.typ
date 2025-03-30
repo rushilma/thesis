@@ -11,33 +11,37 @@ This question is known in statistics, physics, and computer science as the _numb
 and has been the subject of intense study since its proposal in 1969 @grahamBoundsMultiprocessingTiming1969.
 
 // todo fix this para
-Let $g_1,dots,g_N$ be $N$ real numbers.
-The _number partitioning problem (NPP)_ asks: what is the subset $A$ of $[N]:={1,2,dots,N}$
-such that the sum of the $g_i$ for $i in A$ and the sum of the remaining $g_i$ are as close as possible?
-More formally, the $A$ we want to find is the one minimizing the discrepancy
+Formally, let $g_1,dots,g_N$ be $N$ real numbers.
+The NPP is the problem of finding the subset $A$ of $[N]:={1,2,dots,N}$ which minimizes the discrepancy
 $ abs(sum_(i in A) g_i - sum_(i in.not A) g_i). $
-
-When rephrased as a decision problem (i.e., whether there exists an $A$ such that the discrepancy is zero, or sufficiently small), the NPP is NP-complete; this can be shown by reduction from the subset sum problem.
-In fact, the NPP is one of the six basic NP-complete problems of Garey and Johnson, and of those, the only one involving numbers @gareyComputersIntractabilityGuide1979[#sym.section 3.1].
-
-The number partitioning problem can be rephrased in the following way.
-Let our instance $g_1,dots,g_N$ be identified with a point $g in RR^N$.
+Alternatively, identify the instance $g_1,dots,g_N$ with a point $g in RR^N$.
 Then, a choice of $A subset.eq [N]$ is equivalent to choosing a point $x$ in the $N$-dimensional binary hypercube $Sigma_N := {plus.minus 1}^N$, where $x_i = +1$ is the same as including $i in A$.
 The discrepancy of $x$ is now $abs(inn(g,x))$, and solving the NPP means finding the $x$ minimizing this discrepancy:
 $ min_(x in Sigma_N) abs(inn(g,x)). $ <eq_npp_first>
 
-()
-
+When rephrased as a decision problem -- does there exists an $A subeq [N]$ (or an $x in Sigma_N$) such that the discrepancy is zero, or sufficiently small -- the NPP is NP-complete; this can be shown by reduction from the subset sum problem.
+In fact, the NPP is one of the six basic NP-complete problems of Garey and Johnson, and of those, the only one involving numbers @gareyComputersIntractabilityGuide1979[#sym.section 3.1].
 
 // practical applications
 
-A common extension to the NPP is the _multiway number partitioning problem (MWNPP)_, in which we want to partition $g_1,dots,g_N$ into $M$ subsets such that the within-subset sums are mutually close.
-While what "mutually close" precisely means varies across the literature, this problem has myriad practical applications which motivate the study of the NPP.
-
-For instance, the NPP was first formulated by Graham, who considered it in the context of multiprocessor scheduling: dividing a group of tasks with known runtimes across a pool of processors so as to minimize one core being overworked while others stall @grahamBoundsMultiprocessingTiming1969.
+Finding "good" solutions to this problem has a number of practical applications.
+For instance, the NPP and MWNPP
+#footnote[That is, the _multiway number partitioning problem (MWNPP)_, in which we want to partition $g_1,dots,g_N$ into $M$ subsets such that the within-subset sums are mutually close; what "mutually close" means precisely varies across the literature.]
+were first formulated by Graham, who considered it in the context of multiprocessor scheduling: dividing a group of tasks with known runtimes across a pool of processors so as to minimize one core being overworked while others stall @grahamBoundsMultiprocessingTiming1969.
 Later work by Coffman, Garey, and Johnson, as well as by Tsai, looked at utilizing algorithms designed for the NPP for designing multiprocessor schedulers or large integrated circuits @coffmanjr.ApplicationBinPackingMultiprocessor1978 @tsaiAsymptoticAnalysisAlgorithm1992.
 Coffman and Lueker also write on how the NPP can be applied as a framework for allocating material stocks, such as steel coils in factories, paintings in museums, or advertisements in newspapers @coffmanProbabilisticAnalysisPacking1991.
 
+// application: randomized control trials
+
+One particularly important application of the NPP in statistics comes from the design of _randomized controlled trials_.
+Consider $N$ individuals, each with a set of covariate information $bold(g)_i in RR^d$.
+Then the problem is to divide them into a treatment group (denoted $A_+$) and a control group (denoted $A_-$), subject each to different conditions, and evaluate the responses.
+In order for such a trial to be accurate, it is necessary to ensure that the covariates across both groups are roughly the same.
+in our notation, this equates to finding an $A_+$ (with $A_- := [N] without A_+$) to minimize
+$
+  min_(A_+ subeq [N]) norm( sum_(i in A_+) bold(g)_i - sum_(i in A_-) bold(g)_i )_infinity.
+$ <eq_def_vbp>
+This multidimensional extension of the NPP is often termed the _vector balancing problem (VBP)_, and many algorithms for solving the NPP/VBP come from designing such randomized controlled trials @kriegerNearlyRandomDesigns2019 @harshawBalancingCovariatesRandomized2023.
 
 // applications: cryptography
 
@@ -52,21 +56,9 @@ However, such NP-completeness is only a worst-case hardness guarantee; Merkle an
 In 1984, Shamir -- one of the developers of the RSA cryptosystem still in use today -- showed that one could exploit this public key generation process to reduce the "hard" knapsack problem to one which was solvable in polynomial time, rendering the Merkle-Hellman scheme insecure @shamirPolynomialTimeAlgorithm1982.
 While today, Merkle-Hellman is but a footnote in the history of cryptography, it demonstrates the importance of looking beyond worst-case hardness and expanding complexity theory to describe the difficulty of the average problem instance.
 
-// application: randomized control trials
-
-One particularly important application of the NPP in statistics comes from the design of _randomized controlled trials_.
-Consider $N$ individuals, each with a set of covariate information $bold(g)_i in RR^d$.
-Then the problem is to divide them into a treatment group (denoted $A_+$) and a control group (denoted $A_-$), subject each to different conditions, and evaluate the responses.
-In order for such a trial to be accurate, it is necessary to ensure that the covariates across both groups are roughly the same.
-in our notation, this equates to finding an $A_+$ (with $A_- := [N] without A_+$) to minimize
-$
-  min_(A_+ subeq [N]) norm( sum_(i in A_+) bold(g)_i - sum_(i in A_-) bold(g)_i )_infinity.
-$ <eq_def_vbp>
-This multidimensional extension of the NPP is often termed the _vector balancing problem (VBP)_, and many algorithms for solving the NPP/VBP come from designing such randomized controlled trials @kriegerNearlyRandomDesigns2019 @harshawBalancingCovariatesRandomized2023.
-
 // physics and phase transition
 
-Another major source of interest in the NPP comes from statistical physics.
+Another major source of interest in the NPP, as well as potential explanations for when it is hard, come from statistical physics.
 In the 1980s, Derrida introduced the eponymous _random energy model (REM)_, a simplified example of a spin glass in which, unlike the Sherrington-Kirkpatrick or other $p$-spin glass models, the possible energy levels are indepedent of each other @derridaRandomEnergyModelLimit1980 @derridaRandomenergyModelExactly1981 @baukeNumberPartitioningRandom2004.
 Despite this simplicity, this model made possible heuristic analyses of the Parisi theory for mean field spin glasses, and it was suspected that arbitrary random discrete systems would locally behave like the REM @baukeUniversalityLevelStatistics2004 @kistlerDerridasRandomEnergy2014.
 The NPP was the first system for which this local REM conjecture was shown @borgsProofLocalREM2009 @borgsProofLocalREM2009a.
@@ -77,18 +69,26 @@ It was also observed that this phase transition coincided with the empirical ons
 
 // algorithmic gap
 
-Of more interest to us is the the typical optical discrepancy in the average-case, i.e., here we assume the instance inputs $g_i$ are i.i.d. random variables.
+== The Statistical-to-Computational Gap
 
-The landmark result here is by Karmarkar et al., who showed that when the distribution of the $g_i$'s is sufficiently nice,
+Many problems involving searches over random combinatorial structures (i.e., throughout high-dimensional statistics) are known to exhibit a statistical-to-computational gap: the optimal values which are known to exist via non-constructive, probabilistic methods are far better than those achievable by known algorithms.
+In the pure optimization setting, such gaps are exhibited in random constraint satisfaction @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017, finding maximal independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015, the largest submatrix problem @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a, and the $p$-spin and diluted $p$-spin models @gamarnikOverlapGapProperty2019 @montanariOptimizationSherringtonKirkpatrickHamiltonian2019 @chenSuboptimalityLocalAlgorithms2019.
+These gaps also arise in various "planted" models, such as matrix or tensor PCA @berthetComputationalLowerBounds2013 @lesieurMMSEProbabilisticLowrank2015 @lesieurPhaseTransitionsSparse2015 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @arousAlgorithmicThresholdsTensor2020,
+high-dimensional linear regression @gamarnikSparseHighDimensionalLinear2019 @gamarnikHighDimensionalRegressionBinary2019,
+or the infamously hard planted clique problem @jerrumLargeCliquesElude1992 @deshpandeImprovedSumofSquaresLower2015 @mekaSumofsquaresLowerBounds2015 @barakNearlyTightSumofSquares2016 @gamarnikLandscapePlantedClique2019.
+(meow why does this indicate hardness beyond NP?)
+
+
+The NPP is no exception: despite its apparent simplicity, its continual focus in the random optimization literature comes from the shocking width of its associated statistical-to-computational gap.
+On the statistical side, the landmark result here is by Karmarkar et al., who showed that when the $g_i$ are i.i.d.random variables, with distribution sufficiently nice,
 #footnote[Specifically, having bounded density, variance $sigma^2$, and finite 4th moment.] <foot_nice>
 then the minimum discrepancy of @eq_npp_first is $Theta(sqrt(N) 2^(-N))$ as $N to infinity$ with high probability as $N to infinity$ @karmarkarProbabilisticAnalysisOptimum1986.
 Their result also extends to _even partitions_, where the sizes of each subset is equal (i.e., for $N$ even), worsening only to $Theta( N 2^(-N))$.
+Yet the best known algorithms cannot achieve discrepancies close to this in polynomial time.
 
-On the algorithmic side, ()
-
-A first approach, often termed the _greedy heuristic_, would be to sort the $N$ inputs, place the largest in one subset, and place the subsequent largest numbers in the subset with the smaller total running sum.
+A first approach to the NPP, often termed the _greedy heuristic_, would be to sort the $N$ inputs, place the largest in one subset, and place the subsequent largest numbers in the subset with the smaller total running sum.
 This takes $O(N log N)$ time (due to the sorting step), but achieves a discrepancy of $O(N^(-1))$, extremely far off from the statistical optimum @mertensEasiestHardProblem2003.
-More recently Krieger et al. developed an algorithm achieving a discrepancy of $O(N^(-2))$, but in exchange for this poor performance, their algorithm solves for a balanced partition, which makes it useful for randomized control trials applications @kriegerNearlyRandomDesigns2019.
+More recently, Krieger et al. developed an algorithm achieving a discrepancy of $O(N^(-2))$, but in exchange for this poor performance, their algorithm solves for a balanced partition, which makes it useful for randomized control trials applications @kriegerNearlyRandomDesigns2019.
 
 The true breakthrough towards the statistical optimum came from Karmarkar and Karp, whose algorithm produced a discrepancy of $O(N^(-alpha log N))=2^(-O(log^2 N))$ with high probability.
 Their algorithm is rather complicated, involving randomization and a resampling step to make their analysis tractable, but their main contribution is the _differencing heuristic_ @karmarkarDifferencingMethodSet1983.
@@ -104,44 +104,31 @@ Of course, at its most basic, the NPP is a search problem over $2^N$ possible pa
 To this degree, Korf developed alternatives known as the _complete greedy_ and _complete Karmarkar-Karp_ algorithms which, if run for exponentially long time, can find the globally optimal partition @korfApproximateOptimalSolutions1995 @korfCompleteAnytimeAlgorithm1998.
 This algorithm was later extended to multiway number partitioning @korfMultiwayNumberPartitioning2009.
 See also Michiels et al. for extensions to balaced multiway partitioning @michielsPerformanceRatiosDifferencing2003.
-()
 
-
-For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(bold(g)_i)_infinity <= 1$ for all $i$ @spencerSixStandardDeviations1985.
+For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(bold(g)_i)_infinity <= 1$ for all $1 <= i <= N$ @spencerSixStandardDeviations1985.
 However, his argument is an application of the probabilistic method, and does not construct such a solution.
 In the average case, Turner et al. proved that, under similar regularity assumptions on the $bold(g)_i$,@foot_nice the minimum discrepancy is $Theta(sqrt(N) 2^(-N slash d))$ for all $d <= o(N)$, with high probability @turnerBalancingGaussianVectors2020.
 For the regime $delta=Theta(N)$, Aubin et al. conjecture there exists an explicit function $c(delta)$ such that for $delta > 0$, then the discrepancy in the $d=delta N$ regime is $c(delta) sqrt(N)$ with high probability @aubinStorageCapacitySymmetric2019.
 To this end, Turner et al. also showed that for $d <= delta N$, one can achieve $O(sqrt(N) 2^(-1 slash delta))$ with probability at least 99% @turnerBalancingGaussianVectors2020.
 On the algorithmic side, they generalized the Karmarkar-Karp algorithm to VBP, which, for $2 <= d = O(sqrt( log N))$ finds partitions with discrepancy $2^(-Theta(log^2 N slash d))$, reproducing the gap of classical Karmarkar-Karp.
-
 On the other hand, in the superlinear regime $d >= 2 N$, this average-case discrepancy worsens to $tilde(O)(sqrt(N log(2d slash N)))$ @chandrasekaranIntegerFeasibilityRandom2013.
 Yet, many proposed algorithms can achieve similar discrepancies, which is believed to be optimal for $d >= N$ @spencerSixStandardDeviations1985 @bansalConstructiveAlgorithmsDiscrepancy2010 @lovettConstructiveDiscrepancyMinimization2012 @rothvossConstructiveDiscrepancyMinimization2016.
 (concluding sentence)
 
-== Hardness and Statistical-to-Computational Gaps
-
-Many problems involving searches over random combinatorial structures (i.e., throughout high-dimensional statistics) are known to exhibit a statistical-to-computational gap.
-In the pure optimization setting, such gaps are exhibited in random constraint satisfaction @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017, finding maximal independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015, the largest submatrix problem @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a, and the $p$-spin and diluted $p$-spin models @gamarnikOverlapGapProperty2019 @montanariOptimizationSherringtonKirkpatrickHamiltonian2019 @chenSuboptimalityLocalAlgorithms2019.
-These gaps also arise in various "planted" models, such as matrix or tensor PCA @berthetComputationalLowerBounds2013 @lesieurMMSEProbabilisticLowrank2015 @lesieurPhaseTransitionsSparse2015 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @arousAlgorithmicThresholdsTensor2020,
-high-dimensional linear regression @gamarnikSparseHighDimensionalLinear2019 @gamarnikHighDimensionalRegressionBinary2019,
-or the infamously hard planted clique problem @jerrumLargeCliquesElude1992 @deshpandeImprovedSumofSquaresLower2015 @mekaSumofsquaresLowerBounds2015 @barakNearlyTightSumofSquares2016 @gamarnikLandscapePlantedClique2019.
-
-Evidence of hardness:
-
-- Failure of MCMC: @huangStrongLowDegree2025 @jerrumLargeCliquesElude1992
-- Failure of AMP: @zdeborovaStatisticalPhysicsInference2016 @bandeiraNotesComputationaltostatisticalGaps2018
-- Reductions from planted clique - @berthetComputationalLowerBounds2013 @brennanOptimalAverageCaseReductions2019 @brennanReducibilityComputationalLower2019
-- Lower bounds agains Sum of Squares hierarchy: @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @raghavendraHighdimensionalEstimationSumofsquares2019 @barakNearlyTightSumofSquares2016
-- Lower bounds in statistical query model: @kearnsEfficientNoisetolerantLearning1998 @diakonikolasStatisticalQueryLower2017 @feldmanStatisticalAlgorithmsLower2016
-- Low degree methods, and low degree likelihood ratio: @hopkinsStatisticalInferenceSum2018 @kuniskyNotesComputationalHardness2019
-
-== Overlap Gap Property
+== Algorithmic Hardness and Landscape Obstructions
 
 Classical algorithmic complexity theory -- involving classes such as P, NP, etc. -- is poorly suited to describing the hardness of random optimization problems, as these classes are based on the worst-case performance of available algorithms.
 In many cases, the statistically possible performance of solutions to random instances of these NP-complete problems will be far better than the worst-case analysis would suggest.
 How then, can we extend complexity theory to describe problems which, like the NPP, are hard on average?
+The past two decades of research have shown that many methods can provide evidence of this average-case hardness, such as the failure of Markov chain algorithms
+@jerrumLargeCliquesElude1992 @gamarnikAlgorithmicObstructionsRandom2021b @huangStrongLowDegree2025,
+the failure of approximate message passing (AMP) algorithms
+@zdeborovaStatisticalPhysicsInference2016 @bandeiraNotesComputationaltostatisticalGaps2018,
+or lower bounding performance against the Sum-of-Squares heirarchy or the statistical query model
+@hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @raghavendraHighdimensionalEstimationSumofsquares2019 @barakNearlyTightSumofSquares2016 @kearnsEfficientNoisetolerantLearning1998 @diakonikolasStatisticalQueryLower2017 @feldmanStatisticalAlgorithmsLower2016.
 
-One approach would be to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concldued that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
+One particularly interesting approach is to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concldued that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
+This method has been used to show hardness for sparse PCA, detecting planted independent subgraphs, and more by reducing to the random planted clique problem @berthetComputationalLowerBounds2013 @brennanOptimalAverageCaseReductions2019 @brennanReducibilityComputationalLower2019.
 To this extent, Hoberg et al. provided such evidence of hardness for the NPP by showing that a polynomial-time approximation oracle that achieved discrepancies around $O(2^sqrt(N))$ could give polynomial-time approximations for Minkowski's problem, the latter of which is known to be hard @hobergNumberBalancingHard2016.
 More recently, Vafa and Vaikuntanathan showed that the Karmarkar-Karp algorithm's performance was nearly tight, assuming the worst-case hardness of the shortest vector problem on lattices @vafaSymmetricPerceptronsNumber2025.
 Other conjectures suggested that the onset of algorithmic hardness was related to phase transitions in the solution landscapes, something which shown for random K-SAT, but this fails to describe hardness for optimization problems.
@@ -171,14 +158,14 @@ These results point to the efficacy of using landscape obstructions to show algo
 
 Low degree heuristic: degree $D$ algorithms are a proxy for the class of $e^(tilde(O)(D))$-time algorithms.
 
-#definition[Strong Low-Degree Hardness][
-  A random search problem, i.e. a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N (y_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
-  $ PP(alg(y_N) in S_N) <= o(1). $
+#definition[Strong Low-Degree Hardness @huangStrongLowDegree2025[Def. 3]][
+  A sequence of random search problems -- a $N$-indexed sequence of input vectors $g_N in RR^(d_N)$ and random subsets $S_N = S_N (g_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $alg_N: (g,omega) mapsto x$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  $ PP(alg(g_N,omega) in S_N) <= o(1). $
 ] <def_sldh>
 
 There are two related notions of degree which we want to consider in @def_sldh.
 The first is traditional polynomial degree, applicable for algorithms given in each coordinate by low degree polynomial functions of the inputs.
-The second uses the more general notion of _coordinate degree_: a function $f : RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
+The second uses the more general notion of _coordinate degree_: a function $f: RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
 ()
 
 Our reasons for condisdering low degree algorithms are twofold.
