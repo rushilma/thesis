@@ -8,7 +8,7 @@ In this section, we prove strong low degree hardness for both low degree polynom
 
 For now, we consider $Sigma_N$-valued deterministic algorithms.
 We discuss the extension to $RR^N$-valued algorithms in @section_rounding.
-As outlined in @subsection_intro_results, we show that TODO.
+As outlined in @section_intro_results, we show that TODO.
 
 // TODO - talk about what's going on here
 The key argument is as follows.
@@ -35,7 +35,7 @@ Finally, we conclude by establishing low degree hardness in both the linear and 
 Explain more meow.
 
 
-== Hardness for Low Degree Polynomial Algorithms
+== Hardness for Low Degree Polynomial Algorithms <section_hardness_poly>
 
 // Degree $D$ polynomials
 

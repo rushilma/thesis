@@ -290,14 +290,6 @@
 @rahmanLocalAlgorithmsIndependent2017
 - Failure of local algorithm for independent sets in graphs
 
-@rothvossConstructiveDiscrepancyMinimization2016
-- Partial coloring of sets (discrepancy min)
-
-
-
-@turnerBalancingGaussianVectors2020
-- Multidimensional NPP - poly time algorithm achieving $e^(-Omega(log^2 N/m))$, for $m = O(sqrt(log n))$.
-
 @vafaSymmetricPerceptronsNumber2025
 - Assuming hardness of shortest vector on lattice, derived polynomial-time hardness for NPP;
 - Prove KK is tight; no poly time algorithm achieves energy of $Omega(log^3 N)$

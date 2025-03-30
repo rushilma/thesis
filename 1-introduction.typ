@@ -107,19 +107,6 @@ See also Michiels et al. for extensions to balaced multiway partitioning @michie
 ()
 
 
-+ Hoberg [HHRY17] - computational hardness for worst-case discrepancy, as poly-time oracle that can get discrepancy to within $O(2^sqrt(n))$ would be oracle for Minkowski problem.
-+ Gamarnik-Kizildag: Information-theoretic guarantee $E_n=n$, best computational guarantee $E_n = Theta(log^2 n)$.
-+ Existence of $m$-OGP for $m=O(1)$ and $E_n=Theta(n)$.
-+ Absence for $omega(1) <= E_n=o(n)$
-+ Existence for $omega(sqrt(n log_2 n)) <= E_n <= o(n)$ for $m=omega_n(1)$ (with changing $eta,beta$)
-  + While OGP not ruled out for $E_n <= omega(sqrt(n log_2 n))$, argued that it is tight.
-+ For $epsilon in (0,1/5)$, no stable algorithm can solve $omega(n log^(-1/5 + epsilon) n) <= E_n <= o(n)$
-+ Possible to strengthen to $E_n=Theta(n)$ (as $2^(-Theta(n)) <= 2^(-o(n))$)
-
-+ @gamarnikAlgorithmicObstructionsRandom2021b
-+ @hobergNumberBalancingHard2016
-+ @vafaSymmetricPerceptronsNumber2025 - hardness by relation to shortest vector problem
-
 For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(bold(g)_i)_infinity <= 1$ for all $i$ @spencerSixStandardDeviations1985.
 However, his argument is an application of the probabilistic method, and does not construct such a solution.
 In the average case, Turner et al. proved that, under similar regularity assumptions on the $bold(g)_i$,@foot_nice the minimum discrepancy is $Theta(sqrt(N) 2^(-N slash d))$ for all $d <= o(N)$, with high probability @turnerBalancingGaussianVectors2020.
@@ -133,19 +120,11 @@ Yet, many proposed algorithms can achieve similar discrepancies, which is believ
 
 == Hardness and Statistical-to-Computational Gaps
 
-Non-planted models:
-- Random constraint satisfaction: @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017.
-- Maximum independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015.
-- Largest submatrix @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a
-- $p$-spin model: @gamarnikOverlapGapProperty2019 @montanariOptimizationSherringtonKirkpatrickHamiltonian2019
-- diluted $p$-spin model: @chenSuboptimalityLocalAlgorithms2019
-
-Planted models:
-- matrix principal component analysis @berthetComputationalLowerBounds2013 @lesieurMMSEProbabilisticLowrank2015 @lesieurPhaseTransitionsSparse2015
-- tensor PCA @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @arousAlgorithmicThresholdsTensor2020
-- high dimensional linear regression @gamarnikSparseHighDimensionalLinear2019 @gamarnikHighDimensionalRegressionBinary2019
-- planted clique problem @jerrumLargeCliquesElude1992 @deshpandeImprovedSumofSquaresLower2015 @mekaSumofsquaresLowerBounds2015 @barakNearlyTightSumofSquares2016 @gamarnikLandscapePlantedClique2019
-
+Many problems involving searches over random combinatorial structures (i.e., throughout high-dimensional statistics) are known to exhibit a statistical-to-computational gap.
+In the pure optimization setting, such gaps are exhibited in random constraint satisfaction @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017, finding maximal independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015, the largest submatrix problem @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a, and the $p$-spin and diluted $p$-spin models @gamarnikOverlapGapProperty2019 @montanariOptimizationSherringtonKirkpatrickHamiltonian2019 @chenSuboptimalityLocalAlgorithms2019.
+These gaps also arise in various "planted" models, such as matrix or tensor PCA @berthetComputationalLowerBounds2013 @lesieurMMSEProbabilisticLowrank2015 @lesieurPhaseTransitionsSparse2015 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @arousAlgorithmicThresholdsTensor2020,
+high-dimensional linear regression @gamarnikSparseHighDimensionalLinear2019 @gamarnikHighDimensionalRegressionBinary2019,
+or the infamously hard planted clique problem @jerrumLargeCliquesElude1992 @deshpandeImprovedSumofSquaresLower2015 @mekaSumofsquaresLowerBounds2015 @barakNearlyTightSumofSquares2016 @gamarnikLandscapePlantedClique2019.
 
 Evidence of hardness:
 
@@ -156,70 +135,74 @@ Evidence of hardness:
 - Lower bounds in statistical query model: @kearnsEfficientNoisetolerantLearning1998 @diakonikolasStatisticalQueryLower2017 @feldmanStatisticalAlgorithmsLower2016
 - Low degree methods, and low degree likelihood ratio: @hopkinsStatisticalInferenceSum2018 @kuniskyNotesComputationalHardness2019
 
-
-
 == Overlap Gap Property
 
-@gamarnikOverlapGapProperty2021
+Classical algorithmic complexity theory -- involving classes such as P, NP, etc. -- is poorly suited to describing the hardness of random optimization problems, as these classes are based on the worst-case performance of available algorithms.
+In many cases, the statistically possible performance of solutions to random instances of these NP-complete problems will be far better than the worst-case analysis would suggest.
+How then, can we extend complexity theory to describe problems which, like the NPP, are hard on average?
 
-The _overlap gap property (OGP)_ states that if $g,g'$ are ()
+One approach would be to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concldued that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
+To this extent, Hoberg et al. provided such evidence of hardness for the NPP by showing that a polynomial-time approximation oracle that achieved discrepancies around $O(2^sqrt(N))$ could give polynomial-time approximations for Minkowski's problem, the latter of which is known to be hard @hobergNumberBalancingHard2016.
+More recently, Vafa and Vaikuntanathan showed that the Karmarkar-Karp algorithm's performance was nearly tight, assuming the worst-case hardness of the shortest vector problem on lattices @vafaSymmetricPerceptronsNumber2025.
+Other conjectures suggested that the onset of algorithmic hardness was related to phase transitions in the solution landscapes, something which shown for random K-SAT, but this fails to describe hardness for optimization problems.
 
-- OGP originally emerged in spin glass theory.
-- Link between OGP and $k$-SAT first came in @achlioptasSolutionSpaceGeometryRandom2006 @achlioptasAlgorithmicBarriersPhase2008 @mezardClusteringSolutionsRandom2005
-- Clustering: large portions of solutions cluster in sets disconnected wrt the topology of the solution space.
-  - Onset of clustering = regine where polynomial time algorithms fail
+A more recent and widely successful approach is based on analyzing the geometry of the solution landscapes.
+Many of the "hard" random optimization problems have a certain disconnectivity property, known as the _overlap gap property (OGP)_ @gamarnikOverlapGapProperty2021.
+Roughly, this means there exist $0 <= nu_1 < nu_2$ such that, for every two near-optimal states $x,x'$ for a particular instance $g$ of the problem either have $d(x,x')<nu_1$ or $d(x,x') > nu_2$.
+That is, every pair of solutions are either close to each other, or much further away - the condition that $nu_1 < nu_2$ ensures that the "diameter" of solution clusters is much smaller than the separation between these clusters.
+#footnote[This is called the "overlap" gap property because, in the literature, this is often described in terms of the inner product of the solutions, as opposed to the distance between them.]
+Beyond ruling out the existence of pairs of near solutions with $d(x,x') in [nu_1,nu_2]$, a common extension is the _multioverlap OGP (m-OGP)_: given an ensemble of $m$ strongly correlated instances, there do not exist $m$-tuples of near solutions all equidistant from each other.
+This extension is often useful to lower the "threshold" at which the OGP starts to appear.
+Once established, the OGP and m-OGP, which is intrinsic to the problem itself, can then be leveraged to rule out the success of a wide class of stable algorithms @achlioptasSolutionSpaceGeometryRandom2006 @achlioptasAlgorithmicBarriersPhase2008 @mezardClusteringSolutionsRandom2005 @gamarnikLimitsLocalAlgorithms2014 @gamarnikLowDegreeHardnessRandom2020 @rahmanLocalAlgorithmsIndependent2017 @weinOptimalLowDegreeHardness2020.
 
-First formal implication: @gamarnikLimitsLocalAlgorithms2014.
+For the NPP, it was expected for decades that the "brittleness" of the solution landscape would be a central barrier in finding successful algorithms to close the statistical-to-computational gap. Mertens wrote in 2001 that any local heuristics, which only looked at fractions of the domain, would fail to outperform random search @mertensPhysicistsApproachNumber2001[#sym.section 4.3].
+This was backed up by the failure of many algorithms based on locally refining KK-optimal solutions, such as simulated annealing
+@arguelloRandomizedMethodsNumber1996 @storerProblemSpaceLocal1996 @johnsonOptimizationSimulatedAnnealing1989b @johnsonOptimizationSimulatedAnnealing1991 @alidaeeNewModelingSolution2005.
+To that end, more recent approaches for algorithmic development are rooted in more global heuristics
+@kraticaTwoMetaheuristicApproaches2014 @corusArtificialImmuneSystems2019 @santucciImprovedMemeticAlgebraic2021,
+and some of the most interesting directions in algorithmic development for the NPP comes from quantum computing: as this is outside our scope, we encourage the interested reader to consult @asproniAccuracyMinorEmbedding2020 @wenOpticalExperimentalSolution2023.
+The main result to this effect comes from Gamarnik and Kızıldağ, who proved that for $m$ of constant order, the m-OGP for NPP held for discrepancies of $2^(-Theta(N))$ (i.e. the statistical optimum), but was absent for smaller discrepancies of $2^(-E_N)$ with $omega(1) <= E_N <= o(N)$ @gamarnikAlgorithmicObstructionsRandom2021b.
+They do show, however, that the m-OGP in for $E_N >= omega(sqrt(N log N))$ could be recovered for $m$ superconstant.
+This allowed them to prove that for $epsilon in (0,1 slash 5)$, no stable algorithm (suitably defined) could find solutions with discrepancy $2^(-E_N)$ for $omega(n log^(-1/5 + epsilon) N) <= E_N$ @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2].
+These results point to the efficacy of using landscape obstructions to show algorithmic hardness for the NPP, which we'll take advantage of in @section_hardness.
+// However, their proof of the OGP, which relies on a first-moment computation, is inherently global, and we'll see that it is possible to improve this result in @section_hardness.
 
-@hatamiLimitsLocallyGlobally2014
-
-@gamarnikLowDegreeHardnessRandom2020
-
-
-@rahmanLocalAlgorithmsIndependent2017
-
-@weinOptimalLowDegreeHardness2020
-
-- Multioverlap OGP
-
-@weinOptimalLowDegreeHardness2020
-
-@coja-oghlanIndependentSetsRandom2015
-
-
-Landscape obstructions suggesting sources of hardness
-
-@arguelloRandomizedMethodsNumber1996
-
-@storerProblemSpaceLocal1996
-
-@johnsonOptimizationSimulatedAnnealing1989b
-
-@johnsonOptimizationSimulatedAnnealing1991
-
-@alidaeeNewModelingSolution2005
-
-@kraticaTwoMetaheuristicApproaches2014
-
-@corusArtificialImmuneSystems2019
-
-@santucciImprovedMemeticAlgebraic2021
-
-@mertensPhysicistsApproachNumber2001
-- Physics notation as applied to NPP
-- "Any heuristic that exploits a fraction of the domain, generating and evaluating a series of feasible configurations, cannot be significantly better than random search." section 4.3
-
-Quantum algorithms
-
-@asproniAccuracyMinorEmbedding2020
-
-@wenOpticalExperimentalSolution2023
-
-
-
-== Our Results <subsection_intro_results>
+== Our Results <section_intro_results>
 
 Low degree heuristic: degree $D$ algorithms are a proxy for the class of $e^(tilde(O)(D))$-time algorithms.
+
+#definition[Strong Low-Degree Hardness][
+  A random search problem, i.e. a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N (y_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  $ PP(alg(y_N) in S_N) <= o(1). $
+] <def_sldh>
+
+There are two related notions of degree which we want to consider in @def_sldh.
+The first is traditional polynomial degree, applicable for algorithms given in each coordinate by low degree polynomial functions of the inputs.
+The second uses the more general notion of _coordinate degree_: a function $f : RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
+()
+
+Our reasons for condisdering low degree algorithms are twofold.
+
+
+#theorem[Results of @section_hardness_poly][
+  The NPP exhibits SLDH for degree $D$ polynomial algorithms, when
+  #enum(
+    numbering: "(a)",
+    indent: 0.5em,
+    [$D <= o(exp_2(delta N slash 2))$ when $E = delta N$ for $delta > 0$;],
+    [$D <= o(exp_2(E slash 4))$ when $omega(log N) <= E <= o(N)$.],
+  )
+]
+
+#theorem[Results of @section_hardness_lcd][
+  The NPP exhibits SLDH for coordinate degree $D$ algorithms, when
+  #enum(
+    numbering: "(a)",
+    indent: 0.5em,
+    [$D <= o(N)$ when $E = delta N$ for $delta > 0$;],
+    [$D <= o(E slash log^2 N)$ when $omega(log^2 N) <= E <= o(N)$.],
+  )
+]
 
 == Notation and Conventions
 

@@ -44,6 +44,6 @@
 
 #bibliography(
   "references.bib",
-  style: "ieee", // "chicago-author-date", // "alphanumeric.csl",
+  style: "springer-lecture-notes-in-computer-science", // "chicago-author-date", // "alphanumeric.csl",
   full: true,
 )
