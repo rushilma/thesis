@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Low-Degree Algorithms
+= Low-Degree Algorithms <section_algorithm>
 
 For our purposes, an _algorithm_ is a function which takes as input a problem instance $g in RR^N$ and outputs some $x in Sigma_N$.
 This definition can be extended to functions giving outputs on $RR^N$, and rounding to a vertex on the hypercube $Sigma_N$.
@@ -18,6 +18,12 @@ In particular, our goal is to show _strong low degree hardness_, in the sense of
   $ PP(alg(y_N) in S_N) <= o(1). $
 ]
 
+
+- Failure of MCMC:
+- Failure of AMP:
+- Reductions from planted clique -
+- Low degree methods, and low degree likelihood ratio: @hopkinsStatisticalInferenceSum2018 @kuniskyNotesComputationalHardness2019
+
 // Why study low degree algorithms (poly time heuristic + simple)
 
 Low degree heuristic: @kuniskyLowCoordinateDegree2024a @kuniskyLowCoordinateDegree2024 for extensions
@@ -32,7 +38,7 @@ For the case of NPP, we consider two distinct notions of degree.
 One is traditional polynomial degree, which has an intuitive interpretation, but the other, known in the ltierature as "coordinate degree," is a more flexible notion which can be applied to a much broader class of algorithms.
 As we will see in @section_hardness, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
 
-== Coordinate Degree and $L^2$ Stability
+== Coordinate Degree and $L^2$ Stability <section_algorithm_es>
 
 First, we consider a general class of putative algorithms, where the notion of "degree" corresponds to how many variables can interact nonlinearly with each other.
 Given this notion, deriving stability bounds becomes a straightforward piece of functional analysis.

@@ -156,48 +156,15 @@ These results point to the efficacy of using landscape obstructions to show algo
 
 == Our Results <section_intro_results>
 
-Low degree heuristic: degree $D$ algorithms are a proxy for the class of $e^(tilde(O)(D))$-time algorithms.
+In this thesis, we use a variant of the OGP, which we term a _conditional landscape obstruction_, to prove low degree algorithmic hardness guarantees for the NPP at a range of energy scales.
+That is, we show that given a solution to one instance of the NPP, it is impossible to pin down the location of any solution to a strongly correlated instance, which prevents suitably stable algorithms from traversing the solution landscape.
+This property can be thought of as "brittleness" of the NPP - even small changes in the instance drastically reshape the geometry of the solutions.
 
-#definition[Strong Low-Degree Hardness @huangStrongLowDegree2025[Def. 3]][
-  A sequence of random search problems -- a $N$-indexed sequence of input vectors $g_N in RR^(d_N)$ and random subsets $S_N = S_N (g_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $alg_N: (g,omega) mapsto x$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
-  $ PP(alg(g_N,omega) in S_N) <= o(1). $
-] <def_sldh>
-
-There are two related notions of degree which we want to consider in @def_sldh.
-The first is traditional polynomial degree, applicable for algorithms given in each coordinate by low degree polynomial functions of the inputs.
-The second uses the more general notion of _coordinate degree_: a function $f: RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
-()
-
-Our reasons for condisdering low degree algorithms are twofold.
-
-
-#theorem[Results of @section_hardness_poly][
-  The NPP exhibits SLDH for degree $D$ polynomial algorithms, when
-  #enum(
-    numbering: "(a)",
-    indent: 0.5em,
-    [$D <= o(exp_2(delta N slash 2))$ when $E = delta N$ for $delta > 0$;],
-    [$D <= o(exp_2(E slash 4))$ when $omega(log N) <= E <= o(N)$.],
-  )
-]
-
-#theorem[Results of @section_hardness_lcd][
-  The NPP exhibits SLDH for coordinate degree $D$ algorithms, when
-  #enum(
-    numbering: "(a)",
-    indent: 0.5em,
-    [$D <= o(N)$ when $E = delta N$ for $delta > 0$;],
-    [$D <= o(E slash log^2 N)$ when $omega(log^2 N) <= E <= o(N)$.],
-  )
-]
-
-== Notation and Conventions
-
-
-// Glossary
+To start, let us formalize our terminology for the NPP:
 
 #definition[
-  Let $x in Sigma_N$. The _energy_ of $x$ (with respect to the instance $g$) is
+  Let $g in RR^N$ be an instance of the NPP, and let $x in Sigma_N$.
+  The _energy_ of $x$ (with respect to the instance $g$) is
   $
     E(x;g) := - log_2 abs(inn(g,x)).
   $
@@ -207,8 +174,59 @@ Our reasons for condisdering low degree algorithms are twofold.
   $ <eq_npp>
 ] <def_npp_statement>
 
-- This terminology is motivated by the statistical physics literature, wherein random optimiztation problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
-- Observe that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
+This terminology is motivated by the statistical physics literature, wherein random optimiztation problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
+Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
+We further know that the statistically optimal energy level is $E=Theta(N)$, while the best computational energy achievable in polynomial time is $E=Theta(log^2 N)$, by Karmarkar-Karp @karmarkarDifferencingMethodSet1983.
+
+One particular class of algorithms which has gained widespread attention are so-called _low degree algorithms._
+Compared to analytically-defined classes of stable algorithms (e.g. Lipschitz, etc.), these algorithms have an algebraic structure making them amenable to precise stability analysis.
+In addition, heuristically, degree $D$ algorithms are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
+Our results show _strong low degree hardness_ for the NPP at energy levels between the statistical and computational thresholds, in the sense of @huangStrongLowDegree2025:
+
+#definition[Strong Low Degree Hardness @huangStrongLowDegree2025[Def. 3]][
+  A sequence of random search problems -- a $N$-indexed sequence of random input vectors $g_N in RR^(d_N)$ and random subsets $S_N = S_N (g_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $alg_N: (g,omega) mapsto x$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  $ PP(alg(g_N,omega) in S_N) <= o(1). $
+] <def_sldh>
+
+There are two related notions of degree which we want to consider in @def_sldh.
+The first is traditional polynomial degree, applicable for algorithms given in each coordinate by low degree polynomial functions of the inputs. In this case, we show
+
+#theorem[Results of @section_hardness_poly][
+  The NPP exhibits SLDH for degree $D$ polynomial algorithms, when
+  #enum(
+    numbering: "(a)",
+    indent: 0.5em,
+    [$D <= o(exp_2(delta N slash 2))$ when $E = delta N$ for $delta > 0$;],
+    [$D <= o(exp_2(E slash 4))$ when $omega(log N) <= E <= o(N)$.],
+  )
+] <thrm_sldh_poly_informal>
+
+Under the low degree heuristic, this suggests polynomial algorithms require double exponential time to achieve the statistical optimal discrepancy; given that brute-force search requires exponential time, this is strong evidence that polynomial algorithms are poor models for solving the NPP.
+
+Thus, we turn to the second, more general notion of _coordinate degree_: a function $f: RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
+While related to polynomial degree, this enables us to consider an extremely broad class of algorithms, in which case we show
+
+#theorem[Results of @section_hardness_lcd][
+  The NPP exhibits SLDH for coordinate degree $D$ algorithms, when
+  #enum(
+    numbering: "(a)",
+    indent: 0.5em,
+    [$D <= o(N)$ when $E = delta N$ for $delta > 0$;],
+    [$D <= o(E slash log^2 N)$ when $omega(log^2 N) <= E <= o(N)$.],
+  )
+] <thrm_sldh_lcd_informal>
+
+These results are likely to be the best-possible under the low degree heuristic, which we discuss in @section_hardness_lcd.
+Overall, our approach towards @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal suggest that in the case of problems with brittle solution geometry, conditional landscape obstructions are an extremely powerful tool for proving algorithmic hardness.
+
+The rest of the thesis is organized as follows. We review the low degree heuristic and work on low coordinate degree algorithms in @section_algorithm. In particular, we provide a self-contained introduction to coordinate degree and related decompositions of $L^2$ functions in @section_algorithm_es.
+Our main results then constitute @section_hardness, where after giving an overview of our proof strategy, we show @thrm_sldh_poly_informal in @section_hardness_poly, and likewise show @thrm_sldh_lcd_informal in @section_hardness_lcd.
+We conclude in @section_rounding by extending our results to the case of $RR^N$-valued algorithms, and finish by discussing interesting directions for future research.
+
+== Notation and Conventions
+
+
+// Glossary
 
 + "instance"/"disorder" - $g$, instance of the NPP problem
 + "discrepancy" - for a given $g$, value of $min _(x in Sigma_N) abs(inn(g,x))$
