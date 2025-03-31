@@ -23,7 +23,7 @@ In principle, the first possibility fails via the same analysis as in @section_h
 
 Why are these the only two possibilities? For $alg$ to provide a way to actually solve the NPP, we must be able to turn its outputs on $RR^N$ into points on $Sigma_N$. If $alg$ could output points within an constant distance (independent of the instance) of a solution, then we could convert $alg$ into a $Sigma_N$-valued algorithm by manually computing the energy of all points close to its output and returning the energy-maximizing point.
 
-However, another common way to convert a $RR^N$-valued algorithm into a $Sigma_N$-valued one is by rounding the outputs, as in @huangStrongLowDegree2025.
+However, another common way to convert a $RR^N$-valued algorithm into a $Sigma_N$-valued one is by rounding the outputs, as in @alaouiSamplingSherringtonKirkpatrickGibbs2024a @huangStrongLowDegree2025.
 Doing this directly can lead to difficulties in performing the stability analysis.
 In our case, though, if we know no $alg$ can reliably output points within constant distance of a solution, then any rounding scheme which only flips $O(1)$ many coordinates will assuredly fail.
 Thus, the only rounding schemes worth considering are those which flip $omega(1)$ many coordinates.

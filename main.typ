@@ -44,7 +44,7 @@
 
 #bibliography(
   "references.bib",
-  style: "ieee", // "chicago-author-date", // "alphanumeric.csl",
+  style: "ieee.csl", // "chicago-author-date", // "alphanumeric.csl",
   title: "References",
   full: false,
 )
