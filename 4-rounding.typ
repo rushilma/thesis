@@ -2,8 +2,6 @@
 
 #import "symbols.typ": *
 
-#pagebreak()
-
 // #show math.equation: set text(font: "New Computer Modern Math")
 
 = Extensions to Real-Valued Algorithms <section_rounding>
@@ -18,7 +16,6 @@ Throughout, let $alg$ denote an $RR^N$-valued algorithm.
 We want to show that
 #enum(
   numbering: "I.",
-  indent: 1.2em,
   [No low degree $alg$ can reliably output points _close_ -- within constant distance -- to a solution,],
   [No $Sigma_N$-valued algorithm $tilde(alg)$ coming from randomly rounding the output of $alg$, which changes an $omega(1)$ number of coordinates, can find a solution with nonvanishing probability.],
 )
@@ -202,8 +199,6 @@ Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bo
   Let $omega((log_2 N)^2) <= E <= Theta(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
   Consider any $r=O(1)$ and $RR^N$-valued $alg$ with $EE norm(alg(g))^2 <= C N$, and assume in addition that
   #enum(
-    numbering: "(a)",
-    indent: 1.2em,
     [if $E = delta N = Theta(N)$ for $delta > 0$, then $alg$ has coordinate degree $D <= o(N)$;],
     [if $(log_2 N)^2 << E << N$, then $alg$ has coordinate degree $D <= o(E slash (log_2 N)^2)$.],
   )

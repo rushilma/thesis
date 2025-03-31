@@ -33,8 +33,12 @@
   #set par(
     justify: true,
     spacing: 1em,
+    // leading: 1.2em,
     first-line-indent: (amount: 1.2em, all: false),
   )
+
+  // enum
+  #set enum(numbering: "(a)", indent: 1.2em)
 
   // math equation stuff
   #set math.equation(
@@ -66,6 +70,11 @@
     pagebreak()
     pad(it, bottom: 5em)
   }
+  /*
+  #show heading.where(level: 2): it => {
+    pad(it, top: 1.2em, bottom: 1.2em)
+  }
+  */
 
   // acknowledgments
   #include "acknowledgements.typ"

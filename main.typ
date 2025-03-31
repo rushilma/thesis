@@ -46,5 +46,5 @@
   "references.bib",
   style: "ieee", // "chicago-author-date", // "alphanumeric.csl",
   title: "References",
-  full: true,
+  full: false,
 )

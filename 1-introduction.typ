@@ -37,7 +37,7 @@ One particularly important application of the NPP in statistics comes from the d
 Consider $N$ individuals, each with a set of covariate information $bold(g)_i in RR^d$.
 Then the problem is to divide them into a treatment group (denoted $A_+$) and a control group (denoted $A_-$), subject each to different conditions, and evaluate the responses.
 In order for such a trial to be accurate, it is necessary to ensure that the covariates across both groups are roughly the same.
-in our notation, this equates to finding an $A_+$ (with $A_- := [N] without A_+$) to minimize
+In our notation, this equates to finding an $A_+$ (with $A_- := [N] without A_+$) to minimize
 $
   min_(A_+ subeq [N]) norm( sum_(i in A_+) bold(g)_i - sum_(i in A_-) bold(g)_i )_infinity.
 $ <eq_def_vbp>
@@ -46,20 +46,20 @@ This multidimensional extension of the NPP is often termed the _vector balancing
 // applications: cryptography
 
 On the other hand, in 1976, Merkle and Hellman devised one of the earliest public key cryptography schemes, deriving its hardness from their belief that a variant of the NPP was computationally difficult to solve -- at the time, it was not yet known whether the NPP was NP-complete or not @merkleHidingInformationSignatures1978.
-Their proposal was for the reciever, say Alice, to generate as a public key $N$ natural numbers $(a_1,dots,a_N)$, with $N$ typically around 100 and each $a_i$ around 200 bits long.
+Their proposal was for the receiver, say Alice, to generate as a public key $N$ natural numbers $(a_1,dots,a_N)$, with $N$ typically around 100 and each $a_i$ around 200 bits long.
 Then, to encrypt a $N$-bit message, $x = (x_1,dots,x_N)$, with $x_i in {0,1}$, the sender, say Bob, could compute
 $ b := sum_(i in N) a_i x_i, $
 and send the ciphertext $b$ to Alice.
 Any eavesdropper would know $a_1,dots,a_N$, as well as $b$, and decrypting the message involved finding a subset of the $a_i$ adding up to $b$.
 This is known as the _knapsack problem_, which is NP-complete, as can be shown by restriction to the NPP @gareyComputersIntractabilityGuide1979[3.2.1(6)].
-However, such NP-completeness is only a worst-case hardness guarantee; Merkle and Hellman's scheme involved Alice choosing $a_1,dots,a_N$ by cryptographically scrambling a sequence $(a'_1,dots,a'_N)$ for which solving the NPP was easy, enabling the reciever to practically decrypt the message $x$ from the ciphertext $b$.
+However, such NP-completeness is only a worst-case hardness guarantee; Merkle and Hellman's scheme involved Alice choosing $a_1,dots,a_N$ by cryptographically scrambling a sequence $(a'_1,dots,a'_N)$ for which solving the NPP was easy, enabling the receiver to practically decrypt the message $x$ from the ciphertext $b$.
 In 1984, Shamir -- one of the developers of the RSA cryptosystem still in use today -- showed that one could exploit this public key generation process to reduce the "hard" knapsack problem to one which was solvable in polynomial time, rendering the Merkle-Hellman scheme insecure @shamirPolynomialTimeAlgorithm1982.
 While today, Merkle-Hellman is but a footnote in the history of cryptography, it demonstrates the importance of looking beyond worst-case hardness and expanding complexity theory to describe the difficulty of the average problem instance.
 
 // physics and phase transition
 
 Another major source of interest in the NPP, as well as potential explanations for when it is hard, come from statistical physics.
-In the 1980s, Derrida introduced the eponymous _random energy model (REM)_, a simplified example of a spin glass in which, unlike the Sherrington-Kirkpatrick or other $p$-spin glass models, the possible energy levels are indepedent of each other @derridaRandomEnergyModelLimit1980 @derridaRandomenergyModelExactly1981 @baukeNumberPartitioningRandom2004.
+In the 1980s, Derrida introduced the eponymous _random energy model (REM)_, a simplified example of a spin glass in which, unlike the Sherrington-Kirkpatrick or other $p$-spin glass models, the possible energy levels are independent of each other @derridaRandomEnergyModelLimit1980 @derridaRandomenergyModelExactly1981 @baukeNumberPartitioningRandom2004.
 Despite this simplicity, this model made possible heuristic analyses of the Parisi theory for mean field spin glasses, and it was suspected that arbitrary random discrete systems would locally behave like the REM @baukeUniversalityLevelStatistics2004 @kistlerDerridasRandomEnergy2014.
 The NPP was the first system for which this local REM conjecture was shown @borgsProofLocalREM2009 @borgsProofLocalREM2009a.
 In addition, in the case when the $g_i$ are independently chosen uniformly over ${1,2,...,2^M}$, Gent and Walsh conjectured that the hardness of finding perfect partitions (i.e., with discrepancy zero if $sum_i g_i$ is even, and one else) was controlled by the parameter $kappa := m/n$ @gentAnalysisHeuristicsNumber1998 @gentPhaseTransitionsAnnealed2000.
@@ -100,10 +100,10 @@ Lueker soon disproved that PDM could achieve the KK discrepancy, showing that wh
 However, for $g_i$ i.i.d. Uniform or even Exponential, Yakir confirmed that LDM could achieve the performance of the original differencing algorithm, proving that its expected discrepancy was $N^(-Theta(log N))$ @yakirDifferencingAlgorithmLDM1996.
 The constant $alpha$ was later estimated for LDM to be $alpha=1/(2 ln 2)$, via non-rigorous calculations @boettcherAnalysisKarmarkarKarpDifferencing2008.
 
-Of course, at its most basic, the NPP is a search problem over $2^N$ possible partitions, so given more and more time, an appropriate algorithm could keep improving its partition until it acheived the global optimum.
+Of course, at its most basic, the NPP is a search problem over $2^N$ possible partitions, so given more and more time, an appropriate algorithm could keep improving its partition until it achieved the global optimum.
 To this degree, Korf developed alternatives known as the _complete greedy_ and _complete Karmarkar-Karp_ algorithms which, if run for exponentially long time, can find the globally optimal partition @korfApproximateOptimalSolutions1995 @korfCompleteAnytimeAlgorithm1998.
 This algorithm was later extended to multiway number partitioning @korfMultiwayNumberPartitioning2009.
-See also Michiels et al. for extensions to balaced multiway partitioning @michielsPerformanceRatiosDifferencing2003.
+See also Michiels et al. for extensions to balanced multiway partitioning @michielsPerformanceRatiosDifferencing2003.
 
 For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(bold(g)_i)_infinity <= 1$ for all $1 <= i <= N$ @spencerSixStandardDeviations1985.
 However, his argument is an application of the probabilistic method, and does not construct such a solution.
@@ -124,14 +124,14 @@ The past two decades of research have shown that many methods can provide eviden
 @jerrumLargeCliquesElude1992 @gamarnikAlgorithmicObstructionsRandom2021b @huangStrongLowDegree2025,
 the failure of approximate message passing (AMP) algorithms
 @zdeborovaStatisticalPhysicsInference2016 @bandeiraNotesComputationaltostatisticalGaps2018,
-or lower bounding performance against the Sum-of-Squares heirarchy or the statistical query model
+or lower bounding performance against the sum-of-squares hierarchy or the statistical query model
 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @raghavendraHighdimensionalEstimationSumofsquares2019 @barakNearlyTightSumofSquares2016 @kearnsEfficientNoisetolerantLearning1998 @diakonikolasStatisticalQueryLower2017 @feldmanStatisticalAlgorithmsLower2016.
 
-One particularly interesting approach is to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concldued that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
+One particularly interesting approach is to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concluded that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
 This method has been used to show hardness for sparse PCA, detecting planted independent subgraphs, and more by reducing to the random planted clique problem @berthetComputationalLowerBounds2013 @brennanOptimalAverageCaseReductions2019 @brennanReducibilityComputationalLower2019.
 To this extent, Hoberg et al. provided such evidence of hardness for the NPP by showing that a polynomial-time approximation oracle that achieved discrepancies around $O(2^sqrt(N))$ could give polynomial-time approximations for Minkowski's problem, the latter of which is known to be hard @hobergNumberBalancingHard2016.
 More recently, Vafa and Vaikuntanathan showed that the Karmarkar-Karp algorithm's performance was nearly tight, assuming the worst-case hardness of the shortest vector problem on lattices @vafaSymmetricPerceptronsNumber2025.
-Other conjectures suggested that the onset of algorithmic hardness was related to phase transitions in the solution landscapes, something which shown for random K-SAT, but this fails to describe hardness for optimization problems.
+Other conjectures suggested that the onset of algorithmic hardness was related to phase transitions in the solution landscapes, something which shown for random $k$-SAT, but this fails to describe hardness for optimization problems.
 
 A more recent and widely successful approach is based on analyzing the geometry of the solution landscapes.
 Many of the "hard" random optimization problems have a certain disconnectivity property, known as the _overlap gap property (OGP)_ @gamarnikOverlapGapProperty2021.
@@ -174,13 +174,15 @@ To start, let us formalize our terminology for the NPP:
   $ <eq_npp>
 ] <def_npp_statement>
 
-This terminology is motivated by the statistical physics literature, wherein random optimiztation problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
+This terminology is motivated by the statistical physics literature, wherein random optimization problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
 Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
 We further know that the statistically optimal energy level is $E=Theta(N)$, while the best computational energy achievable in polynomial time is $E=Theta(log^2 N)$, by Karmarkar-Karp @karmarkarDifferencingMethodSet1983.
 
-One particular class of algorithms which has gained widespread attention are so-called _low degree algorithms._
+For our purposes, an algorithm is a function $alg : g mapsto x in Sigma_N$. We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
+In particular, we consider the class of so-called _low degree algorithms_, given by either low degree polynomials or by functions with low _coordinate degree_.
 Compared to analytically-defined classes of stable algorithms (e.g. Lipschitz, etc.), these algorithms have an algebraic structure making them amenable to precise stability analysis.
-In addition, heuristically, degree $D$ algorithms are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
+In addition, heuristically, degree $D$ algorithms (in either sense) are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
+Expand on meow.
 Our results show _strong low degree hardness_ for the NPP at energy levels between the statistical and computational thresholds, in the sense of @huangStrongLowDegree2025:
 
 #definition[Strong Low Degree Hardness @huangStrongLowDegree2025[Def. 3]][
@@ -194,8 +196,6 @@ The first is traditional polynomial degree, applicable for algorithms given in e
 #theorem[Results of @section_hardness_poly][
   The NPP exhibits SLDH for degree $D$ polynomial algorithms, when
   #enum(
-    numbering: "(a)",
-    indent: 0.5em,
     [$D <= o(exp_2(delta N slash 2))$ when $E = delta N$ for $delta > 0$;],
     [$D <= o(exp_2(E slash 4))$ when $omega(log N) <= E <= o(N)$.],
   )
@@ -209,8 +209,6 @@ While related to polynomial degree, this enables us to consider an extremely bro
 #theorem[Results of @section_hardness_lcd][
   The NPP exhibits SLDH for coordinate degree $D$ algorithms, when
   #enum(
-    numbering: "(a)",
-    indent: 0.5em,
     [$D <= o(N)$ when $E = delta N$ for $delta > 0$;],
     [$D <= o(E slash log^2 N)$ when $omega(log^2 N) <= E <= o(N)$.],
   )

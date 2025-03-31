@@ -4,7 +4,10 @@
 
 = Proof of Strong Low-Degree Hardness <section_hardness>
 
-In this section, we prove strong low degree hardness for both low degree polynomial algorithms and algorithms with low Efron-Stein degree.
+In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -- that is, we show strong low degree hardness for both low degree polynomial algorithms and algorithms with low degree.
+
+
+
 
 For now, we consider $Sigma_N$-valued deterministic algorithms.
 We discuss the extension to $RR^N$-valued algorithms in @section_rounding.
@@ -34,12 +37,72 @@ Finally, we conclude by establishing low degree hardness in both the linear and 
 
 Explain more meow.
 
+For clarity of explanation, let us describe the proof of @thrm_sldh_poly_informal, stated formally as @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear; the proof of @thrm_sldh_lcd_informal requires only minor modifications.
+Let $E$ be an energy level and $D$ be a maximum algorithm degree, both depending on $N$.
+We assume that $D$ is bounded by a level depending on $E$ and $N$, corresponding to the low degree regime in which we want to show hardness.
+We then choose parameters $eta$ and $epsilon$, depending on $E$, $D$, and $N$.
+As described in @section_algorithm, assume $alg$ is a deterministic, $Sigma_N$-valued algorithm with polynomial degree at most $D$.
+Our goal is to show that for our choices of $eta$ and $epsilon$,
+$ PP(alg(g) in Soln(g)) -> 0 $
+as $N to infinity$.
+This is done in the following steps:
+
+#enum(
+  [
+    Consider a $(1-epsilon)$-correlated pair $g,g'$ of NPP instances.
+    These are $N$-dimensional standard Normal vectors which are $p$-correlated, for $p=1-epsilon$ (when considering coordinate degree, we instead require them to be $p$-resampled).
+  ],
+  [
+    For $epsilon$ small, $g$ and $g'$ have correlation close to 1.
+    By @prop_alg_stability, this implies the outputs of a low degree polynomial algorithm $alg$ will be within distance $2sqrt(eta N)$ of each other with high probability.
+  ],
+  [
+    For $eta$ small and a fixed $alg(g)$, @prop_correlated_fundamental shows that conditional on $g$, $g'$ has no solutions within distance $2 sqrt(eta N)$ of $alg(g)$. This is the conditional landscape obstruction we described above.
+  ],
+  [
+    Put together, these points imply it is unlikely for $alg$ to find solutions to _both_ $g$ and $g'$ such that the stability guarantee of @prop_alg_stability holds.
+    By the positive correlation statement in @lem_correlated_solve_prob, we conclude that $alg(g) in.not Soln(g)$ with high probability.
+  ],
+)
+
+We can summarize the parameters in our argument in the following table
+
+
+#figure(
+  table(
+    columns: 4,
+    fill: (_, y) => if calc.odd(y) { rgb("EAF2F5") },
+    stroke: none,
+    table.hline(),
+    [*Parameter*], [*Meaning*], [*Desired Direction*], [*Intuition*],
+    table.hline(),
+    [$N$], [Dimension],
+    [Large], [Showing hardness _asymptotically_, want "bad behavior" to pop up in low dimensions.],
+
+    [$E$], [Solution energy; want to find $x$ such that $abs(inn(g,x)) <= 2^(-E)$],
+    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by @karmarkarDifferencingMethodSet1983],
+
+    [$D$], [Algorithm degree (in either Efron-Stein sense or usual polynomial sense.)],
+    [Large], [Higher degree means more complexity. Want to show even complex algorithms fail.],
+
+    [$epsilon$], [Complement of correlation/resample probability; (g,g') are $(1-epsilon)$-correlated.],
+    [Small], [$epsilon$ is "distance" between $g,g'$. Want to show that small changes in disorder lead to "breaking" of landscape.],
+
+    [$eta$], [Algorithm instability; $alg$ is stable if $norm(alg(g) - alg(g')) <= 2 sqrt(eta N)$, for $(g,g')$ close.],
+    [Large], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
+
+    table.hline(),
+  ),
+  caption: [Explanation of Parameters],
+) <parameter_table>
+
+
 
 == Hardness for Low Degree Polynomial Algorithms <section_hardness_poly>
 
 // Degree $D$ polynomials
 
-First, consider the case of $alg$ being a polynomial algorithm with degree $D$.
+First, we consider the case of $alg$ being a polynomial algorithm with degree $D$.
 
 Let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s, and let $x in Sigma_N$ depend only on $g$.
 Furthermore, let $eta>0$ be a parameter which will be chosen in a manner specified later.
@@ -91,7 +154,7 @@ Then, we have the following correlation bound, which allows us to avoid union bo
   where the last line follows by Jensen's inequality.
 ]
 
-// TODO: should we rearrange this?
+// meow: should we rearrange this?
 
 Moreover, let us define $p^cor _"unstable"$ and $p^cor _"cond" (x)$ by
 $
@@ -403,34 +466,4 @@ Sublinear case. We now consider sublinear energy levels, ranging from $(log_2 N)
   $
   By @eq_lcd_fundamental, $(p^res _"solve")^2 <= PP(S_"diff")dot (p^res _"unstable" + p^res _"cond") = o(1)$, thus completing the proof.
 ]
-
-== Summary of Parameters
-
-#figure(
-  table(
-    columns: 4,
-    fill: (_, y) => if calc.odd(y) { rgb("EAF2F5") },
-    stroke: none,
-    table.hline(),
-    [*Parameter*], [*Meaning*], [*Desired Direction*], [*Intuition*],
-    table.hline(),
-    [$N$], [Dimension],
-    [Large], [Showing hardness _asymptotically_, want "bad behavior" to pop up in low dimensions.],
-
-    [$E$], [Solution energy; want to find $x$ such that $abs(inn(g,x)) <= 2^(-E)$],
-    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by @karmarkarDifferencingMethodSet1983],
-
-    [$D$], [Algorithm degree (in either Efron-Stein sense or usual polynomial sense.)],
-    [Large], [Higher degree means more complexity. Want to show even complex algorithms fail.],
-
-    [$epsilon$], [Complement of correlation/resample probability; (g,g') are $(1-epsilon)$-correlated.],
-    [Small], [$epsilon$ is "distance" between $g,g'$. Want to show that small changes in disorder lead to "breaking" of landscape.],
-
-    [$eta$], [Algorithm instability; $alg$ is stable if $norm(alg(g) - alg(g')) <= 2 sqrt(eta N)$, for $(g,g')$ close.],
-    [Large], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
-
-    table.hline(),
-  ),
-  caption: [Explanation of Parameters],
-) <parameter_table>
 

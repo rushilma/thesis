@@ -4,43 +4,59 @@
 
 = Low-Degree Algorithms <section_algorithm>
 
-For our purposes, an _algorithm_ is a function which takes as input a problem instance $g in RR^N$ and outputs some $x in Sigma_N$.
-This definition can be extended to functions giving outputs on $RR^N$, and rounding to a vertex on the hypercube $Sigma_N$.
+An _algorithm_ is a function which takes as input an instance $g in RR^N$ and outputs some $x in Sigma_N$.
+This definition can be extended to functions giving outputs on $RR^N$ and rounding to a vertex on the hypercube $Sigma_N$, which we consider in @section_rounding.
 Alternatively, we could consider _randomized algorithms_ via taking as additional input some randomness $omega$ independent of the problem instance.
-However, most of our analysis will focus on the deterministic case.
+However, as this extension requires only minor changes, which we describe when relevant, most of our analysis will focus on the deterministic case.
 
-To further restrict the category of algorithms considered, we specifically restrict to _low degree algorithms_.
-Compared to analytically-defined classes of algorithms (e.g. Lipschitz), these algorithms have a regular algebraic structure that we can exploit to precisely control their stability properties.
-In particular, our goal is to show _strong low degree hardness_, in the sense of @huangStrongLowDegree2025[Def. 3].
+The category of algorithms we consider are specifically _low degree algorithms_.
+We treat two closely related notions of degree: first is _polynomial degree_, in which we assume our algorithms are given coordinate-wise by polynomials of some bounded degree.
+The second, more general notion is _coordinate degree_, which roughly counts how many coordinates can interact nonlinearly; this can be applied to arbitrary algorithms given by $L^2$ functions.
+While polynomial algorithms are widely known and studied, low coordinate degree algorithms were first introduced in Hopkins' thesis @hopkinsStatisticalInferenceSum2018, and were later used by Brennan et al. @brennanStatisticalQueryAlgorithms2021 and Mossel et al. @koehlerReconstructionTreesLowDegree2022 @huangOptimalLowDegree2025 (although in the latter case, they were shown to be equivalent to polynomial algorithms).
+Compared to analytically-defined classes of algorithms (e.g. Lipschitz), these low degree algorithms have an algebraic structure that we can exploit to precisely control their stability properties.
 
-#definition[Strong Low-Degree Hardness][
-  A random search problem, namely a $N$-indexed sequence of input vectors $y_N in RR^(d_N)$ and random subsets $S_N = S_N(y_N) subeq Sigma_N$, exhibits _strong low degree hardness up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $(alg_N)$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
-  $ PP(alg(y_N) in S_N) <= o(1). $
-]
+As mentioned in the introduction, our goal is to show _strong low degree hardness_, meaning that low degree algorithms (either meaning low polynomial degree or low coordinate degree) fail to find solutions to the NPP with high probability.
+However, our proofs only use the low degree assumption to apply stability bounds: roughly, a stable algorithm cannot "overcome" the gaps between solutions for two closely-related instances of the NPP.
+Why, then, do we restrict to low degree algorithms specifically?
+The main reason is the _low degree heuristic_:
+#align(
+  center,
+  [
+    _For nice random optimization problems, degree $D$ algorithms \ succeed if and only if time $e^(tilde(O)(D))$ algorithms do._
+  ],
+)
+This heuristic was first proposed in Hopkins' thesis @hopkinsStatisticalInferenceSum2018, and later expanded upon by Kunisky, Wein, and Bandeira @kuniskyNotesComputationalHardness2019, although this was primarily in the context of low degree polynomials for hypothesis testing.
+Kunisky later expanded these results when applying low coordinate degree methods towards hypothesis testing @kuniskyLowCoordinateDegree2024a @kuniskyLowCoordinateDegree2024.
+Huang and Sellke thus observed that strong low degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential $e^(tilde(Omega)(N))$ time to find globally optimal solutions @huangStrongLowDegree2025.
+They prove strong low degree hardness for a variety of random optimization problems: optimization of pure $k$-spin glasses, symmetric binary perceptrons, and random $k$-SAT, to name a few, most of which are optimal under the low degree heuristic.
+However, Huang and Mossel's work on broadcasting on trees, this heuristic breaks down: degree $D <= O(log N)$ algorithms fail despite there existing a linear-time algorithm known as Belief Propagation @huangOptimalLowDegree2025.
+To this end, the authors suggest this discrepancy arises from the requirement of "depth" in the Belief Propagation algorithm -- roughly, despite running in linear time, this algorithm still struggles in practice in the "hard" regime.
+As a takeaway, we can surmise that the low degree heuristic is reasonable for describing random search problems involving optimization of a "flat" structure, in which algorithmic complexity cannot hide behind $N$-independent factors.
 
+meow @liEasyOptimizationProblems2024
 
-- Failure of MCMC:
-- Failure of AMP:
-- Reductions from planted clique -
-- Low degree methods, and low degree likelihood ratio: @hopkinsStatisticalInferenceSum2018 @kuniskyNotesComputationalHardness2019
+/*
+$omega mapsto f(omega) := EE[ norm(alg(g,omega))^2 | omega]$
 
-// Why study low degree algorithms (poly time heuristic + simple)
+WTS $f(omega) <= C'(omega) N$
 
-Low degree heuristic: @kuniskyLowCoordinateDegree2024a @kuniskyLowCoordinateDegree2024 for extensions
-@montanariEquivalenceApproximateMessage2024
+$
+  EE[f(omega) | f(omega) <= C N] PP(f(omega) <= C N) + EE[f(omega) | f(omega) >= C N] PP(f(omega) >= C N) = EE[f(omega)] <= C N
+$
 
-Sometimes it fails: @huangOptimalLowDegree2025
+$
+  PP_omega (EE[norm(alg(g,omega))^2 | omega] >= C' N) <= (EE norm(alg(g,omega))^2) / (C' N) <= C / C'
+$
 
-In addition, degree $D$ polynomials are a heuristic proxy for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018 @kothariSumSquaresLower2017.
-Thus, strong low degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential (i.e. $e^Omega(N)$) time to find globally optimal solutions.
-
-For the case of NPP, we consider two distinct notions of degree.
-One is traditional polynomial degree, which has an intuitive interpretation, but the other, known in the ltierature as "coordinate degree," is a more flexible notion which can be applied to a much broader class of algorithms.
-As we will see in @section_hardness, these classes of algorithms exhibit quantitatively different behavior, in line with existing heuristics for the "brittleness" of NPP.
+$
+  PP(alg(g,omega) in Soln(g)) &= EE[ PP(alg(g,omega) in Soln(g) | omega) ] \
+  &<= EE[ ]
+$
+*/
 
 == Coordinate Degree and $L^2$ Stability <section_algorithm_es>
 
-First, we consider a general class of putative algorithms, where the notion of "degree" corresponds to how many variables can interact nonlinearly with each other.
+First, we consider a general class of putative algorithms, and construct the "coordinate decomposition" underlying the notion of coordinate degree.
 Given this notion, deriving stability bounds becomes a straightforward piece of functional analysis.
 To start, recall the notion of $L^2$ functions:
 
@@ -53,9 +69,8 @@ To start, recall the notion of $L^2$ functions:
   Alternatively, this is the space of $L^2$ functions of $N$ i.i.d. random variables $x_i$, distributed as $pi$.
 ] <def_L2_iid>
 
-Note that this is an extremely broad class of functions; for instance, all bounded functions are $L^2$.
-
-Given any function $f in L2iid$, we can consider how it depends on various subsets of the $N$ input coordinates.
+This is an extremely broad class of functions; for instance, all bounded functions are $L^2$.
+Given any function $f in L2iid$, we can then consider how it depends on various subsets of the $N$ input coordinates.
 In principle, everything about $f$ should be reflected in how it acts on all possible such subsets.
 To formalize this intuition, define the following coordinate projection:
 
@@ -64,7 +79,6 @@ To formalize this intuition, define the following coordinate projection:
   Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$.
   The _projection of $f$ onto $J$_ is the function $f^(subeq J): RR^N to RR$ given by
   $ f^(subeq J)(x) := EE[f(x_1,dots,x_n) | x_i, i in J] = EE[f(x) | x_J] $
-  // This is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on $x_J$.
 ] <def_subset_proj>
 
 Intuitively $f^(subeq J)$ is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on the coordinates in $J$.
@@ -74,8 +88,11 @@ $ f = sum_(S subeq [N]) f^(= S) $ <eq_efron_stein_decomp>
 where each $f^(=S)$ only depends on the coordinates in $S$, but not any smaller subset.
 That is, if $T subset.eq.not S$ and $g$ depends only on the coordinates in $T$, then $inn(f^(=S), g)=0$.
 
-This decomposition, often called the _Efron-Stein_, _orthogonal_, or _Hoeffding_ decomposition, does indeed exist, and exhibits the following combinatorial construction.
-Our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3], as well as the paper @kuniskyLowCoordinateDegree2024a.
+This decomposition, often called the _Efron-Stein_, _orthogonal_, or _Hoeffding_ decomposition, does indeed exist.
+Its applications in statistics come from the fact that it provides a way of decomposing the total variance of a function into the components coming from specific sets of coordinates, a step which underlies the ANOVA methodology.
+These low coordinate degree decompositions have also been used in computational chemistry: see the reviews by Li et al. @liHighDimensionalModel2001 or Rabitz and Aliş @rabitzGeneralFoundationsHighdimensional1999 for more details.
+The Efron-Stein decomposition exhibits the following combinatorial construction;
+our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3], as well as the paper @kuniskyLowCoordinateDegree2024a.
 
 The motivating fact is that for any $J subeq [N]$, we should have
 $ f^(subeq J) = sum_(S subeq J) f^(=S). $ <eq_efron_stein_motiv>
@@ -107,13 +124,20 @@ This construction, along with some direct calculations, leads to the following:
   Let $f in L2iid$. Then $f$ has a unique decomposition as
   $ f = sum_(S subeq [N]) f^(=S), $
   known as the _Efron-Stein decomposition_, where the functions $f^(=S) in L2iid$ satisfy
-  + $f^(=S)$ depends only on the coordinates in $S$;
-  + if $T subset.neq S$ and $g in L2iid$ only depends on coordinates in $T$, then $inn(f^(=S),g)=0$.
+  #enum(
+    numbering: "(1)",
+    [$f^(=S)$ depends only on the coordinates in $S$;],
+    [if $T subset.neq S$ and $g in L2iid$ only depends on coordinates in $T$, then $inn(f^(=S),g)=0$.],
+  )
   In addition, this decomposition has the following properties:
-  3. Condition 2. holds whenever $S subset.eq.not T$.
-  + The decomposition is orthogonal: $inn(f^(=S),f^(=T))=0$ for $S eq.not T$.
-  + $sum_(S subeq T) f^(=S) = f^(subeq T)$.
-  + For each $S subeq [N]$, $f mapsto f^(=S)$ is a linear operator.
+  #enum(
+    numbering: "(1)",
+    start: 3,
+    [Condition (2) holds whenever $S subset.eq.not T$.],
+    [The decomposition is orthogonal: $inn(f^(=S),f^(=T))=0$ for $S eq.not T$.],
+    [$sum_(S subeq T) f^(=S) = f^(subeq T)$.],
+    [For each $S subeq [N]$, $f mapsto f^(=S)$ is a linear operator.],
+  )
 ] <thrm_efron_stein>
 
 In summary, this decomposition of any $L2iid$ function into it's different interaction levels not only uniquely exists, but is an orthogonal decomposition, enabling us to apply tools from elementary Fourier analysis.
@@ -218,7 +242,7 @@ Alternatively, we can consider the much more restrictive (but more concrete) cla
 This theory is much more classical, so we encourage the interested reader to see @odonnellAnalysisBooleanFunctions2021[#sym.section 11] for details.
 
 #definition[
-  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. Then the _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal r.v.s.
+  Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. The _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal r.v.s.
 ]
 
 Note that under the usual $L^2$ inner product, $inn(f,g) = EE[f dot g]$, this is a separable Hilbert space.
@@ -265,7 +289,7 @@ When working with honest polynomials, the traditional notion of correlation is a
   Let $(x,y)$ be $N$-dimensional standard Normal vectors. We say $(x,y)$ are _$p$-correlated_ if $(x_i,y_i)$ are $p$-correlated for each $i in [N]$, and these pairs are mutually independent.
 ]
 
-In a similar way to the Efron-Stein case, we can consider the resulting "noise operator," as a way of measuring a the effect on a function of a small change in the input.
+In a similar way to the Efron-Stein case, we can consider the resulting "noise operator," as a way of measuring the effect on a function of a small change in the input.
 
 #show sym.EE: math.limits
 
@@ -304,21 +328,20 @@ With this in hand, we can prove a similar stability bound to @thrm_es_stability.
   From there, the proof proceeds as before.
 ]
 
-As a comparision to the case for functions with coordinate degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
-In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant strengthenings in the arguments which follow, justifying equal consideration of both classes of functions.
+As a comparison to the case for functions with coordinate degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
+In exchange, being able to use $p$-correlation as a "metric" on the input domain will turn out to offer significant benefits in the arguments which follow, justifying equal consideration of both classes of functions.
 
 == Stability of Low-Degree Algorithms <section_algorithm_stability>
 
 With these notions of low degree functions/polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
-  A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x^* in Sigma^N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
+  A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x in Sigma_N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
 
-// TODO: rephrase this paragraph
-In practice, we want to consider $RR^N$-valued algorithms as opposed to $Sigma_N$-valued ones to avoid the resulting restrictions on the component functions.
-These can then be converted to $Sigma_N$-valued algorithms by some rounding procedure.
-We discuss the necessary extensions to handling this rounding in @section_rounding.
+As discussed in the introduction to this section, we will usually focus on deterministic algorithms, discussing the minor modifications necessary for handling randomized algorithms as necessary.
+In addition, many practical algorithms are $RR^N$-valued, which must be rounded to give outputs on $Sigma_N$.
+For simplicity, we assume for now that our algorithms are $Sigma_N$-valued, and discuss the extensions to handle this rounding in @section_rounding.
 
 #definition[
   A _polynomial algorithm_ is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
@@ -351,6 +374,11 @@ By the low degree heuristic, these algorithms can be interpreted as a proxy for 
   Multiplying by $C'$ gives @eq_alg_expected_stability (as $C' <= C N$).
   Finally, @eq_alg_stability follows from Markov's inequality.
 ]
+
+#remark[
+  Note that @prop_alg_stability also holds for randomized algorithms meow
+]
+
 
 /*
 #example[
