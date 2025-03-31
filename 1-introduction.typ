@@ -176,7 +176,7 @@ To start, let us formalize our terminology for the NPP:
 
 This terminology is motivated by the statistical physics literature, wherein random optimization problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
 Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
-We further know that the statistically optimal energy level is $E=Theta(N)$, while the best computational energy achievable in polynomial time is $E=Theta(log^2 N)$, by Karmarkar-Karp @karmarkarDifferencingMethodSet1983.
+We further know that the _statistically optimal energy level_ is $E=Theta(N)$, while the best _computational energy level_ (achievable in polynomial time) is $E=Theta(log^2 N)$.
 
 For our purposes, an algorithm is a function $alg : g mapsto x in Sigma_N$. We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
 In particular, we consider the class of so-called _low degree algorithms_, given by either low degree polynomials or by functions with low _coordinate degree_.

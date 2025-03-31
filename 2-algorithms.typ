@@ -22,7 +22,7 @@ The main reason is the _low degree heuristic_:
 #align(
   center,
   [
-    _For nice random optimization problems, degree $D$ algorithms \ succeed if and only if time $e^(tilde(O)(D))$ algorithms do._
+    _For nice random optimization problems, there exists a successful degree $D$ algorithm \ if and only if there exists a successful algorithm running in time $e^(tilde(O)(D))$._
   ],
 )
 This heuristic was first proposed in Hopkins' thesis @hopkinsStatisticalInferenceSum2018, and later expanded upon by Kunisky, Wein, and Bandeira @kuniskyNotesComputationalHardness2019, although this was primarily in the context of low degree polynomials for hypothesis testing.
@@ -32,6 +32,7 @@ They prove strong low degree hardness for a variety of random optimization probl
 However, Huang and Mossel's work on broadcasting on trees, this heuristic breaks down: degree $D <= O(log N)$ algorithms fail despite there existing a linear-time algorithm known as Belief Propagation @huangOptimalLowDegree2025.
 To this end, the authors suggest this discrepancy arises from the requirement of "depth" in the Belief Propagation algorithm -- roughly, despite running in linear time, this algorithm still struggles in practice in the "hard" regime.
 As a takeaway, we can surmise that the low degree heuristic is reasonable for describing random search problems involving optimization of a "flat" structure, in which algorithmic complexity cannot hide behind $N$-independent factors.
+Thus, having an explicit handle on algorithm degree enables us to both control stability and extend our results to rule out general polynomial-time algorithms.
 
 meow @liEasyOptimizationProblems2024
 
@@ -353,7 +354,7 @@ We can broaden the notion of polynomial algorithms (with their obvious notion of
   Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _coordinate degree_ of $alg$ is the maximum coordinate degree of each of its coordinate functions.
 ]
 
-By the low degree heuristic, these algorithms can be interpreted as a proxy for time $N^D$-algorithms, unlike classes based off of their stability properties, such as Lipschitz/Hölder continuous algorithms. Yet in addition to this interpretability, these algorithms also have accessible stability bounds:
+As we've seen, these algorithms admit clear stability bounds:
 
 // Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
 

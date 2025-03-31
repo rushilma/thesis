@@ -4,40 +4,25 @@
 
 = Proof of Strong Low-Degree Hardness <section_hardness>
 
-In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -- that is, we show strong low degree hardness for both low degree polynomial algorithms and algorithms with low degree.
-
-
-
-
-For now, we consider $Sigma_N$-valued deterministic algorithms.
-We discuss the extension to $RR^N$-valued algorithms in @section_rounding.
-As outlined in @section_intro_results, we show that TODO.
-
-// TODO - talk about what's going on here
-The key argument is as follows.
-Fix some energy levels $E$, depending on $N$.
-Suppose we have a $Sigma_N$-valued, deterministic algorithm $alg$ given by a degree $D$ polynomial (resp. an Efron-Stein degree $D$ function), and we have two instances $g,g'~stdnorm$ which are $(1-epsilon)$-correlated (resp. $(1-epsilon)$-resampled), for $epsilon>0$.
-Say $alg(g)=x in Sigma_N$ is a solution with energy at least $E$, i.e. it "solves" this NPP instance.
-For $epsilon$ close to 0, $alg(g')=x'$ will be close to $x$, by low degree stability.
-However, by adjusting parameters carefully, we can make it so that with high probability (exponential in $E$), there are no solutions to $g'$ close to $x$.
-By application of a correlation bound on the probability of solving any fixed instance, we can conclude that with high probability, $alg$ can't find solutions to NPP with energy $E$.
+In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -- that is, we show strong low degree hardness for both low polynomial degree and low coordinate degree algorithms.
 
 Our argument utilizes what can be thought of as a "conditional" version of the overlap gap property.
-Traditionally, the overlap gap property is a global obstruction: one shows that with high probability, one cannot find a tuple of good solutions to a family of correlated instances which are all roughly the same distance apart.
-Here, however, we show a local obstruction - we condition on being able to solve a single instance, and show that after a small change to the instance, we cannot guarantee any solutions will exist close to the first one.
+Traditionally, proofs of algorithmic hardness use the overlap gap property is a global obstruction: one shows that with high probability, one cannot find a tuple of good solutions to a family of correlated instances which are all roughly the same distance apart.
+Here, however, we show a local obstruction -- we condition on being able to solve a single instance, and show that after a small change to the instance, we cannot guarantee any solutions will exist close to the first one.
 This is an instance of the "brittleness," so to speak, that makes NPP so frustrating to solve; even small changes in the instance break the landscape geometry, so that even if solutions exist, there's no way to know where they'll end up.
 
-First moment details meow.
-// TODO - discuss that this is first moment computation, as opposed to a second moment one in which we consider pairs of solutions
+This conditional landscape obstruction approach is partially inspired by Huang and Sellke's recent work on strong low degree hardness for finding optima in spin glasses @huangStrongLowDegree2025.
+However, a main reason for not appealing to an OGP-style result is Gamarnik and Kızıldağ's disproof of the $m$-OGP for sublinear energy levels @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 2.5].
 
-We start with some setup which will apply, with minor modifications depending on the nature of the algorithm in consideration, to all of the energy regimes in discussion.
-After proving some preliminary estimates, we establish the existence of our conditional landscape obstruction, which is of independent interest.
-Finally, we conclude by establishing low degree hardness in both the linear and sublinear energy regimes.
+Our conditional obstruction (@prop_correlated_fundamental in the low degree polynomial case, and @prop_resampled_fundamental in the low coordinate degree case) is established by a first moment computation.
+That is, we show that given "correlated" instances $g,g'$ and a point $x in Sigma_N$ such that $g',x$ are conditionally independent given $g$, then any fixed point $x' in Sigma_N$ has low probability of solving $g'$; then the same must hold for all $x'$ in a suitably small neighborhood of $x$.
+This is similar to the proof of the OGP in the linear energy regime in @gamarnikAlgorithmicObstructionsRandom2021b, but our method allows us to work with sublinear energy levels.
+Heuristically, this is because the cardinality of neighborhoods of $x$ grows exponentially in $N$, which means that the number of $m$-tuples of such points grows much faster than any sublinearly small probability.
+In contrast, the disproof of the OGP in the sublinear energy regime of Gamarnik and Kızıldağ follows from a second moment computation:
+they show that the majority of pairs of $m$-tuples of solutions are nearly "uncorrelated," which again implies that globally, looking at large ensembles of solutions fails to capture the brittleness of the NPP for cardinality reasons.
 
-
-Explain more meow.
-
-For clarity of explanation, let us describe the proof of @thrm_sldh_poly_informal, stated formally as @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear; the proof of @thrm_sldh_lcd_informal requires only minor modifications.
+The proof of @thrm_sldh_poly_informal, stated formally as @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear, is as follows.
+#footnote[The proof of @thrm_sldh_lcd_informal requires only minor modifications.]
 Let $E$ be an energy level and $D$ be a maximum algorithm degree, both depending on $N$.
 We assume that $D$ is bounded by a level depending on $E$ and $N$, corresponding to the low degree regime in which we want to show hardness.
 We then choose parameters $eta$ and $epsilon$, depending on $E$, $D$, and $N$.
@@ -65,45 +50,50 @@ This is done in the following steps:
   ],
 )
 
-We can summarize the parameters in our argument in the following table
+We can summarize the parameters in our argument in the following table:
 
-
+#let crimson = rgb(68%, 12%, 20%)
 #figure(
-  table(
-    columns: 4,
-    fill: (_, y) => if calc.odd(y) { rgb("EAF2F5") },
-    stroke: none,
-    table.hline(),
-    [*Parameter*], [*Meaning*], [*Desired Direction*], [*Intuition*],
-    table.hline(),
-    [$N$], [Dimension],
-    [Large], [Showing hardness _asymptotically_, want "bad behavior" to pop up in low dimensions.],
+  pad(
+    x: 1.2em,
+    table(
+      columns: 4,
+      fill: (_, y) => if calc.odd(y) { crimson.lighten(65%) },
+      // rgb("EAF2F5") },
+      stroke: none,
+      table.hline(),
+      [*Parameter*], [*Meaning*], [*Desired Direction*], [*Intuition*],
+      table.hline(),
+      [$N$], [Dimension],
+      [-], [Showing strong hardness _asymptotically_, want uniformly large.],
 
-    [$E$], [Solution energy; want to find $x$ such that $abs(inn(g,x)) <= 2^(-E)$],
-    [Small], [Smaller $E$ implies weaker solutions, and can consider full range of $1 << E << N$. Know that $E>(log^2 N)$ by @karmarkarDifferencingMethodSet1983],
+      [$E$], [Energy; \ want $x$ such that \ $abs(inn(g,x)) <= 2^(-E)$],
+      [Small], [Smaller $E$ rules out weaker solutions; know $Omega(log^2 N) <= E <= Theta(N)$ by @karmarkarDifferencingMethodSet1983 @karmarkarProbabilisticAnalysisOptimum1986],
 
-    [$D$], [Algorithm degree (in either Efron-Stein sense or usual polynomial sense.)],
-    [Large], [Higher degree means more complexity. Want to show even complex algorithms fail.],
+      [$D$], [Algorithm degree],
+      [Large], [Higher degree means more complex/longer time algorithms fail.],
 
-    [$epsilon$], [Complement of correlation/resample probability; (g,g') are $(1-epsilon)$-correlated.],
-    [Small], [$epsilon$ is "distance" between $g,g'$. Want to show that small changes in disorder lead to "breaking" of landscape.],
+      [$epsilon$], [Distance between $(g,g')$],
+      [Small], [Want to show that small changes in instance lead to "breaking" of landscape.],
 
-    [$eta$], [Algorithm instability; $alg$ is stable if $norm(alg(g) - alg(g')) <= 2 sqrt(eta N)$, for $(g,g')$ close.],
-    [Large], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
+      [$eta$], [Instability; \ $norm(alg(g) - alg(g')) <= 2 sqrt(eta N)$, for $(g,g')$ close],
+      [Large (but \ bounded by $E,N$)], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
 
-    table.hline(),
+      table.hline(),
+    ),
   ),
   caption: [Explanation of Parameters],
 ) <parameter_table>
 
-
+For the remainder of this section, we first show strong low degree hardness for polynomial algorithms, and then for low coordinate degree algorithms.
+Throughout, we aim to keep constants as explicit as possible, to clarify the nature in which $epsilon$ and $eta$ behave in the limit as $N to infinity$.
+We end by interpreting our results through the lens of the low degree heuristic, as well as discuss the extensions needed to consider randomized $Sigma_N$-valued algorithms.
 
 == Hardness for Low Degree Polynomial Algorithms <section_hardness_poly>
 
 // Degree $D$ polynomials
 
 First, we consider the case of $alg$ being a polynomial algorithm with degree $D$.
-
 Let $g,g'$ be $(1-epsilon)$-correlated standard Normal r.v.s, and let $x in Sigma_N$ depend only on $g$.
 Furthermore, let $eta>0$ be a parameter which will be chosen in a manner specified later.
 We define the following events:
@@ -300,7 +290,7 @@ Next, we let $omega(log_2  N ) <= E <= o(N)$.
 // Degree $D$ functions
 
 Next, let $alg$ have coordinate degree $D$.
-We now want $g,g'$ to be $(1-epsilon)$-resampled standard Normals. We define the following events.
+We now want $g,g'$ to be $(1-epsilon)$-resampled standard Normal random variables. We define the following events.
 $
   S_"diff" &= { g != g'} \
   S_"solve" &= {alg(g) in Soln(g), alg(g') in Soln(g')} \

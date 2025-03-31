@@ -15,7 +15,7 @@ In this section, we show that this assumption is not in fact as restrictive as i
 Throughout, let $alg$ denote an $RR^N$-valued algorithm.
 We want to show that
 #enum(
-  numbering: "I.",
+  // numbering: "I.",
   [No low degree $alg$ can reliably output points _close_ -- within constant distance -- to a solution,],
   [No $Sigma_N$-valued algorithm $tilde(alg)$ coming from randomly rounding the output of $alg$, which changes an $omega(1)$ number of coordinates, can find a solution with nonvanishing probability.],
 )
@@ -23,12 +23,14 @@ In principle, the first possibility fails via the same analysis as in @section_h
 
 Why are these the only two possibilities? For $alg$ to provide a way to actually solve the NPP, we must be able to turn its outputs on $RR^N$ into points on $Sigma_N$. If $alg$ could output points within an constant distance (independent of the instance) of a solution, then we could convert $alg$ into a $Sigma_N$-valued algorithm by manually computing the energy of all points close to its output and returning the energy-maximizing point.
 
-However, the more common way to convert a $RR^N$-valued algorithm into a $Sigma_N$-valued one is by rounding the outputs, as in @huangStrongLowDegree2025.
+However, another common way to convert a $RR^N$-valued algorithm into a $Sigma_N$-valued one is by rounding the outputs, as in @huangStrongLowDegree2025.
 Doing this directly can lead to difficulties in performing the stability analysis.
 In our case, though, if we know no $alg$ can reliably output points within constant distance of a solution, then any rounding scheme which only flips $O(1)$ many coordinates will assuredly fail.
 Thus, the only rounding schemes worth considering are those which flip $omega(1)$ many coordinates.
 
-We first describe a landscape obstruction to finding multiple solutions at the same energy level for a random NPP instance. Then, we show hardness in both of the aforementioned cases. meow.
+We first show that no low degree $alg$ can find points within constant distance of a solution, effectively by reproducing the argument of @section_hardness_lcd.
+We then turn to describing a landscape obstruction to randomized rounding, relying on what we term the _solution repulsion property_ -- namely that solutions to any NPP instance are far away from each other, with this distance tradeoff controlled by the energy level of the solution set in consideration.
+This can then be leveraged to show that any sufficiently randomized rounding scheme will always fail to find solutions at energies higher than the computational threshold.
 
 == Solutions repel meow
 
@@ -102,7 +104,7 @@ $
   ) = {B(alg(g), r) inter S(E;g) != emptyset }
 $
 
-Note that as $r$ is fixed (potentially depending on $alg$, but independent of $N$ or $g$), we can convert $alg$ into a $Sigma_N$-valued algorithm by considering the corners of $Sigma_N$ within constant distance of $alg(g)$.
+Note that as $r$ is of constant order, we can convert $alg$ into a $Sigma_N$-valued algorithm by considering the corners of $Sigma_N$ within constant distance of $alg(g)$.
 
 // definition of hat alg
 
@@ -118,7 +120,8 @@ Observe that $S_"close"(r)$ occuring is the same as $hat(alg)_r$ finding a solut
 In addition, note that practically speaking, computing $hat(alg)_r$ requires additionally computing the energy of $O(1)$-many points on $Sigma_N$.
 This requires only an additional $O(N)$ operations.
 
-Recall from @section_algorithm_stability that if $alg$ is low degree (or low coordinate degree) then we can derive useful stability bounds for its outputs. Luckily, this modification $hat(alg)_r$ of $alg$ also are stable, with slightly modified bounds.
+Recall from @section_algorithm_stability that if $alg$ has low polynomial/coordinate degree, then we can derive useful stability bounds for its outputs.
+Luckily, this modification $hat(alg)_r$ of $alg$ also are stable, with slightly modified bounds.
 
 // hat alg is still stable
 
@@ -234,7 +237,7 @@ Talk about implications meow.
 
 At this point, one might wonder whether, while deterministic algorithms fail, perhaps a randomized rounding scheme could save us, maybe by assiging small values to coordinates which it was less confident in.
 However, this approach is blunted by the same brittleness of the NPP landscape that established the conditional obstruction of @prop_correlated_fundamental and @prop_resampled_fundamental.
-In particular, by @thrm_solutions_repel, if you have a subcube of $Sigma_N$ nonconstant but bounded dimension, then with high probability at most one of those points will be a solution.
+In particular, by @thrm_solutions_repel, if you have a subcube of $Sigma_N$ with dimension growing slowly with $N$, then with high probability at most one of those points will be a solution.
 
 For this section, again let $alg$ be a deterministic $RR^N$-valued algorithm.
 Moreover, assume we are searching for solutions with energy between $(log_2 N)^2 << E <= N$; note that for lower values of $E$, algorithms like @karmarkarDifferencingMethodSet1983 already achieve discrepancies of $N^(O(log_2 N))$ energy in polynomial time.
