@@ -42,7 +42,7 @@
 
 /// Conclusion
 
-#include "5-conclusion.typ"
+// #include "5-conclusion.typ"
 
 
 #bibliography(

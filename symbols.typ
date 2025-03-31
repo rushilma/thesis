@@ -29,6 +29,7 @@
 #let L2iid = $L^2(RR^N,pi^(times.circle N))$
 #let subeq = $subset.eq$
 #let round = $sans("round")$
+#let cube = $sans("cube")$
 
 #let L2norm = $L^2(RR,gamma)$
 #let L2normN = $L^2(RR^N,gamma^N)$

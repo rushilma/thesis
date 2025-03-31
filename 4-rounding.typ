@@ -32,67 +32,6 @@ We first show that no low degree $alg$ can find points within constant distance 
 We then turn to describing a landscape obstruction to randomized rounding, relying on what we term the _solution repulsion property_ -- namely that solutions to any NPP instance are far away from each other, with this distance tradeoff controlled by the energy level of the solution set in consideration.
 This can then be leveraged to show that any sufficiently randomized rounding scheme will always fail to find solutions at energies higher than the computational threshold.
 
-== Solutions repel meow
-
-Introduce section meow.
-
-No two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
-// The reason is that this would require a subset of $k$ signed coordinates $± g_{i_1},...,± g_{i_k}$ to have small sum, and there are only $2^k binom{N}{k}\leq O(N^k)$ possibilities, each of which is centered Gaussian with variance at least $1$, so the smallest is typically of order $Omega(N^{-k})$.
-
-#proposition[
-  Fix distinct points $x,x' in Sigma_N$ and let $g ~ stdnorm$ be a random instance.
-  // with $norm(x - x')<= 2sqrt(k)$ (i.e. $x,x'$ differ by $k$ sign flips), and let $g$ be any instance.
-  Then,
-  $
-    PP(x, x' in Soln(g)) <= exp_2 (-E + O(1)) = exp2(-E + O(1)).
-  $
-] <prop_fixed_close_solns_lowprob>
-#proof[
-  For $x != x'$, let $J subeq [N]$ denote the subset of coordinates in which $x,x'$ differ, i.e. $x_J != x'_J$.
-  // by assumption, $abs(J) <= k$.
-  In particular, we can write
-  $ x = x_([N] without J) + x_J, #h(5em) x' = x_([N] without J) - x_J. $
-  Thus, for a fixed pair $(x,x')$, if $-2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E)$,
-  we can expand this into
-  $
-    -2^(-E) <= &inn(g,x_([N] without J)) + inn(g,x_J) <= 2^(-E), \
-    -2^(-E) <= &inn(g,x_([N] without J)) - inn(g,x_J) <= 2^(-E).
-  $
-  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives $abs(inn(g,x_J)) <= 2^(-E)$.
-  Note that $inn(g,x_J)~Normal(0,abs(J))$ (and is nondegenerate, as $abs(J)>0$). By @lem_normal_smallprob and the following remark, it follows that
-  $
-    PP(x,x' in Soln(g)) <= PP(abs(inn(g,x_J)) <= 2^(-E)) <= exp_2 (-E + O(1)). #qedhere
-  $
-]
-
-Remarks on theorem below meow.
-
-#theorem[Solutions Can't Be Close][
-  Consider any distances $k = Omega(1)$ and energy levels $E >> k log_2  N$.
-  Then for any instance $g$, there are no pairs of distinct solutions $x,x' in Soln(g)$ with $norm(x-x') <= 2 sqrt(k)$ (i.e. within $k$ coordinate flips of each other) with high probability.
-] <thrm_solutions_repel>
-#proof[
-  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of at most $k$ coordinates $J subset[N]$ of $g$ and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
-  For any $g$, there are at most $2^k$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5], there are
-  $
-    sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k <= (e N)^k = 2^(O(k log_2 N))
-  $
-  choices of such subsets.
-  Union bounding @prop_fixed_close_solns_lowprob over these $exp_2 O(k log_2 N)$ choices, we get
-  $
-    PP multiprob(
-      exists x\,x' "s.t.",
-      (upright(a))  &norm(x-x') <= 2sqrt(k)\,,
-      (upright(b)) #h(0.3em) &x\,x' in Soln(g)
-    ) <= PP multiprob(
-      exists J subset [N]\, x_J in {plus.minus 1}^abs(J) "s.t.",
-      (upright(a)) &abs(J) <= k\,,
-      (upright(b)) &abs(inn(g_J,x_J)) <= exp_2 (-E))
-    <= exp_2 (-E + O(k log_2 N)) = o(1).
-  $ <eq_solutions_repel>
-  Note that the last equality holds as $E >> k log_2 N$.
-]
-
 == Proof of Hardness for Close Algorithms
 
 Throughout this section, fix some distance $r=O(1)$.
@@ -104,84 +43,87 @@ $
   ) = {B(alg(g), r) inter S(E;g) != emptyset }
 $
 
-Note that as $r$ is of constant order, we can convert $alg$ into a $Sigma_N$-valued algorithm by considering the corners of $Sigma_N$ within constant distance of $alg(g)$.
+Note that as $r$ is of constant order, we can convert $alg$ into a $Sigma_N$-valued algorithm by first rounding the $alg(g)$ into the unit cube and then picking the best corner of $Sigma_N$ within constant distance of this output.
+Let $cube colon RR^N to [-1,1]^N$ be the function which rounds $x in RR^N$ into the cube $[-1,1]^N$:
+$
+  cube(x)_i = cases(-1 #h(1em) &x_i <= -1\,, x_i &-1 < x_i < 1\,, 1 &x_i >= 1.)
+$
+Note that $cube$ is $1$-Lipschitz with respect to the Euclidean norm.
 
 // definition of hat alg
 
 #definition[
-  Let $r>0$ and $alg$ be a $RR^N$-valued algorithm. Define $hat(alg)_r$ to be the $Sigma_N$-valued algorithm defined by
+  Let $r>0$ and $alg$ be a $RR^N$-valued algorithm. Define $hat(alg)_r$ to be the $[-1,1]^N$-valued algorithm defined by
   $
-    hat(alg)_r (g) := limits("argmin")_(x' in B(alg(g),r) inter Sigma_N) abs(inn(g,x')).
+    hat(alg)_r (g) := limits("argmin")_(x' in B(cube(alg(g)),r) inter Sigma_N) abs(inn(g,x')).
   $ <eq_hat_alg>
-  If $B(alg(g),r) inter Sigma_N = emptyset$, then set $hat(alg)_r (g) := (1 slash g_1,0,dots)$, which always has energy 0.
+  If $B(cube(alg(g)),r) inter Sigma_N = emptyset$, then set $hat(alg)_r (g) := cube(alg(g))$, which is necessarily not in $Sigma_N$.
 ] <def_hat_alg>
 
-Observe that $S_"close"(r)$ occurring is the same as $hat(alg)_r$ finding a solution for $g$.
-In addition, note that practically speaking, computing $hat(alg)_r$ requires additionally computing the energy of $O(1)$-many points on $Sigma_N$.
+Observe that $S_"close" (r)$ occuring implies $hat(alg)_r$ finds a solution for $g$.
+In addition, computing $hat(alg)_r$ in practice requires additionally calculating the energy of $O(1)$-many points on $Sigma_N$.
 This requires only an additional $O(N)$ operations.
 
 Recall from @section_algorithm_stability that if $alg$ has low polynomial/coordinate degree, then we can derive useful stability bounds for its outputs.
-Luckily, this modification $hat(alg)_r$ of $alg$ also are stable, with slightly modified bounds.
-
-// hat alg is still stable
+Adjusting the bounds, this modification $hat(alg)_r$ of $alg$ is also stable.
 
 #lemma[
   Suppose that $EE norm(alg(g))^2 <= C N$ and that $alg$ has degree $<= D$ (resp. coordinate degree $<= D$), and let $(g,g')$ be $(1-epsilon)$-correlated (resp. $(1-epsilon)$-resampled).
   Then $hat(alg)_r$ as defined above has
   $
-    EE norm(hat(alg)_r (g) - hat(alg)_r (g'))^2 <= 6C D epsilon N + 6 r^2.
-  $
+    EE norm(hat(alg)_r (g) - hat(alg)_r (g'))^2 <= 4C D epsilon N + 8 r^2.
+  $ <eq_hat_alg_expectation>
   In particular, we have
   $
-    PP (norm(hat(alg)_r (g) - hat(alg)_r (g')) >= 2 sqrt(eta N)) <= (3 C D epsilon) / (2 eta) + (3 r^2) / (2 eta N).
+    PP (norm(hat(alg)_r (g) - hat(alg)_r (g')) >= 2 sqrt(eta N)) <= (C D epsilon) / (eta) + (2 r^2) / (eta N).
   $
   <eq_hat_alg_stability>
 ] <lem_hat_alg_stability>
 #proof[
-  Observe by the triangle inequality, as per @eq_squared_triangle_ineq, that
+  Observe that by the triangle inequality, $ norm(hat(alg)_r (g) &- hat(alg)_r (g'))$ is bounded by
+  $
+    norm(hat(alg)_r (g) - cube(alg(g))) +
+    norm(cube(alg(g)) - cube(alg(g'))) +
+    norm(cube(alg(g')) - hat(alg)_r (g')) \
+    <= 2r + norm(alg(g) - alg(g')).
+  $
+  This follows as $cube$ is $1$-Lipschitz and the corner-picking step in @eq_hat_alg only moves $hat(alg)_r (g)$ from $cube(alg(r))$ by at most $r$.
+  By Jensen's inequality, squaring this gives
   $
     norm(hat(alg)_r (g) - hat(alg)_r (g'))^2 <=
-    3( norm(hat(alg)_r (g) - alg(g))^2 +
-      norm(alg(g) - alg(g'))^2 +
-      norm(alg(g') - hat(alg)_r (g'))^2 ).
+    2( 4r^2 + norm(alg(g) - alg(g'))^2).
   $
-  By @prop_alg_stability, we know $EE norm(alg(g)-alg(g'))^2 <= 6 C D epsilon N$.
-  Moreover, we know that $norm(hat(alg)_r (g) - alg(g)) <= r$ by definition, so the remaining terms can be bounded by $3r^2$ each deterministically. Finally, @eq_hat_alg follows from Markov's inequality.
+  Combining this with @prop_alg_stability gives @eq_hat_alg_expectation, and @eq_hat_alg_stability follows from Markov's inequality.
 ]
 
-Of course, computing $hat(alg)_r$ is certainly never polynomial, and does not preserve any low coordinate degree assumptions in a controllable way.
-Thus, we cannot directly hope for @thrm_sldh_poly_linear, @thrm_sldh_poly_sublinear, @thrm_sldh_lcd_linear, or @thrm_sldh_lcd_sublinear to hold meow
-
-// lcd hat alg is still hard
-
-We show for $alg$ being a $RR^N$-valued, low coordinate degree algorithm and any $r=O(1)$, low degree hardness still holds for $hat(alg)_r$.
-Note that by a similar argument, we can show hardness in the case that $alg$ is a low degree polynomial algorithm, but we omit the proof meow.
+Of course, our construction of $hat(alg)_r$ is certainly never polynomial, and does not preserve any low coordinate degree assumptions in a controllable way.
+Thus, we cannot directly hope for @thrm_sldh_poly_linear, @thrm_sldh_poly_sublinear, @thrm_sldh_lcd_linear, or @thrm_sldh_lcd_sublinear to hold.
+However, because this rounding does not drastically alter the stability analysis, we are still able to show for $alg$ being a $RR^N$-valued low coordinate degree algorithm and any $r=O(1)$, low degree hardness still holds for $hat(alg)_r$.
+The same argument shows hardness when $alg$ is a low degree polynomial algorithm; this is omitted for brevity.
 
 We recall the setup from @section_hardness_lcd.
 Let $g,g'$ be $(1-epsilon)$-resampled standard Normal vectors.
 Define the following events:
 $
-  S_"diff" &= { g != g'} \
-  S_"solve" &= { hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')} \
-  S_"stable" &= { norm(hat(alg)_r (g) - hat(alg)_r (g')) <= 2 sqrt(eta N) } \
-  S_"cond" (x) &= multiset(
+  S_"diff" &:= { g != g'} \
+  S_"solve" &:= { hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')}, \
+  S_"stable" &:= { norm(hat(alg)_r (g) - hat(alg)_r (g')) <= 2 sqrt(eta N) }, \
+  S_"cond" (x) &:= multiset(
     exists.not x' in Soln(g') "such that",
     norm(x-x') <= 2sqrt(eta N),
-  )
+  ).
 $ <eq_lcd_hat_events>
 
 These are the same events as in @eq_lcd_events, just adapted to $hat(alg)_r$. In particular, @lem_lcd_solve_disjoint holds unchanged.
 
-Moreover, we can define
+Moreover, we define
 $
-  hat(p)^cor_"solve" = PP(hat(alg)_r (g) in Soln(g)) = PP(S_"close" (r)),
+  hat(p)^cor_"solve" := PP(hat(alg)_r (g) in Soln(g)) >= PP(S_"close" (r)),
 $ <eq_def_lcd_hat_psolve>
-as well as
 $
-  hat(p)^cor _"unstable" = 1 - PP(S_"stable" | S_"diff"), #h(5em)  hat(p)^cor _"cond" (x) = 1 - PP(S_"cond" (x) | S_"diff"),
+  hat(p)^cor _"unstable" := 1 - PP(S_"stable" | S_"diff"), #h(5em)  hat(p)^cor _"cond" (x) := 1 - PP(S_"cond" (x) | S_"diff"),
 $
 along with $hat(p)^cor _"cond" := max_(x in Sigma_N) hat(p)^cor _"cond" (x)$, echoing @eq_def_lcd_punstablecond.
-
 Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bound in @prop_resampled_fundamental holds without change. Moreover, @lem_hat_alg_stability lets us control $hat(p)^cor _"unstable"$. The final piece needed is an appropriate analog of @lem_resampled_solve_prob.
 
 #lemma[
@@ -199,11 +141,11 @@ Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bo
 #set math.cases(gap: 0% + 0.4em)
 
 #theorem[
-  Let $omega((log_2 N)^2) <= E <= Theta(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
+  Let $omega(log^2 N) <= E <= Theta(N)$, and let $g,g'$ be $(1-epsilon)$-resampled standard Normal r.v.s.
   Consider any $r=O(1)$ and $RR^N$-valued $alg$ with $EE norm(alg(g))^2 <= C N$, and assume in addition that
   #enum(
     [if $E = delta N = Theta(N)$ for $delta > 0$, then $alg$ has coordinate degree $D <= o(N)$;],
-    [if $(log_2 N)^2 << E << N$, then $alg$ has coordinate degree $D <= o(E slash (log_2 N)^2)$.],
+    [if $log^2 N << E << N$, then $alg$ has coordinate degree $D <= o(E slash log^2 N)$.],
   )
   Let $hat(alg)_r$ be defined as in @def_hat_alg. Then there exist $epsilon, eta > 0$ such that
   $ hat(p)^cor_"solve" = PP(hat(alg)_r (g) in Soln(g)) = o(1). $
@@ -217,7 +159,7 @@ Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bo
   $
     eta = cases(
       O(1) "s.t." 2 eta log_2(1 slash eta) < delta slash 4 #h(1em) &E = delta N\,,
-      E / (16 N log_2  (N slash E)) #h(1em) &E = o(N),
+      E / (16 N log_2  (N slash E)) #h(1em) &E <= o(N).,
     )
   $
   in conjunction with @prop_resampled_fundamental, guarantees that
@@ -226,10 +168,11 @@ Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bo
   $
   Finally, note that in the linear case, when $eta = O(1)$, $r^2/(eta N) = o(1)$ trivially. In the sublinear case, for $eta= E slash (16 N log_2 (N slash E))$, we instead get
   $ eta N = E / (16 log_2 (N slash E)) >= E / (16 log_2 N) = omega(1), $
-  as $E >> (log_2 N)^2$.
+  as $E >> log^2 N$.
   Thus, applying the properly modified @lem_hat_alg_stability with these choices of $epsilon,eta$, we see that $hat(p)^cor _"unstable" = o(1)$.
   By @eq_hat_lcd_fundamental, we conclude that $hat(p)^cor _"solve" = o(1)$, as desired.
 ]
+
 
 Talk about implications meow.
 
@@ -278,7 +221,7 @@ By @lem_random_rounding_altdef, we can redefine $round(x)$ to be $tilde(x)$ as c
 
 // What is tilde(x)?
 
-It thus makes sense to define $tilde(alg)(g) := round(alg(g))$, which is now (a) $Sigma_N$-valued and (b) randomized only in the transition from $RR^N$ to $Sigma_N$ (i.e., the rounding doesn't depend directly on $g$, only the output $x = alg(g)$).
+It thus makes sense to define $tilde(alg)(g) := round(alg(g))$, which is now (a) $Sigma_N$-valued and (b) randomized only in the transition from $RR^N$ to $Sigma_N$ (i.e., the rounding does not depend directly on $g$, only the output $x = alg(g)$).
 We should expect that if $tilde(alg)=alg^*$ (e.g., if $alg$ outputs values far outside the cube $[-1,1]^N$) with high probability, then low degree hardness will still apply, as $alg^*$ is deterministic.
 However, in general, any $tilde(alg)$ which differs from $alg^*$ will fail to solve $g$ with high probability.
 This is independent of any assumptions on $alg$: any rounding scheme will introduce so much randomness that $tilde(x)$ will be effectively a random point, which has a vanishing probability of being a solution because of how sparse and disconnected the NPP landscape is.
@@ -302,6 +245,71 @@ To see this, we first show that any randomized rounding scheme as in @lem_random
   The $E_i$ are independent, so by Borel-Cantelli, $sum_i PP(E_i) = 2 sum_i p_i (x) = omega(1)$ implies $tilde(x)_i$ is resampled infinitely often with probability 1, thus completing the proof.
 ]
 
+Introduce section meow.
+
+No two adjacent points on $Sigma_N$ (or pairs within $k=O(1)$ distance) which are both good solutions to the same problem.
+
+Remarks on theorem below meow.
+
+#theorem[Solutions Repel][
+  Consider any distances $k = Omega(1)$ and energy levels $E >> k log N$.
+  With high probability, there are no pairs of distinct solutions $x,x' in Soln(g)$ to an instance $g$ with $norm(x-x') <= 2 sqrt(k)$ (i.e. within $k$ sign flips of each other).
+] <thrm_solutions_repel>
+#proof[
+  Consider any $x != x'$, and let $J subeq [N]$ denote the coordinates in which $x,x'$ differ. Then
+  $ x = x_(overline(J)) + x_J, #h(5em) x' = x_(overline(J)) - x_J. $
+  Assuming both $x,x' in Soln(g)$, we can expand the inequalities
+  $-2^(-E) <= inn(g,x), inn(g,x') <= 2^(-E)$
+  into
+  $
+    -2^(-E) <= &inn(g,x_(overline(J))) + inn(g,x_J) <= 2^(-E), \
+    -2^(-E) <= &inn(g,x_(overline(J))) - inn(g,x_J) <= 2^(-E).
+  $
+  Multiplying the lower equation by $-1$ and adding the resulting inequalities gives $abs(inn(g,x_J)) <= 2^(-E)$.
+
+  Thus, finding pairs of distinct solutions within distance $2 sqrt(k)$ implies finding a subset $J subeq [N]$ of at most $k$ coordinates and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J)) <= 2^(-E)$.
+  By @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5], there are
+  $
+    sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k <= (e N)^k = 2^(O(k log N))
+  $
+  choices of such subsets, and at most $2^k$ choices of signs.
+  Now, $inn(g_J,x_J) ~ Normal(0,abs(J))$, and as $abs(J)>=1$, @lem_normal_smallprob and the following remark implies $PP(abs(inn(g_J,x_J)) <= 2^(-E)) <= exp_2(-E + O(1))$, so union bounding this over the $2^O(k log N))$ possibilities gives
+  $
+    PP multiprob(
+      exists (x,x') in Soln(g) "s.t.",
+      norm(x-x') <= 2sqrt(k).
+    )
+    /* <= PP multiprob( exists J subset [N]\, x_J in {plus.minus 1}^abs(J) "s.t.", (upright(a)) &abs(J) <= k\,, (upright(b)) &abs(inn(g_J,x_J)) <= exp_2 (-E)) */
+    <= exp_2 (-E + O(k log N)) = o(1). #qedhere
+  $ <eq_solutions_repel>
+
+  /*
+  Observe that by @prop_fixed_close_solns_lowprob, finding a pair of distinct solutions within distance $2 sqrt(k)$ implies finding some subset of at most $k$ coordinates $J subset[N]$ of $g$ and $abs(J)$ signs $x_J$ such that $abs(inn(g_J,x_J))$ is small.
+  For any $g$, there are at most $2^k$ choices of signs and, by @vershyninHighDimensionalProbabilityIntroduction2018[Exer. 0.0.5], there are
+  $
+    sum_(1 <= k' <= k)binom(N,k') <= ((e N) / k)^k <= (e N)^k = 2^(O(k log_2 N))
+  $
+  choices of such subsets.
+  Union bounding @prop_fixed_close_solns_lowprob over these $exp_2 O(k log_2 N)$ choices, we get
+  $
+    PP multiprob(
+      exists x\,x' "s.t.",
+      (upright(a))  &norm(x-x') <= 2sqrt(k)\,,
+      (upright(b)) #h(0.3em) &x\,x' in Soln(g)
+    ) <= PP multiprob(
+      exists J subset [N]\, x_J in {plus.minus 1}^abs(J) "s.t.",
+      (upright(a)) &abs(J) <= k\,,
+      (upright(b)) &abs(inn(g_J,x_J)) <= exp_2 (-E))
+    <= exp_2 (-E + O(k log_2 N)) = o(1).
+  $ <eq_solutions_repel>
+  Note that the last equality holds as $E >> k log_2 N$.
+  */
+]
+
+Here, our technique of converting pairs of solutions into subvectors of $g$ which must have small sum enables us to reduce the size of the set we union bound over from $2^(O(N))$ to $2^(O(k log N))$.
+Moreover, observe that this proof can be adapted to show that for a fixed $x in Soln(g)$, there are no other solutions within $k$ sign flips with high probability.
+
+meow
 With this, we can apply @thrm_solutions_repel, which shows that solutions resist clustering at a rate related to their energy level (i.e. higher energy solutions are push each other further apart), to conclude that any $tilde(alg)$ which is not equal to $alg^*$ with high probability fails to find solutions.
 
 #theorem[

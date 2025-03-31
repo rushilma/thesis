@@ -9,7 +9,7 @@ In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -
 Our argument utilizes what can be thought of as a "conditional" version of the overlap gap property.
 Traditionally, proofs of algorithmic hardness use the overlap gap property is a global obstruction: one shows that with high probability, one cannot find a tuple of good solutions to a family of correlated instances which are all roughly the same distance apart.
 Here, however, we show a local obstruction -- we condition on being able to solve a single instance, and show that after a small change to the instance, we cannot guarantee any solutions will exist close to the first one.
-This is an instance of the "brittleness," so to speak, that makes NPP so frustrating to solve; even small changes in the instance break the landscape geometry, so that even if solutions exist, there's no way to know where they'll end up.
+This is an instance of the "brittleness," so to speak, that makes NPP so frustrating to solve; even small changes in the instance break the landscape geometry, so that even if solutions exist, there's no way to know where they will end up.
 
 This conditional landscape obstruction approach is partially inspired by Huang and Sellke's recent work on strong low degree hardness for finding optima in spin glasses @huangStrongLowDegree2025.
 However, a main reason for not appealing to an OGP-style result is Gamarnik and Kızıldağ's disproof of the $m$-OGP for sublinear energy levels @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 2.5].
@@ -114,7 +114,7 @@ The last event, which depends on $x$, corresponds to the conditional landscape o
 #proof[
   Suppose that $S_"solve"$ and $S_"stable"$ both occur.
   Letting $x:=alg(g)$ (which only depends on $g$) and $x':=alg(g')$, we have that $x' in Soln(g')$ while also being within distance $2 sqrt(eta N)$ of $x$.
-  This contradicts $S_"cond" (x)$, thus completing the proof.
+  This contradicts $S_"cond" (x)$, as desired.
 ]
 
 First, define $p^cor _"solve"$ as the probability that the algorithm solves a single random instance:
@@ -228,7 +228,7 @@ With this obstruction in hand, we can turn to showing strong low degree hardness
 We start with hardness for linear energy levels, $E=Theta(N)$; this corresponds to the statistically optimal regime, as per @karmarkarProbabilisticAnalysisOptimum1986.
 Our hardness result in this regime roughly corresponds to that of Gamarnik and Kızıldağ's Theorem 3.2, although their result applies to stable algorithms and does not show a low degree hardness-type result
 @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2].
-A key feature of considering polynomial algorithms is that in @prop_correlated_fundamental, we can let $epsilon$ be exponentially small in $E$, which in the linear regime allows for it to be exponentially small in $N$; as we'll see, this has rather extreme implications for the failure of polynomial algorithms under the low degree heuristic.
+A key feature of considering polynomial algorithms is that in @prop_correlated_fundamental, we can let $epsilon$ be exponentially small in $E$, which in the linear regime allows for it to be exponentially small in $N$; as we will see, this has rather extreme implications for the failure of polynomial algorithms under the low degree heuristic.
 
 // linear poly low degree hardness
 #theorem[
@@ -250,7 +250,7 @@ A key feature of considering polynomial algorithms is that in @prop_correlated_f
   $
     p^cor_"unstable" <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta asymp D dot exp_2 (- (delta N) / 2) -> 0.
   $
-  By @eq_poly_fundamental, we conclude that $(p^cor _"solve")^2 <= p^cor _"unstable" + p^cor _"cond" = o(1)$, thus completing the proof.
+  By @eq_poly_fundamental, we conclude that $(p^cor _"solve")^2 <= p^cor _"unstable" + p^cor _"cond" = o(1)$.
 ]
 
 Next, we let $omega(log  N ) <= E <= o(N)$. This bridges the gap from the statistically optimal energy threshold down to the computational threshold. In particular, our method allows us to rule out degree $o(N^O(N))$ polynomial algorithms even for achieving the same energy threshold as the Karmarkar-Karp algorithm; this is expected however, as neither the original KK algorithm nor the simplified LDM algorithm are polynomial.
@@ -284,7 +284,7 @@ Next, we let $omega(log  N ) <= E <= o(N)$. This bridges the gap from the statis
     &<= exp_2 (-E / 4 + log_2 (N) + log_2 log_2 (N) - log_2 (E)) = o(1),
   $
   again, as $E >> log  N$.
-  Ergo, by @eq_poly_fundamental, $(p^cor _"solve")^2 <= p^cor _"unstable" + p^cor _"cond" = o(1)$, as desired.
+  Ergo, by @eq_poly_fundamental, $(p^cor _"solve")^2 <= p^cor _"unstable" + p^cor _"cond" = o(1)$.
 ]
 
 #remark[Extending to Randomized Algorithms][
@@ -412,7 +412,7 @@ As before, we can establish a conditional landscape obstruction for resampled in
   By @lem_hypercube_counting, the number of terms in the sum @eq_resampled_firstmoment is bounded by $exp_2 (2 eta log_2 (1 slash eta)N)$, so summing @eq_resampled_lowprob allows us to conclude @eq_resampled_lowprob_disp.
 ]
 
-Note that in contrast to @prop_correlated_fundamental, this bound doesn't involve $epsilon$ at all, but the condition $g!= g'$ requires $epsilon = omega(1 slash N)$ to hold almost surely, by @lem_sdiff_prob.
+Note that in contrast to @prop_correlated_fundamental, this bound does not involve $epsilon$ at all, but the condition $g!= g'$ requires $epsilon = omega(1 slash N)$ to hold almost surely, by @lem_sdiff_prob.
 
 // Linear case
 With this, we can show strong low degree hardness for low coordinate degree algorithms at energy levels $E=Theta(N)$.As before, this corresponds to hardness at the statistically optimal energy regime, but now applies to an extremely broad category of algorithms.
@@ -466,7 +466,7 @@ Note also that our method also allows us to derive a clear tradeoff between solu
     &= (D log_2 (N slash D) log_2 (N slash E)) / E
     <= (D (log_2 N)^2) / E = o(1).
   $
-  By @eq_lcd_fundamental, this completes the proof.
+  We are now done by @eq_lcd_fundamental.
 ]
 
 #remark[Tightness of Coordinate Degree Bounds][

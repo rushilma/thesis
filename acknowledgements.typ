@@ -1,6 +1,7 @@
 #let love = text(lang: "hin", font: "Devanagari MT")[मैं आप ससे बहुत प्यार करता हूँ।]
 
 
+/*
 = Acknowledgments
 Meow #lorem(20)
 
@@ -18,3 +19,4 @@ Jarell Cheong
 Finally, (family)
 
 #align(center, love)
+*/

@@ -151,8 +151,7 @@ and some of the most interesting directions in algorithmic development for the N
 The main result to this effect comes from Gamarnik and Kızıldağ, who proved that for $m$ of constant order, the m-OGP for NPP held for discrepancies of $2^(-Theta(N))$ (i.e. the statistical optimum), but was absent for smaller discrepancies of $2^(-E_N)$ with $omega(1) <= E_N <= o(N)$ @gamarnikAlgorithmicObstructionsRandom2021b.
 They do show, however, that the m-OGP in for $E_N >= omega(sqrt(N log N))$ could be recovered for $m$ superconstant.
 This allowed them to prove that for $epsilon in (0,1 slash 5)$, no stable algorithm (suitably defined) could find solutions with discrepancy $2^(-E_N)$ for $omega(n log^(-1/5 + epsilon) N) <= E_N$ @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 3.2].
-These results point to the efficacy of using landscape obstructions to show algorithmic hardness for the NPP, which we'll take advantage of in @section_hardness.
-// However, their proof of the OGP, which relies on a first-moment computation, is inherently global, and we'll see that it is possible to improve this result in @section_hardness.
+These results point to the efficacy of using landscape obstructions to show algorithmic hardness for the NPP, which we will take advantage of in @section_hardness.
 
 == Our Results <section_intro_results>
 
@@ -234,6 +233,7 @@ We use $Normal(mu,sigma^2)$ to denote the scalar Normal distribution with given 
 
 Throughout the remainder of this thesis, we will make use of the following general results:
 
+/*
 #lemma[Squared Triangle Inequality][
   Suppose $x^((1)), dots, x^((n)), x^((n+1))$ are $n$ vectors in $RR^N$. Then
   $
@@ -244,6 +244,7 @@ Throughout the remainder of this thesis, we will make use of the following gener
   Trivial: recall by Jensen's inequality that for any real numbers $d_1,dots,d_n$, we have
   $ (sum_(i = 1)^n d_i)^2 <= n sum_(i=1)^n d_i^2. #qedhere $
 ]
+*/
 
 // Normal probability lemma
 
