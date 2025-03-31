@@ -12,7 +12,7 @@ With @section_hardness, we have established strong low degree hardness for both 
 However, our stability analysis assumed that the algorithms in question were $Sigma_N$-valued.
 In this section, we show that this assumption is not in fact as restrictive as it might appear.
 
-Throughout, let $alg$ denote an $RR^N$-valued algorithm.
+Throughout, let $alg$ denote a $RR^N$-valued algorithm.
 We want to show that
 #enum(
   // numbering: "I.",
@@ -109,7 +109,7 @@ Note that as $r$ is of constant order, we can convert $alg$ into a $Sigma_N$-val
 // definition of hat alg
 
 #definition[
-  Let $r>0$ and $alg$ be an $RR^N$-valued algorithm. Define $hat(alg)_r$ to be the $Sigma_N$-valued algorithm defined by
+  Let $r>0$ and $alg$ be a $RR^N$-valued algorithm. Define $hat(alg)_r$ to be the $Sigma_N$-valued algorithm defined by
   $
     hat(alg)_r (g) := limits("argmin")_(x' in B(alg(g),r) inter Sigma_N) abs(inn(g,x')).
   $ <eq_hat_alg>

@@ -5,12 +5,15 @@
 
 #import "@preview/equate:0.3.1": equate
 
+#let purple = rgb(128, 0, 76)
+
 #import "thesisize.typ": *
 
 #show: thesisize.with(
   title: [SLDH For NPP],
   subtitle: [Strong Low Degree Hardness for the Number Partitioning Problem],
   abstract: [Meow #lorem(200)],
+  linkcolor: purple,
 )
 
 /// Math environments

@@ -17,7 +17,13 @@
   pad(top: 0.7in, text(size: 11pt)[*Abstract.* #abstract])
 }
 
-#let thesisize(doc, title: none, subtitle: none, abstract: none) = [
+#let thesisize(
+  doc,
+  title: none,
+  subtitle: none,
+  abstract: none,
+  linkcolor: blue,
+) = [
   #set text(
     font: "Crimson Pro",
     size: 12pt,
@@ -58,8 +64,7 @@
   #show math.equation: set block(breakable: true)
 
   // references
-  #let crimson = rgb(68%, 12%, 20%)
-  #show ref: it => text(fill: crimson)[#it]
+  #show ref: it => text(fill: linkcolor)[#it]
 
   // title page
   #titlepage(title, subtitle, abstract)

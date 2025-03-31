@@ -34,12 +34,12 @@ Coffman and Lueker also write on how the NPP can be applied as a framework for a
 // application: randomized control trials
 
 One particularly important application of the NPP in statistics comes from the design of _randomized controlled trials_.
-Consider $N$ individuals, each with a set of covariate information $bold(g)_i in RR^d$.
+Consider $N$ individuals, each with a set of covariate information $g_i in RR^d$.
 Then the problem is to divide them into a treatment group (denoted $A_+$) and a control group (denoted $A_-$), subject each to different conditions, and evaluate the responses.
 In order for such a trial to be accurate, it is necessary to ensure that the covariates across both groups are roughly the same.
 In our notation, this equates to finding an $A_+$ (with $A_- := [N] without A_+$) to minimize
 $
-  min_(A_+ subeq [N]) norm( sum_(i in A_+) bold(g)_i - sum_(i in A_-) bold(g)_i )_infinity.
+  min_(A_+ subeq [N]) norm( sum_(i in A_+) g_i - sum_(i in A_-) g_i )_infinity.
 $ <eq_def_vbp>
 This multidimensional extension of the NPP is often termed the _vector balancing problem (VBP)_, and many algorithms for solving the NPP/VBP come from designing such randomized controlled trials @kriegerNearlyRandomDesigns2019 @harshawBalancingCovariatesRandomized2023.
 
@@ -105,9 +105,9 @@ To this degree, Korf developed alternatives known as the _complete greedy_ and _
 This algorithm was later extended to multiway number partitioning @korfMultiwayNumberPartitioning2009.
 See also Michiels et al. for extensions to balanced multiway partitioning @michielsPerformanceRatiosDifferencing2003.
 
-For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(bold(g)_i)_infinity <= 1$ for all $1 <= i <= N$ @spencerSixStandardDeviations1985.
+For the multidimensional VBP case, Spencer showed in 1985 that the worse-case discrepancy of the VBP was at most $6sqrt(N)$ for $d=N$ and $norm(g_i)_infinity <= 1$ for all $1 <= i <= N$ @spencerSixStandardDeviations1985.
 However, his argument is an application of the probabilistic method, and does not construct such a solution.
-In the average case, Turner et al. proved that, under similar regularity assumptions on the $bold(g)_i$,@foot_nice the minimum discrepancy is $Theta(sqrt(N) 2^(-N slash d))$ for all $d <= o(N)$, with high probability @turnerBalancingGaussianVectors2020.
+In the average case, Turner et al. proved that, under similar regularity assumptions on the $g_i$,@foot_nice the minimum discrepancy is $Theta(sqrt(N) 2^(-N slash d))$ for all $d <= o(N)$, with high probability @turnerBalancingGaussianVectors2020.
 For the regime $delta=Theta(N)$, Aubin et al. conjecture there exists an explicit function $c(delta)$ such that for $delta > 0$, then the discrepancy in the $d=delta N$ regime is $c(delta) sqrt(N)$ with high probability @aubinStorageCapacitySymmetric2019.
 To this end, Turner et al. also showed that for $d <= delta N$, one can achieve $O(sqrt(N) 2^(-1 slash delta))$ with probability at least 99% @turnerBalancingGaussianVectors2020.
 On the algorithmic side, they generalized the Karmarkar-Karp algorithm to VBP, which, for $2 <= d = O(sqrt( log N))$ finds partitions with discrepancy $2^(-Theta(log^2 N slash d))$, reproducing the gap of classical Karmarkar-Karp.
@@ -156,7 +156,7 @@ These results point to the efficacy of using landscape obstructions to show algo
 
 == Our Results <section_intro_results>
 
-In this thesis, we use a variant of the OGP, which we term a _conditional landscape obstruction_, to prove low degree algorithmic hardness guarantees for the NPP at a range of energy scales.
+In this thesis, we use a variant of the OGP, which we term a _conditional landscape obstruction_, to prove low degree algorithmic hardness guarantees for the NPP at a range of discrepancy scales.
 That is, we show that given a solution to one instance of the NPP, it is impossible to pin down the location of any solution to a strongly correlated instance, which prevents suitably stable algorithms from traversing the solution landscape.
 This property can be thought of as "brittleness" of the NPP - even small changes in the instance drastically reshape the geometry of the solutions.
 
@@ -223,37 +223,29 @@ We conclude in @section_rounding by extending our results to the case of $RR^N$-
 
 == Notation and Conventions
 
+We use the standard Bachmann-Landau notations $o(dots), O(dot), omega(dot), Omega(dot), Theta(dot)$, taken in the limit $N to infinity$. In addition, we write $f(N) asymp g(N)$, $f(N) << g(N)$, or $f(N) >> g(N)$ when $f(N)=Theta(g(N))$, $f(N) = o(g(N))$, or $f(N) = omega(g(N))$, respectively.
 
-// Glossary
+We write $[N] := {1,dots,N}$. If $S subeq [N]$, then $overline(S) := [N] without S$ is the complimentary set of indices. If $x in RR^N$ and $S subeq [N]$, then $x_S$ is the vector with
+$ (x_S)_i := cases(x_i #h(2em) &i in S\,, 0 &"else.") $
+In particular, for $x,y in RR^N$, $inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S)$.
 
-+ "instance"/"disorder" - $g$, instance of the NPP problem
-+ "discrepancy" - for a given $g$, value of $min _(x in Sigma_N) abs(inn(g,x))$
-+ "energy" - negative exponent of discrepancy, i.e. if discrepancy is $2^(-E)$, then energy is $E$. Lower energy indicates "worse" discrepancy.
-+ "near-ground state"/"approximate solution"
+On $RR^N$, we write $norm(dot)$ for the Euclidean norm, and $B(x,r) := { y in RR^N : norm(y-x) < r}$ for the Euclidean ball of radius $r$ around $x$.
+We use $Normal(mu,sigma^2)$ to denote the scalar Normal distribution with given mean and variance. In addition, we write "i.i.d." to mean independently and identically distributed, and "r.v." to mean random variable (or random vector, if it is clear from context).
 
-// Conventions
+Throughout the remainder of this thesis, we will make use of the following general results:
 
-Conventions:
-+ On $RR^N$ we write $norm(dot)_2 = norm(dot)$ for the Euclidean norm, and $norm(dot)_1$ for the $ell^1$ norm.
-+ Asymptotics notation
-// + $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
-+ If $x in RR^N$ and $S subeq [N]$, then $x_S$ is vector with
-  $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
-  In particular, for $x,y in RR^N$,
-  $ inn(x_S, y) = inn(x,y_S) = inn(x_S,y_S). $
-+ meow
-+ If $S subeq [N]$, then $overline(S) := [N] without S$ is the complementary set of indices.
-+ $B(x,r) = { y in RR^N : norm(y-x) < r}$ is $ell^2$ unit ball.
-+ Recall by Jensen's inequality that for any real numbers $d_1,dots,d_n$, we have
-  $ (sum_(i = 1)^n d_i)^2 <= n sum_(i=1)^n d_i^2. $
-  We will use this in the following way: suppose $x^((1)), dots, x^((n)), x^((n+1))$ are $n$ vectors in $RR^N$. Then
+#lemma[Squared Triangle Inequality][
+  Suppose $x^((1)), dots, x^((n)), x^((n+1))$ are $n$ vectors in $RR^N$. Then
   $
-    norm(x^((1)) - x^((n+1)))^2 <= ( sum_(i=1)^n norm(x^((i)) - x^((i+1))) )^2 <= n sum_(i=1)^n norm(x^((i)) - x^((i+1)))^2
+    norm(x^((1)) - x^((n+1)))^2 <= ( sum_(i=1)^n norm(x^((i)) - x^((i+1))) )^2 <= n sum_(i=1)^n norm(x^((i)) - x^((i+1)))^2.
   $ <eq_squared_triangle_ineq>
+]
+#proof[
+  Trivial: recall by Jensen's inequality that for any real numbers $d_1,dots,d_n$, we have
+  $ (sum_(i = 1)^n d_i)^2 <= n sum_(i=1)^n d_i^2. #qedhere $
+]
 
 // Normal probability lemma
-
-Throughout we will make key use of the following lemma:
 
 #lemma[Normal Small-Probability Estimate][
   Let $E,sigma^2 > 0$, and suppose $Z | mu ~ Normal(mu,sigma^2)$. Then
@@ -272,11 +264,11 @@ Throughout we will make key use of the following lemma:
   $
 ]
 
-Note that this is decreasing function of $sigma^2$. Thus, for instance if there exists $gamma$ with $sigma^2 >= gamma > 0$, then @eq_normal_smallprob is bounded by $exp_2(-E - log_2(gamma) slash 2 + O(1))$.
+Note that this is decreasing function of $sigma^2$: for instance if there exists $gamma$ with $sigma^2 >= gamma > 0$, then @eq_normal_smallprob is bounded by $exp_2(-E - log_2(gamma) slash 2 + O(1))$.
 
 // Chernoff-Hoeffding bound
 
-#lemma[
+#lemma[Chernoff-Hoeffding][
   Suppose that $K <= N slash 2$, and let $h(x)=-x log_2 (x) - (1-x) log_2 (x)$ be the binary entropy function. Then, for $p := K slash N$,
   $ sum_(k <= K) binom(N,k) <= exp_2 (N h(p)) <= exp_2 (2 N p log_2 (1 / p)). $
   // https://mathoverflow.net/questions/473730/bounding-a-binomial-coefficient-using-the-binary-entropy-function#mjx-eqn-20

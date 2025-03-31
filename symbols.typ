@@ -10,6 +10,7 @@
 
 #let abs(x) = $lr(bar.v #x bar.v)$
 #let inn(x, y) = $lr(angle.l #x, #y angle.r)$
+#let corr(x, y) = $"corr"(#x, #y)$
 #let exp2(x) = $exp_2 lr(paren.l #x paren.r)$
 #let log2(x) = $log_2 lr(paren.l #x paren.r)$
 
