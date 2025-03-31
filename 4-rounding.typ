@@ -19,7 +19,7 @@ We want to show that
   [No low degree $alg$ can reliably output points _close_ -- within constant distance -- to a solution,],
   [No $Sigma_N$-valued algorithm $tilde(alg)$ coming from randomly rounding the output of $alg$, which changes an $omega(1)$ number of coordinates, can find a solution with nonvanishing probability.],
 )
-In principle, the first possibility fails via the same analysis as in @section_hardness, while the second fails because because the landscape of solutions to any given NPP instance is sparse.
+In principle, the first possibility fails via the same analysis as in @section_hardness, while the second fails because the landscape of solutions to any given NPP instance is sparse.
 
 Why are these the only two possibilities? For $alg$ to provide a way to actually solve the NPP, we must be able to turn its outputs on $RR^N$ into points on $Sigma_N$. If $alg$ could output points within an constant distance (independent of the instance) of a solution, then we could convert $alg$ into a $Sigma_N$-valued algorithm by manually computing the energy of all points close to its output and returning the energy-maximizing point.
 
@@ -116,7 +116,7 @@ Note that as $r$ is of constant order, we can convert $alg$ into a $Sigma_N$-val
   If $B(alg(g),r) inter Sigma_N = emptyset$, then set $hat(alg)_r (g) := (1 slash g_1,0,dots)$, which always has energy 0.
 ] <def_hat_alg>
 
-Observe that $S_"close"(r)$ occuring is the same as $hat(alg)_r$ finding a solution for $g$.
+Observe that $S_"close"(r)$ occurring is the same as $hat(alg)_r$ finding a solution for $g$.
 In addition, note that practically speaking, computing $hat(alg)_r$ requires additionally computing the energy of $O(1)$-many points on $Sigma_N$.
 This requires only an additional $O(N)$ operations.
 
@@ -211,7 +211,7 @@ Observe that as $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bo
 #proof[
   First, by @lem_lcd_solve_disjoint, the appropriate adjustment of @eq_lcd_fundamental holds, namely that
   $
-    (hat(p)^cor_"solve")^2 <= PP(S_"diff") dot (hat(p)^cor_"unstable" + hat(p)^cor_"cond").
+    (hat(p)^cor_"solve")^2 <= hat(p)^cor_"unstable" + hat(p)^cor_"cond" + (1 - PP(S_"diff"))
   $ <eq_hat_lcd_fundamental>
   To ensure $PP(S_"diff") approx 1$, we begin by following @eq_def_lcd_epsilon and choosing $epsilon = log_2 (N slash D) slash N$. Moreover, following the proof of @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear, we know that choosing
   $
@@ -235,7 +235,7 @@ Talk about implications meow.
 
 == Truly Random Rounding
 
-At this point, one might wonder whether, while deterministic algorithms fail, perhaps a randomized rounding scheme could save us, maybe by assiging small values to coordinates which it was less confident in.
+At this point, one might wonder whether, while deterministic algorithms fail, perhaps a randomized rounding scheme could save us, maybe by assigning small values to coordinates which it was less confident in.
 However, this approach is blunted by the same brittleness of the NPP landscape that established the conditional obstruction of @prop_correlated_fundamental and @prop_resampled_fundamental.
 In particular, by @thrm_solutions_repel, if you have a subcube of $Sigma_N$ with dimension growing slowly with $N$, then with high probability at most one of those points will be a solution.
 
@@ -251,7 +251,7 @@ We can define the modified alg $alg^*(g) := alg(g)^*$.
   Note that if $alg$ has coordinate degree $D$, then $alg^*$ also has coordinate degree $D$. As a deterministic $Sigma_N$-valued algorithm, strong low degree hardness as proved in the previous section applies.
 ]
 
-In contrast to deterministically taking signs of the outputs of $alg$ (which corresponds to deterministically rounding the outputs of $alg$ to $Sigma_N$), we can consider passing the output of $alg$ through a randomized rounding scheme. Let $round(x,omega):RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input. We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
+In contrast to taking signs of the outputs of $alg$ (which corresponds to deterministically rounding the outputs of $alg$ to $Sigma_N$), we can consider passing the output of $alg$ through a randomized rounding scheme. Let $round(x,omega) colon RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input. We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
 Given such a randomized rounding function, we can describe it in the following way.
 Let $p_1 (x),dots,p_N (x)$ be defined by
 $ p_i (x) := max(PP(round(x)_i != x^*_i), 1/2). $ <eq_rounding_changed_coord>

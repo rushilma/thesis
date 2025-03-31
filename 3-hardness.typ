@@ -58,7 +58,7 @@ We can summarize the parameters in our argument in the following table:
     x: 1.2em,
     table(
       columns: 4,
-      fill: (_, y) => if calc.odd(y) { crimson.lighten(65%) },
+      fill: (_, y) => if calc.odd(y) { crimson.transparentize(80%) },
       // rgb("EAF2F5") },
       stroke: none,
       table.hline(),
@@ -77,7 +77,7 @@ We can summarize the parameters in our argument in the following table:
       [Small], [Want to show that small changes in instance lead to "breaking" of landscape.],
 
       [$eta$], [Instability; \ $norm(alg(g) - alg(g')) <= 2 sqrt(eta N)$, for $(g,g')$ close],
-      [Large (but \ bounded by $E,N$)], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
+      [Large \ (but bounded \ by $E,N$)], [Large $eta$ indicates a more unstable algorithm; want to show that even weakly stable algorithms fail. ],
 
       table.hline(),
     ),
@@ -144,11 +144,23 @@ Then, we have the following correlation bound, which allows us to avoid union bo
   where the last line follows by Jensen's inequality.
 ]
 
+#remark[
+  We note here that @lem_correlated_solve_prob also holds in the case where $alg(g,omega)$ is randomized, in the sense of @def_algorithm.
+  Namely, write
+  $
+    p &= PP(alg(g, omega) in Soln(g)), &P& = PP(alg(g,omega) in Soln(g), alg(g',omega) in Soln(g')), \
+    p(omega) &= PP(alg(g,omega) in Soln(g) | omega), #h(2em) &P(omega)& = PP(alg(g,omega) in Soln(g), alg(g',omega) in Soln(g') | omega).
+  $
+  @lem_correlated_solve_prob shows that for any $omega in Omega_N$, $P(omega) >= p(omega)^2$. Then, by Jensen's inequality,
+  $ P = EE[P(omega)] >= EE[p(omega)^2] >= EE[p(omega)]^2 = p^2. $
+  Thus, in combination with @rmk_randomized_L2_stable, the remainder of the proof also applies when $alg$ depends on an independent random seed $omega$.
+] <rmk_randomized_multiple_solve>
+
 // meow: should we rearrange this?
 
 Moreover, let us define $p^cor _"unstable"$ and $p^cor _"cond" (x)$ by
 $
-  p^cor _"unstable" = 1 - PP(S_"stable"), #h(5em)  p^cor _"cond" (x) = 1 - PP(S_"cond" (x)).
+  p^cor _"unstable" := 1 - PP(S_"stable"), #h(5em)  p^cor _"cond" (x) := 1 - PP(S_"cond" (x)).
 $
 In addition, define
 $ p^cor_"cond" := max_(x in Sigma_N) p^cor_"cond" (x). $ <eq_def_pcond>
@@ -181,27 +193,30 @@ To this end, we start by bounding the size of neighborhoods on $Sigma_N$.
 This shows that within a small neighborhood of any $x in Sigma_N$, the number of nearby points is exponential in $N$, with a more nontrivial dependence on $eta$. The question is how many of these are solutions to a correlated/resampled instance.
 
 First, we consider the conditional probability of any fixed $x in Sigma_N$ solving a $(1-epsilon)$-correlated problem instance $g'$, given $g$:
-
 Putting together these bounds, we conclude the following fundamental estimates of $p^cor _"cond"$, i.e. of the failure of our conditional landscape obstruction.
+meow
 
 #proposition[Fundamental Estimate -- Correlated Case][
-  Assume that $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors. Then, for any $x$ only depending on $g$,
+  Assume that $(g,g')$ are $(1-epsilon)$-correlated standard Normal vectors.
+  Then, for any $x$ such that $(g',x)$ are conditionally independent given $g$,
   $
-    p^cor_"cond" (x) := PP multiprob(
+    p^cor_"cond" (x) &:= PP multiprob(
       exists x' in Soln(g') "such that",
       norm(x-x') <= 2sqrt(eta N),
-    ) <= exp_2(-E -1 / 2 log_2(epsilon) + 2 eta log_2(1 / eta) N + O(log_2 N)).
-  $
+    ) \
+    &<= exp_2(-E -1 / 2 log_2(epsilon) + 2 eta log_2(1 / eta) N + O(log_2 N)).
+  $ <eq_correlated_lowprob_disp>
 ] <prop_correlated_fundamental>
 #proof[
   For each $x'$ within distance $2 sqrt(eta N)$ of $x$, let
-  $ I_(x') := I(x in Soln(g')) = I(abs(inn(g',x')) <= 2^(-E)), $
+  $ I_(x') := I(x' in Soln(g')) = I(abs(inn(g',x')) <= 2^(-E)), $
   so that
   $
     p^cor_"cond" (x) =
     EE[ sum_(norm(x - x') <= 2sqrt(eta N)) EE[I_(x') | g] ]
     = EE[ sum_(norm(x-x') <= 2sqrt(eta N)) PP(abs(inn(g',x')) <= 2^(-E) | g) ]
   $ <eq_correlated_firstmoment>
+  Note in particular that the range of this sum is independent of the inner probability, as $g'$ and $x$ are conditionally independent.
 
   To bound the inner probability, let $tilde(g)$ be a Normal vector independent to $g$ and set $p = 1-epsilon$.
   Observe that $g'$ can be represented as $g' = p g + sqrt(1-p^2)tilde(g)$,
@@ -212,10 +227,12 @@ Putting together these bounds, we conclude the following fundamental estimates o
     PP(abs(inn(g',x')) <= 2^(-E) | g) <= exp_2 (-E - 1 / 2 log_2 (epsilon) + O(log_2 N)).
   $ <eq_correlated_lowprob>
 
-  Finally, by @lem_hypercube_counting, the number of terms in the sum @eq_correlated_firstmoment is bounded by $exp_2 (2 eta log_2 (1 slash eta)N)$, so given that @eq_correlated_lowprob is independent of $g$, we conclude that
-  $
-    p^cor _"cond" (x) <= exp_2 (-E + -1/2 log_2 (epsilon) + 2 eta log_2 (1 / eta) N + O(log_2 N)). #qedhere
-  $
+  Finally, by @lem_hypercube_counting, the number of terms in the sum @eq_correlated_firstmoment is bounded by $exp_2 (2 eta log_2 (1 slash eta)N)$, so given that @eq_correlated_lowprob is independent of $g$, we deduce @eq_correlated_lowprob_disp.
+  /*
+    $
+      p^cor _"cond" (x) <= exp_2 (-E  -1/2 log_2 (epsilon) + 2 eta log_2 (1 / eta) N + O(log_2 N)). #qedhere
+    $
+  */
 ]
 
 Note for instance that $epsilon$ can be exponentially small in $E$ (e.g. $epsilon = exp_2 (-E slash 10)$), which for the case $E = Theta(N)$ implies $epsilon$ can be exponentially small in $N$.
@@ -318,9 +335,8 @@ Note that these are the same events as @eq_poly_events, along with an event to e
   This follows from @lem_solve_disjoint, noting that the proof did not use that $g != g'$ almost surely.
 ]
 
-We should interpret this as saying $S_"solve", S_"stable", S_"cond"$ are all mutually exclusive, conditional on $g != g'$.
-
-The previous definition of $p^cor _"solve"$ in @eq_def_psolve, which we now term $p^res _"solve"$, remains valid. In particular, we have
+We can interpret this as saying $S_"solve", S_"stable", S_"cond"$ are all mutually exclusive, conditional on $g != g'$.
+The previous definition of $p^cor _"solve"$ in @eq_def_psolve, which we now term $p^res _"solve"$, remains valid. In particular:
 
 #lemma[
   For $g,g'$ being $(1-epsilon)$-resampled, we have
@@ -354,30 +370,37 @@ Now, by @lem_lcd_solve_disjoint, we know that for $x = alg(g)$, $PP(S_"solve",S_
 $
   PP(S_"solve"|S_"diff") + PP(S_"stable"|S_"diff") + PP(S_"cond" (x)|S_"diff") <= 2.
 $
-Thus, rearranging and multiplying by $PP(S_"diff")$ (so as to apply @lem_resampled_solve_prob) gives
+Thus, rearranging and multiplying by $PP(S_"diff")$ gives
 $
-  (p^res_"solve")^2 <= PP(S_"diff") dot (p^res_"unstable" + p^res_"cond")
+  PP(S_"solve",S_"diff") <= PP(S_"diff") dot (p^res_"unstable" + p^res_"cond") <= p^res_"unstable" + p^res_"cond".
+$
+Adding $PP(S_"solve",attach(tl: not, S_"diff")) <= 1-P(S_"diff")$
+(so as to apply @lem_resampled_solve_prob) now lets us conclude
+$
+  (p^res_"solve")^2 <= PP(S_"solve") <= p^res_"unstable" + p^res_"cond" + (1 - PP(S_"diff"))
 $ <eq_lcd_fundamental>
 
-As before, our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, that $p^res _"unstable",p^res _"cond" = o(1)$. However, this also requires us to choose $epsilon >> 1/N$, so as to ensure that $g != g'$, as otherwise $p^res _"unstable",p^res _"cond"$ would be too large. This restriction on $epsilon$ effectively limits us from showing hardness for algorithms with degree larger than $o(N)$, as we will see shortly.
+As before, our proof follows by showing that, for appropriate choices of $epsilon$ and $eta$, depending on $D$, $E$, and $N$, that $p^res _"unstable",p^res _"cond" = o(1)$. However, this also requires us to choose $epsilon >> 1/N$, so as to ensure that $g != g'$, as otherwise $p^res _"unstable",p^res _"cond"$ would be too large. This restriction on $epsilon$ effectively limits us from showing hardness for algorithms with degree larger than $o(N)$, as we will see shortly. meow
 
 First, we bound the same probability of a fixed $x$ solving a resampled instance. Here, we need to condition on the resampled instance being different, as otherwise the probability in question can be made to be 1 if $x$ was chosen to solve $g$.
 
 #proposition[Fundamental Estimate -- Resampled Case][
-  Assume that $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors. Then, for any $x$ only depending on $g$,
+  Assume that $(g,g')$ are $(1-epsilon)$-resampled standard Normal vectors.
+  Then, for any $x$ such that $(g',x)$ are conditionally independent given $g$,
   $
-    p^res_"cond" (x) = PP
+    p^res_"cond" (x) &= PP
     multiprobcond(
         g != g',
         exists x' in Soln(g') "such that",
         norm(x-x') <= 2sqrt(eta N),
-    ) <= exp_2 (-E + 2 eta log_2 (1 / eta) N + O(1)).
-  $
+    )
+    &<= exp_2 (-E + 2 eta log_2 (1 / eta) N + O(1)).
+  $ <eq_resampled_lowprob_disp>
 ] <prop_resampled_fundamental>
 #proof[
   We follow the setup of proof of @prop_correlated_fundamental.
   For each $x'$ within distance $2 sqrt(eta N)$ of $x$, let
-  $ I_(x') := I(x in Soln(g')) = I(abs(inn(g',x')) <= 2^(-E)), $
+  $ I_(x') := I(x' in Soln(g')) = I(abs(inn(g',x')) <= 2^(-E)), $
   so that
   $
     p^res_"cond" (x) &=
@@ -396,10 +419,7 @@ First, we bound the same probability of a fixed $x$ solving a resampled instance
     PP(abs(inn(g',x')) <= 2^(-E) | g, g!= g') <= exp_2 (-E + O(1)).
   $ <eq_resampled_lowprob>
 
-  By @lem_hypercube_counting, the number of terms in the sum @eq_resampled_firstmoment is bounded by $exp_2 (2 eta log_2 (1 slash eta)N)$, so summing @eq_resampled_lowprob allows us to conclude that
-  $
-    p^res _"cond" (x) <= exp_2 (-E + 2 eta log_2 (1 / eta) N + O( 1 )). #qedhere
-  $
+  By @lem_hypercube_counting, the number of terms in the sum @eq_resampled_firstmoment is bounded by $exp_2 (2 eta log_2 (1 slash eta)N)$, so summing @eq_resampled_lowprob allows us to conclude @eq_resampled_lowprob_disp.
 ]
 
 Note that in contrast to @prop_correlated_fundamental, this bound doesn't involve $epsilon$ at all, but the condition $g!= g'$ requires $epsilon = omega(1 slash N)$ to hold almost surely, by @lem_sdiff_prob.

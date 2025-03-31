@@ -63,7 +63,7 @@ To start, recall the notion of $L^2$ functions:
 
 // Def. L2 space of functions of N iid variables
 #definition[
-  Let $pi$ be a probability distribution on $RR$. The $L^2$ space $L2iid$ is the space of functions $f:RR^N to RR$ with finite $L^2$ norm.
+  Let $pi$ be a probability distribution on $RR$. The $L^2$ space $L2iid$ is the space of functions $f colon RR^N to RR$ with finite $L^2$ norm.
   $
     EE[f^2] := integral_(RR^N) f(x)^2 dif pi^(times.circle N)(x) < infinity.
   $
@@ -78,7 +78,7 @@ To formalize this intuition, define the following coordinate projection:
 // Def. Projection of function.
 #definition[
   Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$.
-  The _projection of $f$ onto $J$_ is the function $f^(subeq J): RR^N to RR$ given by
+  The _projection of $f$ onto $J$_ is the function $f^(subeq J) colon RR^N to RR$ given by
   $ f^(subeq J)(x) := EE[f(x_1,dots,x_n) | x_i, i in J] = EE[f(x) | x_J] $
 ] <def_subset_proj>
 
@@ -157,7 +157,7 @@ With this, we can define the notion of "coordinate degree":
   $
     cdeg(f) := max { abs(S) : S subeq [N]\, f^(=S)!=0 } = min {D : f in V_(<= D) }
   $
-  If $f=(f_1,dots,f_M): RR^N to RR^M$ is a multivariate function, then
+  If $f=(f_1,dots,f_M) colon RR^N to RR^M$ is a multivariate function, then
   $ cdeg(f) := max_(i in [M]) cdeg(f_i). $
 ]
 
@@ -209,7 +209,7 @@ This noise operator changes the Efron-Stein decomposition, and hence the behavio
 Thus, we can derive the following stability bound on low coordinate degree functions.
 
 #theorem[
-  Let $p in [0,1]$ and let $f=(f_1,dots,f_M):RR^N arrow RR^M$ be a multivariate function with coordinate degree $D$ and each $f_i in L2iid$.
+  Let $p in [0,1]$ and let $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a multivariate function with coordinate degree $D$ and each $f_i in L2iid$.
   Suppose that $(x,y)$ are a $p$-resampled pair under $pi^(times.circle N)$, and $EE norm(f(x))^2 = 1$. Then
   $ EE norm(f(x)-f(y))^2 <= 2(1-p^D) <= 2(1-p)D. $ <eq_es_stability>
 ] <thrm_es_stability>
@@ -268,7 +268,7 @@ Note here that each $h_j$ is a degree $j$ polynomial. With these, we have:
   The Hermite polynomials $(h_j)_(j >= 0)$ form a complete orthonormal basis for $L2norm$.
 ]
 
-To extend this to $L2normN$, we can take products. For a multi-index $alpha in NN^N$, we define the multivariate Hermite polynomial $h_alpha: RR^N to RR$ as
+To extend this to $L2normN$, we can take products. For a multi-index $alpha in NN^N$, we define the multivariate Hermite polynomial $h_alpha colon RR^N to RR$ as
 $ h_alpha (z) := product_(j=1)^N h_(alpha_j)(z_j). $
 The degree of $h_alpha$ is clearly $abs(alpha)=sum_j alpha_j$.
 
@@ -315,7 +315,7 @@ As it happens, a straightforward computation with the Normal moment generating f
 With this in hand, we can prove a similar stability bound to @thrm_es_stability.
 
 #theorem[
-  Let $p in [0,1]$ and let $f=(f_1,dots,f_M):RR^N arrow RR^M$ be a multivariate polynomial with degree $D$.
+  Let $p in [0,1]$ and let $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a multivariate polynomial with degree $D$.
   Suppose that $(x,y)$ are a $p$-correlated pair of standard Normal vectors, and $EE norm(f(x))^2 = 1$.
   Then
   $ EE norm(f(x)-f(y))^2 <= 2(1-p^D) <= 2(1-p)D. $ <eq_poly_stability>
@@ -337,7 +337,7 @@ In exchange, being able to use $p$-correlation as a "metric" on the input domain
 With these notions of low degree functions/polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
-  A _(randomized) algorithm_ is a measurable function $alg :(g,omega) mapsto x in Sigma_N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
+  A _(randomized) algorithm_ is a measurable function $alg colon (g,omega) mapsto x in Sigma_N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
 
 As discussed in the introduction to this section, we will usually focus on deterministic algorithms, discussing the minor modifications necessary for handling randomized algorithms as necessary.
@@ -377,9 +377,9 @@ As we've seen, these algorithms admit clear stability bounds:
 ]
 
 #remark[
-  Note that @prop_alg_stability also holds for randomized algorithms meow
-]
-
+  Note that @prop_alg_stability also holds for randomized algorithms.
+  Namely, if $alg(g,omega)$ is a randomized algorithm with polynomial/coordinate degree $D$, with $EE_(g,omega) norm(alg(g,omega))^2 <= C N$, then by applying Markov's inequality to $omega mapsto EE[norm(alg(g,omega))^2 | omega]$ allows us to reduce to the deterministic case, possibly after adjusting $C$.
+] <rmk_randomized_L2_stable>
 
 /*
 #example[

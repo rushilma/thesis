@@ -34,6 +34,8 @@
 
 #let Soln(x) = $S(E;#x)$
 
+#let colon = $class("punctuation", :) space.thin$
+
 #let multiset(..x) = (
   math.lr(
     size: 100% + 1em,

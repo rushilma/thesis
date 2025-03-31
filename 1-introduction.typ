@@ -178,7 +178,7 @@ This terminology is motivated by the statistical physics literature, wherein ran
 Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
 We further know that the _statistically optimal energy level_ is $E=Theta(N)$, while the best _computational energy level_ (achievable in polynomial time) is $E=Theta(log^2 N)$.
 
-For our purposes, an algorithm is a function $alg : g mapsto x in Sigma_N$. We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
+For our purposes, an algorithm is a function $alg colon g mapsto x in Sigma_N$. We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
 In particular, we consider the class of so-called _low degree algorithms_, given by either low degree polynomials or by functions with low _coordinate degree_.
 Compared to analytically-defined classes of stable algorithms (e.g. Lipschitz, etc.), these algorithms have an algebraic structure making them amenable to precise stability analysis.
 In addition, heuristically, degree $D$ algorithms (in either sense) are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
@@ -186,8 +186,8 @@ Expand on meow.
 Our results show _strong low degree hardness_ for the NPP at energy levels between the statistical and computational thresholds, in the sense of @huangStrongLowDegree2025:
 
 #definition[Strong Low Degree Hardness @huangStrongLowDegree2025[Def. 3]][
-  A sequence of random search problems -- a $N$-indexed sequence of random input vectors $g_N in RR^(d_N)$ and random subsets $S_N = S_N (g_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $alg_N: (g,omega) mapsto x$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
-  $ PP(alg(g_N,omega) in S_N) <= o(1). $
+  A sequence of random search problems -- a $N$-indexed sequence of random input vectors $g_N in RR^(d_N)$ and random subsets $S_N = S_N (g_N) subeq Sigma_N$, exhibits _strong low degree hardness (SLDH) up to degree $D <= o(D_N)$_ if, for all sequences of degree $o(D_N)$ algorithms $alg_N colon (g,omega) mapsto x$ with $EE norm(alg(y_N))^2 <= O(N)$, we have
+  $ PP(alg_N(g_N,omega) in S_N) <= o(1). $
 ] <def_sldh>
 
 There are two related notions of degree which we want to consider in @def_sldh.
@@ -203,7 +203,7 @@ The first is traditional polynomial degree, applicable for algorithms given in e
 
 Under the low degree heuristic, this suggests polynomial algorithms require double exponential time to achieve the statistical optimal discrepancy; given that brute-force search requires exponential time, this is strong evidence that polynomial algorithms are poor models for solving the NPP.
 
-Thus, we turn to the second, more general notion of _coordinate degree_: a function $f: RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
+Thus, we turn to the second, more general notion of _coordinate degree_: a function $f colon RR^N to RR$ has coordinate degree $D$ if it can be expressed as a linear combination of functions depending on combinations of no more than $D$ coordinates.
 While related to polynomial degree, this enables us to consider an extremely broad class of algorithms, in which case we show
 
 #theorem[Results of @section_hardness_lcd][
@@ -235,6 +235,7 @@ We conclude in @section_rounding by extending our results to the case of $RR^N$-
 
 Conventions:
 + On $RR^N$ we write $norm(dot)_2 = norm(dot)$ for the Euclidean norm, and $norm(dot)_1$ for the $ell^1$ norm.
++ Asymptotics notation
 // + $log$ means $log$ in base 2, $exp$ is $exp$ base 2 - natural log/exponent is $ln$/$e^x$.
 + If $x in RR^N$ and $S subeq [N]$, then $x_S$ is vector with
   $ (x_S)_i = cases(x_i #h(2em) &i in S\,, 0 &"else.") $
