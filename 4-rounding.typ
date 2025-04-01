@@ -2,11 +2,7 @@
 
 #import "symbols.typ": *
 
-// #show math.equation: set text(font: "New Computer Modern Math")
-
 = Extensions to Real-Valued Algorithms <section_rounding>
-
-// #show math.equation: set text(font: "STIX Two Math")
 
 In @section_hardness, we have established strong low degree hardness for both low degree polynomial and low coordinate degree algorithms.
 However, our stability analysis assumed that the algorithms in question were $Sigma_N$-valued.
@@ -62,7 +58,7 @@ Note that $cube$ is $1$-Lipschitz with respect to the Euclidean norm.
   If $B(cube(alg(g)),r) inter Sigma_N = emptyset$, then set $hat(alg)_r (g) := cube(alg(g))$, which is necessarily not in $Sigma_N$.
 ] <def_hat_alg>
 
-Observe that $S_"close" (r)$ occuring implies $hat(alg)_r$ finds a solution for $g$.
+Observe that $S_"close" (r)$ occurring implies $hat(alg)_r$ finds a solution for $g$.
 In addition, computing $hat(alg)_r$ in practice requires additionally calculating the energy of $O(1)$-many points on $Sigma_N$.
 This requires only an additional $O(N)$ operations.
 
@@ -176,7 +172,7 @@ Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the
   By @eq_hat_lcd_fundamental, we conclude that $hat(p)^cor _"solve" = o(1)$.
 ]
 
-Note that as $hat(p)^cor_"solve"$ upper bounds $PP(S_"close" (r))$, this argument shows algorithmic hardness for low degree $RR^N$-valued algorithms to even output points withon constant distance of a solution.
+Note that as $hat(p)^cor_"solve"$ upper bounds $PP(S_"close" (r))$, this argument shows algorithmic hardness for low degree $RR^N$-valued algorithms to even output points within constant distance of a solution.
 
 == Truly Random Rounding
 
@@ -193,10 +189,10 @@ $ x^*_i := cases(+1 #h(1em) &x_i > 0\,, -1 &x_i <= 0.) $
 We can then define the deterministically rounded algorithm $alg^*(g) := alg(g)^*$.
 
 #remark[
-  Observe that if $alg$ was a low coordinate degree algorithm, then $alg^*$ has the same coordinate degree, so strong low degree hardness as proved in @section_hardness_lcd still applies. On the other hand, if $alg$ was a low polynomial degree algorithm, then $alg^*$ will not be polynomial, but by treating $alg$ as a low coordinate degree algorithm, we can recover strong low degere hardness, albeit with worse bounds on $D$.
+  Observe that if $alg$ was a low coordinate degree algorithm, then $alg^*$ has the same coordinate degree, so strong low degree hardness as proved in @section_hardness_lcd still applies. On the other hand, if $alg$ was a low polynomial degree algorithm, then $alg^*$ will not be polynomial, but by treating $alg$ as a low coordinate degree algorithm, we can recover strong low degree hardness, albeit with worse bounds on $D$.
 ]
 
-In contrast to determinstically rounding of the outputs of $alg$ by taking signs,
+In contrast to deterministically rounding of the outputs of $alg$ by taking signs,
 we can consider passing the output of $alg$ through a randomized rounding scheme. Let $round(x,omega) colon RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input.
 We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
 We can describe such a randomized rounding function in the following way.
@@ -253,7 +249,7 @@ To take advantage of the above construction, we show @thrm_solutions_repel: this
 
 #theorem[Solutions Repel][
   Consider any distances $k = Omega(1)$ and energy levels $E >> k log N$.
-  With high probability, there are no pairs of distinct solutions $x,x' in Soln(g)$ to an instance $g$ with $norm(x-x') <= 2 sqrt(k)$ (i.e. within $k$ sign flips of each other):
+  With high probability, there are no pairs of distinct solutions $x,x' in Soln(g)$ to an instance $g$ with $norm(x-x') <= 2 sqrt(k)$ (i.e., within $k$ sign flips of each other):
   $
     PP multiprob(
       exists (x,x') in Soln(g) "s.t.",

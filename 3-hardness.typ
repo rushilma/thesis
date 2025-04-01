@@ -2,7 +2,7 @@
 
 #import "symbols.typ": *
 
-= Proof of Strong Low Degree Hardness <section_hardness>
+= Proofs of Strong Low Degree Hardness <section_hardness>
 
 In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -- that is, we exhibit strong low degree hardness for both low polynomial degree and low coordinate degree algorithms.
 
@@ -74,7 +74,7 @@ We can summarize the parameters in our argument in the following table.
         [Small], [Smaller $E$ rules out weaker solutions; know $Omega(log^2 N) <= E <= Theta(N)$.], // by @karmarkarDifferencingMethodSet1983 @karmarkarProbabilisticAnalysisOptimum1986],
 
         [$D$], [Algorithm degree],
-        [Large], [Higher degree means more complex (i.e. longer time) algorithms fail.],
+        [Large], [Higher degree means more complex (i.e., longer time) algorithms fail.],
 
         [$epsilon$], [Distance between $g$ and $g'$],
         [Small], [Want to show that small changes in instance lead to "breaking" of landscape.],
@@ -265,7 +265,7 @@ As we will see, this has rather extreme implications for the failure of polynomi
 
 Next, we consider the sublinear energy regime $omega(log  N ) <= E <= o(N)$.
 This bridges the gap from the statistically optimal energy threshold down to the computational threshold.
-In particular, our method allows us to rule out degree $o(N^O(N))$ polynomial algorithms even for achieving the same energy threshold as the Karmarkar-Karp algorithm; this is expected however, as neither the original KK algorithm nor the simplified LDM algorithm are polynomial.
+In particular, our method allows us to rule out degree $o(N^O(N))$ polynomial algorithms even for achieving the same energy threshold as the Karmarkar-Karp algorithm; this is expected however, as neither the original Karmarkar-Karp algorithm nor the simplified LDM algorithm are polynomial.
 
 // sublinear poly low degree hardness
 #theorem[
@@ -301,8 +301,8 @@ In particular, our method allows us to rule out degree $o(N^O(N))$ polynomial al
 ]
 
 Holistically, these results imply that polynomial algorithms require degree exponential in the energy level to achieve solutions of the desired discrepancy.
-Under the low degree heuristic, this corresponds to requring double exponential time -- this is clearly beaten by brute force search in exponential time.
-In this case, strong low degree hardness of the NPP serves as evidence of polynomial algorithms being unsuited to these types of brittle random optmization problems.
+Under the low degree heuristic, this corresponds to requiring double exponential time -- this is clearly beaten by brute force search in exponential time.
+In this case, strong low degree hardness of the NPP serves as evidence of polynomial algorithms being unsuited to these types of brittle random optimization problems.
 
 #remark[Extending to Randomized Algorithms][
   As discussed in @rmk_randomized_L2_stable and @rmk_randomized_multiple_solve, if $alg(g,omega)$ is a randomized $Sigma_N$-valued low degree polynomial algorithm satisfying the averaged bound $EE norm(alg(g,omega))^2 <= C N$, then for every $epsilon$, one can show @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear for $alg(-,omega)$ for any fixed random seed. Averaging these bounds then allows the proof to go through. We note that this extension to randomized algorithms also applies for low coordinate degree hardness.
@@ -369,7 +369,7 @@ $
 $ <eq_def_lcd_punstablecond>
 This is necessary as when $g=g'$, $S_"stable"$ always holds and $S_"cond" (x)$ always fails.
 Note however that if we knew that $PP(S_"diff") = 1$ (which is always the case for $g,g'$ being $(1-epsilon)$-correlated), then these definitions agree with what we had in @eq_poly_fundamental.
-Again, we can define $p^res _"cond"$ via @eq_def_pcond. // , i.e. as the maximum of $p^res _"cond" (x)$ over $Sigma_N$.
+Again, we can define $p^res _"cond"$ via @eq_def_pcond.
 
 // fundamental equation
 Now, by @lem_lcd_solve_disjoint, we know that for $x = alg(g)$, $PP(S_"solve",S_"stable",S_"cond" (x) |S_"diff") = 0$, so
@@ -514,7 +514,7 @@ Note also that our method also allows us to derive a clear tradeoff between solu
   In particular, this suggests that our results @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear are optimal under the low degree heuristic.
   Namely, low degree hardness of finding solutions with energy $E$ holds up to degree $tilde(o)(E)$, which implies finding such solutions requires at least time $e^(tilde(Omega)(E))$.
   This restricted brute force strategy shows that it is indeed possible to find these solutions in time $e^(tilde(O)(E))$, implying that our method gives the optimal energy/runtime tradeoff.
-]
+] <rmk_optimal>
 
 As a final remark, consider that an algorithm with coordinate degree $Omega(N)$ (equivalently, $Theta(N)$) is one which considers nonlinear interactions between some constant fraction of all the coordinates as $N$ gets large.
 Intuitively, such an algorithm is forced to look at how a large number of instance elements balance against each other, giving further evidence to the claim that any sufficiently local algorithm for the NPP will be no better than random search.

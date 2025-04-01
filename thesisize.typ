@@ -2,10 +2,13 @@
   pad(
     left: -0.01in,
     top: 0.7in,
-    text(
-      weight: "medium",
-      size: 30pt,
-      title,
+    align(
+      left,
+      text(
+        weight: "medium",
+        size: 30pt,
+        title,
+      ),
     ),
   )
   pad(top: 0.05in, text(size: 17pt, style: "italic", subtitle))
@@ -13,8 +16,10 @@
     top: 5em,
     text[Rushil Mallarapu #footnote[Written under the joint supervision of Professor Mark Sellke and Professor Subhabrata Sen.]],
   )
-  pad(top: -0.05in, text[Harvard University, Cambridge, MA 02138])
-  pad(top: 0.7in, text(size: 11pt)[*Abstract.* #abstract])
+  pad(top: 0.05in, text[Harvard University])
+  pad(top: -0.05in, text[Cambridge, Massachusetts])
+  pad(top: 0.05in, text[April 1, 2025])
+  pad(top: 0.5in, text(size: 11pt)[*Abstract.* #abstract])
 }
 
 #let thesisize(
