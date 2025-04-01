@@ -220,7 +220,7 @@ The rest of the thesis is organized as follows. We review the low degree heurist
 Our main results then constitute @section_hardness, where after giving an overview of our proof strategy, we show @thrm_sldh_poly_informal in @section_hardness_poly, and likewise show @thrm_sldh_lcd_informal in @section_hardness_lcd.
 We conclude in @section_rounding by extending our results to the case of $RR^N$-valued algorithms, and finish by discussing interesting directions for future research.
 
-== Notation and Conventions
+== Conventions and Fundamentals
 
 We use the standard Bachmann-Landau notations $o(dots), O(dot), omega(dot), Omega(dot), Theta(dot)$, taken in the limit $N to infinity$. In addition, we write $f(N) asymp g(N)$, $f(N) << g(N)$, or $f(N) >> g(N)$ when $f(N)=Theta(g(N))$, $f(N) = o(g(N))$, or $f(N) = omega(g(N))$, respectively.
 
