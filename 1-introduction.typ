@@ -70,11 +70,11 @@ It was also observed that this phase transition coincided with the empirical ons
 == The Statistical-to-Computational Gap
 
 Many problems involving searches over random combinatorial structures (i.e., throughout high-dimensional statistics) exhibit a statistical-to-computational gap: the optimal values which are known to exist via non-constructive, probabilistic methods are far better than those achievable by state-of-the-art algorithms.
-In the pure optimization setting, examples such gaps are found in random constraint satisfaction @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017, finding maximal independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015, the largest submatrix problem @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a, and the $p$-spin and diluted $p$-spin models @gamarnikOverlapGapProperty2019 @montanariOptimizationSherringtonKirkpatrickHamiltonian2019 @chenSuboptimalityLocalAlgorithms2019.
+In the pure optimization setting, examples such gaps are found in random constraint satisfaction @mezardClusteringSolutionsRandom2005 @achlioptasAlgorithmicBarriersPhase2008 @kothariSumSquaresLower2017, finding maximal independent sets in sparse random graphs @gamarnikLimitsLocalAlgorithms2014 @coja-oghlanIndependentSetsRandom2015, the largest submatrix problem @gamarnikFindingLargeSubmatrix2016 @gamarnikOverlapGapProperty2021a, and the $p$-spin and diluted $p$-spin models @gamarnikOverlapGapProperty2019 @chenSuboptimalityLocalAlgorithms2019.
 These gaps also arise in various "planted" models, such as matrix or tensor PCA @berthetComputationalLowerBounds2013 @lesieurMMSEProbabilisticLowrank2015 @lesieurPhaseTransitionsSparse2015 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @arousAlgorithmicThresholdsTensor2020,
 high-dimensional linear regression @gamarnikSparseHighDimensionalLinear2019 @gamarnikHighDimensionalRegressionBinary2019,
 or the infamously hard planted clique problem @jerrumLargeCliquesElude1992 @deshpandeImprovedSumofSquaresLower2015 @mekaSumofsquaresLowerBounds2015 @barakNearlyTightSumofSquares2016 @gamarnikLandscapePlantedClique2019.
-These indicate that these problems are "hard" in a way that goes beyond being NP; algorithms fail even on average case instances.
+These indicate that these problems are "hard" in a way that goes beyond being NP; algorithms fail even on average-case instances.
 
 The NPP is no exception: despite its apparent simplicity, its persistent importance in the random optimization literature comes from the shocking width of its associated statistical-to-computational gap.
 On the statistical side, the landmark result here is by Karmarkar et al., who showed that when the $g_i$ are i.i.d.random variables, with distribution sufficiently nice,
@@ -123,7 +123,7 @@ the failure of approximate message passing (AMP) algorithms
 or lower bounding performance against the sum-of-squares hierarchy or the statistical query model
 @hopkinsTensorPrincipalComponent2015 @hopkinsPowerSumofsquaresDetecting2017 @raghavendraHighdimensionalEstimationSumofsquares2019 @barakNearlyTightSumofSquares2016 @kearnsEfficientNoisetolerantLearning1998 @diakonikolasStatisticalQueryLower2017 @feldmanStatisticalAlgorithmsLower2016.
 
-One particularly interesting approach is to prove random-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concluded that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
+One particularly interesting approach is to prove average-case to worst-case reductions: if one shows that a polynomial-time algorithm for solving random instances could be used to design a polynomial-time algorithm for arbitrary instances, then assuming the problem was known to be in NP, it can be concluded that no such polynomial-time algorithm for the average case can exist @gamarnikOverlapGapProperty2021.
 This method has been used to show hardness for sparse PCA, detecting planted independent subgraphs, and more by reducing to the random planted clique problem @berthetComputationalLowerBounds2013 @brennanOptimalAverageCaseReductions2019 @brennanReducibilityComputationalLower2019.
 To this extent, Hoberg et al. provided such evidence of hardness for the NPP by showing that a polynomial-time approximation oracle achieving discrepancies around $O(2^sqrt(N))$ could give polynomial-time approximations for Minkowski's problem, the latter of which is known to be hard @hobergNumberBalancingHard2016.
 More recently, Vafa and Vaikuntanathan showed that the Karmarkar-Karp algorithm's performance was nearly tight, assuming the worst-case hardness of the shortest vector problem on lattices @vafaSymmetricPerceptronsNumber2025.
@@ -166,22 +166,21 @@ To start, let us formalize our terminology for the NPP.
   The _solution set $Soln(g)$_ is the set of all $x in Sigma_N$ that have energy at least $E$, i.e., that satisfy
   $
     abs(inn(g,x)) <= 2^(-E).
-  $ <eq_npp>
+  $ // <eq_npp>
 ] <def_npp_statement>
 
 Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E(x;g)$.
 This terminology is motivated by the statistical physics literature, wherein random optimization problems are often reframed as energy maximization over a random landscape @mertensPhysicistsApproachNumber2001.
 We further know that the _statistically optimal energy level_ is $E=Theta(N)$, while the best _computational energy level_ (achievable in polynomial time) is $E=Theta(log^2 N)$.
 
-For our purposes, an algorithm is a function $alg colon RR^N to Sigma_N$ mapping $g mapsto x$.
+For our purposes, an algorithm is a function $alg colon RR^N to Sigma_N$ mapping instances $g$ to partitions $x$.
 We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
 In particular, we consider the class of so-called _low degree algorithms_, given by either low degree polynomials or by functions with low _coordinate degree_.
 Compared to analytically-defined classes of stable algorithms (e.g. Lipschitz, etc.), these algorithms have an algebraic structure making them amenable to precise stability analysis.
-//
-In addition, heuristically, degree $D$ algorithms (in either sense) are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
-Expand on meow.
-//
-Our results show _strong low degree hardness_ for the NPP at energy levels between the statistical and computational thresholds, in the sense of @huangStrongLowDegree2025:
+In addition, the _low degree heuristic_ suggests that degree $D$ algorithms (in either sense) are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018.
+This is a reasonable expectation for number partitioning, enabling us to translate our results into heuristic runtime bounds.
+
+Our results show _strong low degree hardness_ for the NPP at energy levels between the statistical and computational thresholds, in the sense of Huang and Sellke @huangStrongLowDegree2025.
 
 #definition[Strong Low Degree Hardness @huangStrongLowDegree2025[Def. 3]][
   A sequence of random search problems, that is, a $N$-indexed sequence of random input vectors
@@ -216,9 +215,8 @@ While related to polynomial degree, this enables us to consider a far broader cl
   )
 ] <thrm_sldh_lcd_informal>
 
-These results are likely to be the best-possible under the low degree heuristic, which we discuss in @rmk_optimal.
+These results are likely to be the best-possible under the low degree heuristic, which we discuss in @rmk_optimal. In particular, the energy-degree tradeoff of $D <= tilde(o)(E)$ implies finding solutions with energy $E$ requires time $e^(tilde(Omega)(E))$, and as we'll show, it is possible to achieve such discrepancies via a restricted exponential-time search. Given this, our method produces a sharp energy-runtime tradeoff, indicating there are no nontrivial algorithms that save more than a polylogarithmic factor in the runtime exponent over brute-force search.
 Overall, our approach towards @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal suggest that in the case of problems with brittle solution geometry, conditional landscape obstructions are an extremely powerful tool for proving algorithmic hardness.
-meow
 
 The rest of the thesis is organized as follows. We review the low degree heuristic and work with low coordinate degree algorithms in @section_algorithm. In particular, we provide a self-contained introduction to coordinate degree and related decompositions of $L^2$ functions in @section_algorithm_es.
 Our main results then constitute @section_hardness; after giving an overview of our proof strategy, we prove @thrm_sldh_poly_informal in @section_hardness_poly, and likewise prove @thrm_sldh_lcd_informal in @section_hardness_lcd.
@@ -236,19 +234,6 @@ On $RR^N$, we write $norm(dot)$ for the Euclidean norm, and $B(x,r) := { y in RR
 We use $Normal(mu,sigma^2)$ to denote the scalar Normal distribution with given mean and variance. In addition, we write "i.i.d." to mean independently and identically distributed, and "r.v." to mean random variable (or random vector, if it is clear from context).
 
 Throughout the remainder of this thesis, we will make use of the following general results:
-
-/*
-#lemma[Squared Triangle Inequality][
-  Suppose $x^((1)), dots, x^((n)), x^((n+1))$ are $n$ vectors in $RR^N$. Then
-  $
-    norm(x^((1)) - x^((n+1)))^2 <= ( sum_(i=1)^n norm(x^((i)) - x^((i+1))) )^2 <= n sum_(i=1)^n norm(x^((i)) - x^((i+1)))^2.
-  $ <eq_squared_triangle_ineq>
-]
-#proof[
-  Trivial: recall by Jensen's inequality that for any real numbers $d_1,dots,d_n$, we have
-  $ (sum_(i = 1)^n d_i)^2 <= n sum_(i=1)^n d_i^2. #qedhere $
-]
-*/
 
 // Normal probability lemma
 

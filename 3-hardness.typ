@@ -25,7 +25,7 @@ The proof of @thrm_sldh_poly_informal, stated formally as @thrm_sldh_poly_linear
 #footnote[The proof of @thrm_sldh_lcd_informal requires only minor modifications.]
 Let $E$ be an energy level and $D$ a maximum algorithm degree, both depending on $N$.
 We assume that $D$ is bounded by a level depending on $E$ and $N$, corresponding to the low degree regime in which we want to show hardness.
-We then choose parameters $eta$ and $epsilon$, depending on $E$, $D$, and $N$.
+We then choose parameters $eta$ (depending on $E$ and $N$) and $epsilon$ (depending on $E$, $D$, and $N$).
 As described in @section_algorithm, assume $alg$ is a deterministic, $Sigma_N$-valued algorithm with polynomial degree at most $D$.
 Our goal is to show that for our choices of $eta$ and $epsilon$,
 $ PP(alg(g) in Soln(g)) -> 0 $
@@ -305,7 +305,9 @@ Under the low degree heuristic, this corresponds to requiring double exponential
 In this case, strong low degree hardness of the NPP serves as evidence of polynomial algorithms being unsuited to these types of brittle random optimization problems.
 
 #remark[Extending to Randomized Algorithms][
-  As discussed in @rmk_randomized_L2_stable and @rmk_randomized_multiple_solve, if $alg(g,omega)$ is a randomized $Sigma_N$-valued low degree polynomial algorithm satisfying the averaged bound $EE norm(alg(g,omega))^2 <= C N$, then for every $epsilon$, one can show @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear for $alg(-,omega)$ for any fixed random seed. Averaging these bounds then allows the proof to go through. We note that this extension to randomized algorithms also applies for low coordinate degree hardness.
+  As discussed in @rmk_randomized_L2_stable and @rmk_randomized_multiple_solve, if $alg(g,omega)$ is a randomized $Sigma_N$-valued low degree polynomial algorithm satisfying the averaged bound $EE norm(alg(g,omega))^2 <= C N$, then for every $epsilon$, one can show @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear for $alg(-,omega)$ for any fixed random seed.
+  In particular, the conditional landscape obstruction @prop_correlated_fundamental works without change when conditioning on $omega$ throughout.
+  Averaging these bounds then allows the proof to go through. We note that this extension to randomized algorithms also applies for low coordinate degree hardness.
 ] <rmk_randomized>
 
 == Hardness for Low Coordinate Degree Algorithms <section_hardness_lcd>
@@ -513,8 +515,13 @@ Note also that our method also allows us to derive a clear tradeoff between solu
   )
   In particular, this suggests that our results @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear are optimal under the low degree heuristic.
   Namely, low degree hardness of finding solutions with energy $E$ holds up to degree $tilde(o)(E)$, which implies finding such solutions requires at least time $e^(tilde(Omega)(E))$.
-  This restricted brute force strategy shows that it is indeed possible to find these solutions in time $e^(tilde(O)(E))$, implying that our method gives the optimal energy/runtime tradeoff.
+  This restricted brute force strategy shows that it is indeed possible to find these solutions in time $e^(tilde(O)(E))$, implying that our method gives the optimal energy-runtime tradeoff.
 ] <rmk_optimal>
+
+It is worthwhile asking whether the low degree heuristic is truly appropriate in our brittle setting.
+For instance, in most cases where it has been applied to a random optimization problem (e.g., by Huang and Sellke @huangStrongLowDegree2025), the objective under consideration has been fairly stable.
+However, the NPP has a very one-dimensional landscape, lacking the "depth" which foils the low degree heuristic for, e.g., broadcasting on trees @huangOptimalLowDegree2025.
+Moreover, the sharp energy-runtime tradeoff in @rmk_optimal is suggestive of the strength of this heuristic in this case.
 
 As a final remark, consider that an algorithm with coordinate degree $Omega(N)$ (equivalently, $Theta(N)$) is one which considers nonlinear interactions between some constant fraction of all the coordinates as $N$ gets large.
 Intuitively, such an algorithm is forced to look at how a large number of instance elements balance against each other, giving further evidence to the claim that any sufficiently local algorithm for the NPP will be no better than random search.

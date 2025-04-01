@@ -34,8 +34,6 @@ To this end, the authors suggest this discrepancy arises from the requirement of
 As a takeaway, we can surmise that the low degree heuristic is reasonable for describing random search problems involving optimization of a "flat" structure, in which algorithmic complexity cannot hide behind $N$-independent factors.
 Thus, having an explicit handle on algorithm degree enables us to both control stability and extend our results to rule out general polynomial-time algorithms.
 
-// meow @liEasyOptimizationProblems2024
-
 == Coordinate Degree and $L^2$ Stability <section_algorithm_es>
 
 First, we consider a general class of putative algorithms, and construct the "coordinate decomposition" underlying the notion of coordinate degree.
@@ -72,7 +70,7 @@ That is, if $T subset.neq S$ and $g$ depends only on the coordinates in $T$, the
 
 This decomposition, often called the _Efron-Stein_, _orthogonal_, or _Hoeffding_ decomposition, does indeed exist.
 Its applications in statistics come from the fact that it provides a way of decomposing the total variance of a function into the components coming from specific sets of coordinates, a step which underlies the ANOVA methodology.
-These low coordinate degree decompositions have also been used in computational chemistry: see the reviews by Li et al. @liHighDimensionalModel2001 or Rabitz and Aliş @rabitzGeneralFoundationsHighdimensional1999 for more details.
+These low coordinate degree decompositions have also been used in computational chemistry: see the review by Li et al. @liHighDimensionalModel2001 for more details.
 The Efron-Stein decomposition exhibits the following combinatorial construction;
 our presentation largely follows @odonnellAnalysisBooleanFunctions2021[#sym.section 8.3], as well as the paper @kuniskyLowCoordinateDegree2024a.
 
@@ -317,12 +315,6 @@ We now formalize our notion of "algorithm" from @section_intro_results.
 #definition[
   A _(randomized) algorithm_ is a measurable function $alg colon (g,omega) mapsto x in Sigma_N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
-
-/*
-As discussed in the introduction to this section, we will usually focus on deterministic algorithms, discussing the minor modifications for handling randomized algorithms as necessary.
-In addition, many practical algorithms are $RR^N$-valued, which must be rounded to give outputs on $Sigma_N$.
-For simplicity, we assume for now that our algorithms are $Sigma_N$-valued, and discuss the extensions to handle this rounding in @section_rounding.
-*/
 
 With the notions of low coordinate degree functions or low degree polynomials in hand, we can consider algorithms based on such functions.
 

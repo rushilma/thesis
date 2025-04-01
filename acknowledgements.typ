@@ -1,9 +1,7 @@
-#let love = text(lang: "hin", font: "Devanagari MT")[मैं आप ससे बहुत प्यार करता हूँ।]
+#let love = text(lang: "hi", font: "Devanagari MT")[मैं आप सबको बहुत प्यार करता हूं।]
 
-
-/*
 = Acknowledgments
-Meow #lorem(20)
+Meow #lorem(500)
 
 First, my deepest thanks to Prof. Mark Sellke and Prof. Subhabrata Sen.
 Prof. Sen, you ()
@@ -19,4 +17,3 @@ Jarell Cheong
 Finally, (family)
 
 #align(center, love)
-*/

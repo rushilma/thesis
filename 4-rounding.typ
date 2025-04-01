@@ -119,7 +119,7 @@ $
   hat(p)^cor_"solve" := PP(hat(alg)_r (g) in Soln(g)) >= PP(S_"close" (r)),
 $ <eq_def_lcd_hat_psolve>
 $
-  hat(p)^cor _"unstable" := 1 - PP(S_"stable" | S_"diff"), #h(5em)  hat(p)^cor _"cond" (x) := 1 - PP(S_"cond" (x) | S_"diff"),
+  hat(p)^cor _"unstable" := 1 - PP(S_"stable" | S_"diff"), #h(3em)  hat(p)^cor _"cond" (x) := 1 - PP(S_"cond" (x) | S_"diff"),
 $
 along with $hat(p)^cor _"cond" := max_(x in Sigma_N) hat(p)^cor _"cond" (x)$, echoing @eq_def_lcd_punstablecond.
 Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the bound in @prop_resampled_fundamental holds without change. Moreover, @lem_hat_alg_stability lets us control $hat(p)^cor _"unstable"$. The final piece needed is an appropriate analog of @lem_resampled_solve_prob.
@@ -158,7 +158,7 @@ Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the
   $
     eta = cases(
       O(1) "s.t." 2 eta log_2(1 slash eta) < delta slash 4 #h(1em) &E = delta N\,,
-      E / (16 N log_2  (N slash E)) #h(1em) &E <= o(N).,
+      E / (16 N log_2  (N slash E)) #h(1em) &E <= o(N)\,,
     )
   $
   in conjunction with @prop_resampled_fundamental, guarantees that
@@ -172,31 +172,31 @@ Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the
   By @eq_hat_lcd_fundamental, we conclude that $hat(p)^cor _"solve" = o(1)$.
 ]
 
-Note that as $hat(p)^cor_"solve"$ upper bounds $PP(S_"close" (r))$, this argument shows algorithmic hardness for low degree $RR^N$-valued algorithms to even output points within constant distance of a solution.
+Note that as $hat(p)^cor_"solve"$ upper bounds $PP(S_"close" (r))$, this argument shows algorithmic hardness for low degree $RR^N$-valued algorithms aiming to output points within constant distance of a solution.
 
 == Truly Random Rounding
 
 While deterministic algorithms fail to get close to NPP solutions, perhaps a randomized rounding scheme could work instead.
 As discussed above, the failure of algorithms finding outputs within a constant distance of a solution motivates considering rounding schemes which are "truly random," in that they change a superconstant number of coordinates.
 However, this approach is blunted by the same brittleness of the NPP landscape that established the conditional obstruction of @prop_correlated_fundamental and @prop_resampled_fundamental.
-In particular, we will see by @thrm_solutions_repel that if one has a subcube of $Sigma_N$ with dimension growing slowly with $N$, then with high probability at most one of those points will be a solution.
+In particular, @thrm_solutions_repel shows that if one has a subcube of $Sigma_N$ with dimension growing slowly with $N$, then at most only one of those points will be a solution.
 
 For this section, again let $alg$ be a deterministic $RR^N$-valued algorithm.
-Moreover, assume we are searching for solutions with energy between $log^2 N << E <= N$; note that for lower values of $E$, algorithms like @karmarkarDifferencingMethodSet1983 already achieve discrepancies of $N^(-Theta(log N))$ energy in polynomial time.
+Moreover, assume we are searching for solutions with energy between $log^2 N << E <= N$; note that for lower values, the Karmarkar-Karp algorithm can already achieve discrepancies of $N^(-Theta(log N))$ energy in polynomial time.
 
 To start, for any $x in RR^N$, we write $x^*$ for the coordinate-wise signs of $x$, i.e.,
 $ x^*_i := cases(+1 #h(1em) &x_i > 0\,, -1 &x_i <= 0.) $
 We can then define the deterministically rounded algorithm $alg^*(g) := alg(g)^*$.
 
 #remark[
-  Observe that if $alg$ was a low coordinate degree algorithm, then $alg^*$ has the same coordinate degree, so strong low degree hardness as proved in @section_hardness_lcd still applies. On the other hand, if $alg$ was a low polynomial degree algorithm, then $alg^*$ will not be polynomial, but by treating $alg$ as a low coordinate degree algorithm, we can recover strong low degree hardness, albeit with worse bounds on $D$.
+  Observe that if $alg$ was a low coordinate degree algorithm, then $alg^*$ has the same coordinate degree, so strong low degree hardness as proved in @section_hardness_lcd still applies. On the other hand, if $alg$ was a low polynomial degree algorithm, then $alg^*$ will not be polynomial, but as coordinate degree bounds polynomial degree, we can recover strong low degree hardness, albeit with worse bounds on $D$.
 ]
 
 In contrast to deterministically rounding of the outputs of $alg$ by taking signs,
 we can consider passing the output of $alg$ through a randomized rounding scheme. Let $round(x,omega) colon RR^N times Omega to Sigma_N$ denote any randomized rounding function, with randomness $omega$ independent of the input.
 We will often suppress the $omega$ in the notation, and treat $round(x)$ as a $Sigma_N$-valued random variable.
 We can describe such a randomized rounding function in the following way.
-Let $p_1 (x),dots,p_N (x)$ be defined by
+Define $p_1 (x),dots,p_N (x)$ by
 $ p_i (x) := max(PP(round(x)_i != x^*_i), 1/2). $ <eq_rounding_changed_coord>
 
 We need to guarantee that each $p_i (x) <= 1 slash 2$ for the following alternative description of $round(x)$.
@@ -210,11 +210,9 @@ We need to guarantee that each $p_i (x) <= 1 slash 2$ for the following alternat
   Conditioning on $I_(x,i)$, we can check that
   $
     PP(tilde(x)_i != x_i) &= 2 p_i (x) dot PP(tilde(x)_i = x_i | I_(x,i) = 1) + (1-2p_i (x) ) dot PP(tilde(x)_i != x_i | I_(x,i) = 0)
-    // = 2 p_i (x) dot 1 / 2
     = p_i (x).
   $
   Thus, $PP(tilde(x)_i = x^*_i) = PP(round(x)_i = x^*_i)$.
-  // $tilde(x)$ has the same probability of equalling $x^*$ in each coordinate as $round(x)$ does, as claimed.
 ]
 
 By @lem_random_rounding_altdef, we can redefine $round(x)$ to be $tilde(x)$ as constructed above without loss of generality.
@@ -306,6 +304,10 @@ Finally, we exhibit strong hardness for truly randomized algorithms. Roughly, th
   // This should work as the rounding bounds are independent of the bounds pertaining to g, by assumption that sum_i p_i (x) = omega(1) for all x; can't have alg throw a bunch of x's where K = O(1).
 ]
 
-meow discuss possible extensions of randomization schemes and whether you expect those to work instead.
+While this rules out many possible randomized rounding schemes, there is still the potential for rounding in a way that depends on both $g$ and $x$ to find solutions with nonvanishing probability.
+More generally, recent work by Li and Schramm has pointed out that the presence of an OGP or a conditional landscape obstruction is itself evidence of the brittleness of a random optimization problem @liEasyOptimizationProblems2024.
+Thus, stable algorithms (e.g., Lipschitz, smooth, etc.) are intrinsically ill-suited for such tasks.
+In light of this, low (coordinate) degree algorithms, which can be stable but are not required to be continuous or smooth, provide better intrinsic models.
+Given that, new approaches on algorithms for the NPP could focus on non-stable algorithms, such as linear or semidefinite programming.
+We invite these as interesting directions for potential future work.
 
-meow concluding paragraphs
