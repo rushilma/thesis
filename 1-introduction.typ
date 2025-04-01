@@ -177,7 +177,8 @@ This terminology is motivated by the statistical physics literature, wherein ran
 Observe here that minimizing the discrepancy $abs(inn(g,x))$ corresponds to maximizing the energy $E$.
 We further know that the _statistically optimal energy level_ is $E=Theta(N)$, while the best _computational energy level_ (achievable in polynomial time) is $E=Theta(log^2 N)$.
 
-For our purposes, an algorithm is a function $alg colon g mapsto x in Sigma_N$. We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
+For our purposes, an algorithm is a function $alg colon RR^N to Sigma_N$ mapping $g mapsto x$.
+We will discuss extensions to randomized algorithms (which can depend on a random seed $omega$ independent of $g$) and to $RR^N$-valued algorithms (which can be forced to give outputs on $Sigma_N$ via rounding) in later sections, but for our main analysis, considering deterministic $Sigma_N$-valued algorithms will suffice.
 In particular, we consider the class of so-called _low degree algorithms_, given by either low degree polynomials or by functions with low _coordinate degree_.
 Compared to analytically-defined classes of stable algorithms (e.g. Lipschitz, etc.), these algorithms have an algebraic structure making them amenable to precise stability analysis.
 In addition, heuristically, degree $D$ algorithms (in either sense) are believed to serve as the simplest representatives for the class of $e^(tilde(O)(D))$-time algorithms @hopkinsStatisticalInferenceSum2018, making them valuable to understand in their own right.
@@ -265,7 +266,7 @@ Throughout the remainder of this thesis, we will make use of the following gener
   $
 ]
 
-Note that this is decreasing function of $sigma^2$: for instance if there exists $gamma$ with $sigma^2 >= gamma > 0$, then @eq_normal_smallprob is bounded by $exp_2(-E - log_2(gamma) slash 2 + O(1))$.
+Note that @eq_normal_smallprob is a decreasing function of $sigma^2$. Thus, if there exists $gamma$ with $sigma^2 >= gamma > 0$, then @eq_normal_smallprob is bounded by $exp_2(-E - log_2(gamma) slash 2 + O(1))$.
 
 // Chernoff-Hoeffding bound
 

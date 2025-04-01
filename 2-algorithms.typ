@@ -6,10 +6,10 @@
 
 For our purposes, an _algorithm_ is a function which takes as input an instance $g in RR^N$ and outputs some $x in Sigma_N$.
 This definition can be extended to functions giving outputs on $RR^N$ and rounding to a vertex on the hypercube $Sigma_N$, which we consider in @section_rounding.
-Alternatively, we could consider _randomized algorithms_ via taking as additional input some randomness $omega$ independent of the problem instance.
-However, as this extension requires only minor changes, which we describe when relevant, most of our analysis will focus on the deterministic case.
+Alternatively, we could consider _randomized algorithms_ by taking as additional input some randomness $omega$ independent of the problem instance.
+However, as this extension requires only minor changes, which we describe in @rmk_randomized, most of our analysis will focus on the deterministic case.
 
-The category of algorithms we consider are specifically _low degree algorithms_.
+The category of algorithms we consider are known as _low degree algorithms_.
 We treat two closely related notions of degree: first is _polynomial degree_, in which we assume our algorithms are given coordinate-wise by polynomials of some bounded degree.
 The second, more general notion is _coordinate degree_, which roughly counts how many coordinates can interact nonlinearly; this can be applied to arbitrary algorithms given by $L^2$ functions.
 While polynomial algorithms are widely known and studied, low coordinate degree algorithms were first introduced in Hopkins' thesis @hopkinsStatisticalInferenceSum2018, and were later used by Brennan et al. @brennanStatisticalQueryAlgorithms2021 and Mossel et al. @koehlerReconstructionTreesLowDegree2022 @huangOptimalLowDegree2025 (although in the latter case, they were shown to be equivalent to polynomial algorithms).
@@ -18,7 +18,7 @@ Compared to analytically-defined classes of algorithms (e.g. Lipschitz), these l
 As mentioned in the introduction, our goal is to show _strong low degree hardness_, meaning that low degree algorithms (either meaning low polynomial degree or low coordinate degree) fail to find solutions to the NPP with high probability.
 However, our proofs only use the low degree assumption to apply stability bounds: roughly, a stable algorithm cannot "overcome" the gaps between solutions for two closely-related instances of the NPP.
 Why, then, do we restrict to low degree algorithms specifically?
-The main reason is the _low degree heuristic_:
+The main reason is the _low degree heuristic_.
 #align(
   center,
   [
@@ -27,33 +27,14 @@ The main reason is the _low degree heuristic_:
 )
 This heuristic was first proposed in Hopkins' thesis @hopkinsStatisticalInferenceSum2018, and later expanded upon by Kunisky, Wein, and Bandeira @kuniskyNotesComputationalHardness2019, although this was primarily in the context of low degree polynomials for hypothesis testing.
 Kunisky later expanded these results when applying low coordinate degree methods towards hypothesis testing @kuniskyLowCoordinateDegree2024a @kuniskyLowCoordinateDegree2024.
-Huang and Sellke thus observed that strong low degree hardness up to $o(N)$ can be thought of as evidence of requiring exponential $e^(tilde(Omega)(N))$ time to find globally optimal solutions @huangStrongLowDegree2025.
-They prove strong low degree hardness for a variety of random optimization problems: optimization of pure $k$-spin glasses, symmetric binary perceptrons, and random $k$-SAT, to name a few, most of which are optimal under the low degree heuristic.
+Huang and Sellke then observed that strong low degree hardness up to degree $o(N)$ can be thought of as evidence of a random optimization problem requiring exponential $e^(tilde(Omega)(N))$ time to find globally optimal solutions @huangStrongLowDegree2025.
+They prove strong low degree hardness for a variety of canonical problems: optimization of pure $k$-spin glasses, symmetric binary perceptrons, and random $k$-SAT, to name a few, most of which are optimal under the low degree heuristic.
 However, Huang and Mossel's work on broadcasting on trees, this heuristic breaks down: degree $D <= O(log N)$ algorithms fail despite there existing a linear-time algorithm known as Belief Propagation @huangOptimalLowDegree2025.
 To this end, the authors suggest this discrepancy arises from the requirement of "depth" in the Belief Propagation algorithm -- roughly, despite running in linear time, this algorithm still struggles in practice in the "hard" regime.
 As a takeaway, we can surmise that the low degree heuristic is reasonable for describing random search problems involving optimization of a "flat" structure, in which algorithmic complexity cannot hide behind $N$-independent factors.
 Thus, having an explicit handle on algorithm degree enables us to both control stability and extend our results to rule out general polynomial-time algorithms.
 
-meow @liEasyOptimizationProblems2024
-
-/*
-$omega mapsto f(omega) := EE[ norm(alg(g,omega))^2 | omega]$
-
-WTS $f(omega) <= C'(omega) N$
-
-$
-  EE[f(omega) | f(omega) <= C N] PP(f(omega) <= C N) + EE[f(omega) | f(omega) >= C N] PP(f(omega) >= C N) = EE[f(omega)] <= C N
-$
-
-$
-  PP_omega (EE[norm(alg(g,omega))^2 | omega] >= C' N) <= (EE norm(alg(g,omega))^2) / (C' N) <= C / C'
-$
-
-$
-  PP(alg(g,omega) in Soln(g)) &= EE[ PP(alg(g,omega) in Soln(g) | omega) ] \
-  &<= EE[ ]
-$
-*/
+// meow @liEasyOptimizationProblems2024
 
 == Coordinate Degree and $L^2$ Stability <section_algorithm_es>
 
@@ -77,15 +58,15 @@ To formalize this intuition, define the following coordinate projection.
 
 // Def. Projection of function.
 #definition[
-  Let $f in L2iid$ and $J subeq [N]$, with $overline(J)=[N] without J$.
+  Let $f in L2iid$ and $J subeq [N]$.
   The _projection of $f$ onto $J$_ is the function $f^(subeq J) colon RR^N to RR$ given by
-  $ f^(subeq J)(x) := EE[f(x_1,dots,x_n) | {x_i, i in J} ] = EE[f(x) | x_J] $
+  $ f^(subeq J)(x) := EE[f(x_1,dots,x_n) | {x_i, i in J} ] = EE[f(x) | x_J]. $
 ] <def_subset_proj>
 
 Intuitively $f^(subeq J)$ is $f$ with the $overline(J)$ coordinates re-randomized, so $f^(subeq J)$ only depends on the coordinates in $J$.
 However, depending on how $f$ accounts for higher-order interactions, it might be the case that $f^(subeq J)$ is fully described by some $f^(subeq J')$, for $J' subset.neq J$.
 What we really want is to decompose $f$ as
-$ f = sum_(S subeq [N]) f^(= S) $ <eq_efron_stein_decomp>
+$ f = sum_(S subeq [N]) f^(= S), $ <eq_efron_stein_decomp>
 where each $f^(=S)$ only depends on the coordinates in $S$, but not any smaller subset.
 That is, if $T subset.neq S$ and $g$ depends only on the coordinates in $T$, then $inn(f^(=S), g)=0$.
 
@@ -101,7 +82,7 @@ Intuitively, $f^(subeq J)$ captures everything about $f$ depending on the coordi
 The construction of $f^(= S)$ proceeds by inverting this formula.
 
 First, we consider the case $J=emptyset$. It is clear that $f^(=emptyset) = f^(subeq emptyset)$, which, by @def_subset_proj is the constant function $EE[f]$.
-Next, if $J={j}$ is a singleton, @eq_efron_stein_motiv gives
+Next, if $J={j}$ is a singleton, then @eq_efron_stein_motiv gives
 $ f^(subeq {j}) = f^(=emptyset) + f^(= {j}), $
 and as $f^(subeq {j})(x) = EE[f | x_j]$, we get
 $ f^(={j}) = EE[f | x_j] - EE[f]. $
@@ -110,11 +91,11 @@ This function only depends on $x_j$; all other coordinates are averaged over, so
 Continuing on to sets of two coordinates, some brief manipulation gives, for $J={i,j}$,
 $
   f^(subeq {i,j}) &= f^(=emptyset) + f^(={i}) + f^(={j}) + f^(={i,j}) \
-  &= f^(subeq emptyset) + (f^(subeq {i}) - f^(subeq emptyset)) + (f^(subeq {j}) - f^(subeq emptyset)) + f^(={i,j}) \
+  &= f^(subeq emptyset) + (f^(subeq {i}) - f^(subeq emptyset)) + (f^(subeq {j}) - f^(subeq emptyset)) + f^(={i,j}), \
   therefore f^(={i,j}) &= f^(subeq {i,j}) - f^(subeq {i}) - f^(subeq {j}) + f^(subeq emptyset).
 $
 We can imagine that this accounts for the two-way interaction of $i$ and $j$, namely $f^(subeq {i,j}) = EE[f | x_i,x_j]$, while "correcting" for the one-way effects of $x_i$ and $x_j$ individually.
-Inductively, we can continue on and define all the $f^(=J)$ via inclusion-exclusion, as
+Inductively, we can continue in this way and define all the $f^(=J)$ via inclusion-exclusion.
 $
   f^(= J) := sum_(S subeq J) (-1)^(abs(J)-abs(S))f^(subeq S) = sum_(S subeq J) (-1)^(abs(J)-abs(S)) EE[f | x_S].
 $
@@ -122,15 +103,15 @@ $
 This construction, along with some direct calculations, leads to the following theorem.
 
 #theorem[@odonnellAnalysisBooleanFunctions2021[Thm 8.35]][
-  Let $f in L2iid$. Then $f$ has a unique decomposition as
+  Each $f in L2iid$ has a unique decomposition as
   $ f = sum_(S subeq [N]) f^(=S), $
-  known as the _Efron-Stein decomposition_, where the functions $f^(=S) in L2iid$ satisfy
+  known as the _Efron-Stein decomposition_, where the functions $f^(=S) in L2iid$ satisfy:
   #enum(
     numbering: "(1)",
     [$f^(=S)$ depends only on the coordinates in $S$;],
     [if $T subset.neq S$ and $g in L2iid$ only depends on coordinates in $T$, then $inn(f^(=S),g)=0$.],
   )
-  In addition, this decomposition has the following properties:
+  In addition, this decomposition has the following properties.
   #enum(
     numbering: "(1)",
     start: 3,
@@ -141,7 +122,7 @@ This construction, along with some direct calculations, leads to the following t
   )
 ] <thrm_efron_stein>
 
-In summary, this decomposition of any $L2iid$ function into its different interaction levels not only uniquely exists, but is an orthogonal decomposition, enabling us to apply tools from elementary Fourier analysis.
+In summary, this decomposition of $L2iid$ functions into their different interaction levels not only exists, but is orthogonal, enabling us to apply tools from elementary Fourier analysis.
 
 @thrm_efron_stein further implies that we can define subspaces of $L2iid$ (see also @kuniskyLowCoordinateDegree2024a[#sym.section 1.3])
 $
@@ -154,9 +135,9 @@ Note that $V_[N] = V_(<= N) = L2iid$.
 #definition[
   The _coordinate degree_ of a function $f in L2iid$ is
   $
-    cdeg(f) := max { abs(S) : S subeq [N]\, f^(=S)!=0 } = min {D : f in V_(<= D) }
+    cdeg(f) := max { abs(S) : S subeq [N]\, f^(=S)!=0 } = min {D : f in V_(<= D) }.
   $
-  If $f=(f_1,dots,f_M) colon RR^N to RR^M$ is a multivariate function, then
+  If $f=(f_1,dots,f_M) colon RR^N to RR^M$ is a multivariate function with each $f_i in L2iid$, then
   $ cdeg(f) := max_(i in [M]) cdeg(f_i). $
 ]
 
@@ -166,24 +147,24 @@ Note as a special case that any multivariate polynomial of degree $D$ has coordi
 As an example, the function $x_1 + x_2$ has both polynomial degree and coordinate degree 1, while $x_1+x_2^2$ has polynomial degree 2 and coordinate degree 1.
 We are especially interested in algorithms coming from functions in $V_(<= D)$, which we term _low coordinate degree algorithms_.
 
-As we are interested in how these function behaves under small changes in its input, we are led to consider the following "noise operator," which lets us measures the effect of small changes in the input on the coordinate decomposition.
-First, we need the following notion of distance between problem instances.
+As we are interested in how these algorithms behave for "close" instances, we are led to consider the following "noise operator," which measures the effect of small changes in the input on the Efron-Stein decomposition.
+We need the following notion of distance between instances.
 
 #definition[
-  For $p in [0,1]$, and $x in RR^N$, we say $y in RR^N$ is _$p$-resampled from $x$_, denoted $y~pi^(times.circle N)_p (x)$, if $y$ is chosen as follows: for each $i in [N]$, independently,
+  For $p in [0,1]$ and $x in RR^N$, we say $y in RR^N$ is _$p$-resampled from $x$_, denoted $y~pi^(times.circle N)_p (x)$, if $y$ is chosen as follows: for each $i in [N]$, independently,
   $
-    y_i = cases(x_i &"with probability" p, "drawn from" pi #h(2em)&"with probability" 1-p).
+    y_i = cases(x_i &"with probability" p\,, "drawn from" pi #h(2em)&"with probability" 1-p.)
   $
   We say $(x,y)$ are a _$p$-resampled pair_.
 ] <def_p_resampled>
 
-Note that being $p$-resampled and being $p$-correlated are rather different - for one, there is a nonzero probability that, for $pi$ a continuous probability distribution, $x=y$ when they are $p$-resampled, even though this a.s. never occurs if they were $p$-correlated.
+Note that being $p$-resampled and being $p$-correlated are rather different -- for one, there is a nonzero probability that, for $pi$ a continuous probability distribution, $x=y$ when they are $p$-resampled, even though this almost surely never occurs if they were $p$-correlated.
 
 // #show sym.EE: math.limits
 
 #definition[
   For $p in [0,1]$, the _noise operator_ $T_p$ is the linear operator on $L2iid$ defined by
-  $ T_p f(x) = EE_(y ~ pi^(times.circle N)_p (x))[f(y)] $
+  $ T_p f(x) = EE_(y ~ pi^(times.circle N)_p (x))[f(y)]. $
   In particular, $inn(f,T_p f) = EE_((x,y)" " p"-resampled") [f(x) dot f(y)]$.
 ]
 
@@ -196,8 +177,8 @@ This noise operator changes the Efron-Stein decomposition, and hence the behavio
   $ T_p f(x) = sum_(S subeq [N]) p^(abs(S))f^(=S). $
 ] <lem_es_noise_op>
 #proof[
-  Let $J$ denote a $p$-random subset of $[N]$, i.e. with $J$ formed by including each $i in [N]$ independently with probability $p$.
-  By definition, $T_p f(x) = EE_J [f^(subeq J)(x)]$ (i.e. pick a random subset of coordinates to fix, and re-randomize the rest).
+  Let $J$ be a random subset formed by including each $i in [N]$ independently with probability $p$.
+  By definition, $T_p f(x) = EE_J [f^(subeq J)(x)]$ (i.e., pick a random subset of coordinates to fix, and re-randomize the rest).
   We know by @thrm_efron_stein that $f^(subeq J) = sum_(S subeq J) f^(=S)$, so
   $
     T_p f(x) = EE_J [ sum_(S subeq J) f^(=S) ] = sum_(S subeq [N]) EE_J [I(S subeq J)] dot f^(=S) = sum_(S subeq [N]) p^abs(S) f^(=S),
@@ -208,8 +189,8 @@ This noise operator changes the Efron-Stein decomposition, and hence the behavio
 Thus, we can derive the following stability bound on low coordinate degree functions.
 
 #theorem[
-  Let $p in [0,1]$ and let $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a multivariate function with coordinate degree $D$ and each $f_i in L2iid$.
-  Suppose that $(x,y)$ are a $p$-resampled pair under $pi^(times.circle N)$, and $EE norm(f(x))^2 = 1$. Then
+  Let $p in [0,1]$ and $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a coordinate degree $D$ multivariate function.
+  Suppose that $(x,y)$ are a $p$-resampled pair under $pi^(times.circle N)$ and $EE norm(f(x))^2 = 1$. Then
   $ EE norm(f(x)-f(y))^2 <= 2(1-p^D) <= 2(1-p)D. $ <eq_es_stability>
 ] <thrm_es_stability>
 #proof[
@@ -220,14 +201,14 @@ Thus, we can derive the following stability bound on low coordinate degree funct
   $ <eq_thrm_es_stability_1>
   Here, we have for each $i in [M]$ that
   $
-    inn(f_i,T_p f_i) = inn(sum_(S subeq [N]) f_i^(=S), sum_(S subeq [N]) p^abs(S) f_i^(=S))= sum_(S subeq [N]) p^abs(S) norm(f_i^(=S) )^2,
+    inn(f_i,T_p f_i) = inn(sum_(S subeq [N]) f_i^(=S), sum_(S subeq [N]) p^abs(S) f_i^(=S))= sum_(S subeq [N]) p^abs(S) norm(f_i^(=S) )^2
   $
   by @lem_es_noise_op and orthogonality.
   Now, as each $f_i$ has coordinate degree at most $D$, the sum above can be taken only over $S subeq [N]$ with $0 <= abs(S) <= D$, giving the bound
   $
     p^D EE [f_i (x)^2] <= inn(f_i,T_p f_i)=EE[f_i (x) dot T_p f_i (x)] <= EE[f_i (x)^2].
   $
-  Summing up over $i$, and using that $EE norm(f(x))^2 = 1$, gives
+  Summing up over $i$ and using that $EE norm(f(x))^2 = 1$ yields
   $ p^D <= sum_i inn(f_i,T_p f_i) = EE inn(f(x),f(y)) <= 1. $
   Finally, we can substitute into @eq_thrm_es_stability_1 to get
   #footnote[The last inequality follows from $(1-p^D) = (1-p)(1+p+p^2+ dots p^(D-1))$; the bound is tight for $p approx 1$.]
@@ -238,18 +219,18 @@ Thus, we can derive the following stability bound on low coordinate degree funct
 
 == Hermite Polynomials
 
-Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of _Hermite polynomials_, which enables us to prove similar bounds as @thrm_es_stability.
-This theory is much more classical, so we encourage the interested reader to see @odonnellAnalysisBooleanFunctions2021[#sym.section 11] for details.
+Alternatively, we can consider the much more restrictive (but more concrete) class of honest polynomials. When considered as functions of independent Normal variables, such functions admit a simple description in terms of _Hermite polynomials_, which enables us to prove bounds similar to @thrm_es_stability.
+This theory is classical, and we encourage the reader to consult @odonnellAnalysisBooleanFunctions2021[#sym.section#h(-0.4pt)11] for details.
 
 #definition[
   Let $gamma_N$ be the $N$-dimensional standard Normal measure on $RR^N$. The _$N$-dimensional Gaussian space_ is the space $L2normN$ of $L^2$ functions of $N$ i.i.d. standard Normal r.v.s.
 ]
 
-Note that under the usual $L^2$ inner product, $inn(f,g) = EE[f dot g]$, this is a separable Hilbert space.
+Note that under the usual $L^2$ inner product $inn(f,g) = EE[f dot g]$, this is a separable Hilbert space.
 
 It is a well-known fact that the monomials $1,z,z^2,dots$ form a complete basis for $L2norm$ @odonnellAnalysisBooleanFunctions2021[Thm 11.22].
 However, these are far from an orthonormal "Fourier" basis; for instance, we know $EE[z^2]=1$ for $z ~ Normal(0,1)$.
-By the Gram-Schmidt process, these monomials can be converted into the _(normalized) Hermite polynomials_ $h_j$ for $j>=0$, given as
+By the Gram-Schmidt process, these monomials can be converted into the _(normalized) Hermite polynomials_ $h_j$ for $j>=0$, given by
 $
   h_0(z)=1,
   #h(2em)
@@ -259,9 +240,9 @@ $
   #h(2em)
   h_3(z)=(z^3-3z)/sqrt(6),
   #h(2em)
-  ...
+  ... .
 $ <eq_hermite_polys>
-Note here that each $h_j$ is a degree $j$ polynomial.
+Note here that each $h_j$ is a degree $j$ polynomial. The following is well-known.
 
 #theorem([@odonnellAnalysisBooleanFunctions2021[Prop 11.30]])[
   // The Hermite polynomials $(h_j)_(#h(-1pt) j >= 0)$ #h(3pt) form a complete orthonormal basis for $L2norm$. \
@@ -273,7 +254,7 @@ $ h_alpha (z) := product_(j=1)^N h_(alpha_j)(z_j). $
 The degree of $h_alpha$ is clearly $abs(alpha)=sum_j alpha_j$.
 
 #theorem[
-  The Hermite polynomials $(h_alpha)_(alpha in NN^N)$ form a complete orthonormal basis for $L2normN$. In particular, every $f in L2normN$ has a unique expansion in $L^2$ norm as
+  The Hermite polynomials $(h_alpha)_(alpha in NN^N)$ form a complete orthonormal basis for $L2normN$. In particular, every $f in L2normN$ has a unique expansion (converging in the $L^2$ norm) as
   $ f(z) = sum_(alpha in NN^N) hat(f)(alpha) h_alpha (z). $
 ] <thrm_hermite>
 
@@ -287,27 +268,24 @@ Thus, $H^(<= k)$ is the closed linear span of the set ${ h_alpha : abs(alpha) <=
 When working with honest polynomials, the traditional notion of correlation is a much more natural measure of "distance" between inputs.
 
 #definition[
-  Let $(x,y)$ be $N$-dimensional standard Normal vectors. We say $(x,y)$ are _$p$-correlated_ if $(x_i,y_i)$ are $p$-correlated for each $i in [N]$, and these pairs are mutually independent.
+  Let $(x,y)$ be a pair of $N$-dimensional standard Normal vectors. We say $(x,y)$ are _$p$-correlated_ if $(x_i,y_i)$ are $p$-correlated for each $i in [N]$, and these pairs are mutually independent.
 ]
 
-In a similar way to the Efron-Stein case, we can consider the resulting "noise operator," as a way of measuring the effect on a function of a small change in the input.
-
-#show sym.EE: math.limits
+Analogously to the Efron-Stein setting, we can consider the resulting "noise operator" as a way of measuring the effect on a function of a small change in the input.
 
 #definition[
-  For $p in [0,1]$, the _Gaussian noise operator_ $T_p$ is the linear operator on $L2normN$ given by
+  For $p in [0,1]$, the _Gaussian noise operator_ $T_p$ is the linear operator on $L2normN$:
   $
     T_p f(x) = EE_(y " " p"-correlated to" x)[f(y)] = EE_(y ~ stdnorm )[ f(p x + sqrt(1-p^2) y)].
   $
 ]
-#show sym.EE: math.scripts
 
 This operator admits a more classical description in terms of the Ornstein-Uhlenbeck semigroup, but we will not need that connection here.
 As it happens, a straightforward computation with the Normal moment generating function gives the following lemma.
 
 #lemma[@odonnellAnalysisBooleanFunctions2021[Prop 11.37]][
-  Let $p in [0,1]$ and $f in L2normN$. Then $T_p f$ has Hermite expansion
-  $ T_p f = sum_(alpha in NN^N) p^abs(alpha) hat(f)(alpha) h_alpha $
+  Let $p in [0,1]$ and $f in L2normN$. Then, $T_p f$ has Hermite expansion
+  $ T_p f = sum_(alpha in NN^N) p^abs(alpha) hat(f)(alpha) h_alpha, $
   and in particular,
   $ inn(f, T_p f) = sum_(alpha in NN^N) p^abs(alpha) hat(f)(alpha)^2. $
 ] <lem_hermite_noise_op>
@@ -315,18 +293,18 @@ As it happens, a straightforward computation with the Normal moment generating f
 With this in hand, we can prove a similar stability bound to @thrm_es_stability.
 
 #theorem[
-  Let $p in [0,1]$ and let $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a multivariate polynomial with degree $D$.
-  Suppose that $(x,y)$ are a $p$-correlated pair of standard Normal vectors, and $EE norm(f(x))^2 = 1$.
-  Then
+  Let $p in [0,1]$ and $f=(f_1,dots,f_M)colon RR^N arrow RR^M$ be a multivariate degree $D$ polynomial.
+  Suppose that $(x,y)$ are a $p$-correlated pair of standard Normal vectors and $EE norm(f(x))^2 = 1$.
+  Then,
   $ EE norm(f(x)-f(y))^2 <= 2(1-p^D) <= 2(1-p)D. $ <eq_poly_stability>
 ] <thrm_poly_stability>
 #proof[
   The proof is almost identical to that of @thrm_es_stability (see also @gamarnikHardnessRandomOptimization2022a[Lem. 3.4]).
-  The main modification is to realize that for each $f_i$, having degree at most $D$ implies that $hat(f_i)(alpha) = 0$ for $abs(alpha)>D$. Thus, as $p^D <= p^s <= 1$ for all $s <= D$, we can apply @lem_hermite_noise_op to get
+  The main modification is in realizing that for each $f_i$, having degree at most $D$ implies that $hat(f_i)(alpha) = 0$ for $abs(alpha)>D$. Thus, as $p^D <= p^s <= 1$ for all $s <= D$, we can apply @lem_hermite_noise_op to get
   $
     p^D EE[f_i (x)^2] <= inn(f_i, T_p f_i) = sum_(alpha in NN^N : abs(alpha) <= D) p^abs(alpha) hat(f_i)(alpha)^2 <= EE[f_i (x)^2].
   $
-  From there, the proof proceeds as before.
+  From here, the proof proceeds as before.
 ]
 
 As a comparison to the case for functions with coordinate degree $D$, notice that @thrm_poly_stability gives, generically, a much looser bound.
@@ -334,27 +312,31 @@ In exchange, being able to use $p$-correlation as a "metric" on the input domain
 
 == Stability of Low Degree Algorithms <section_algorithm_stability>
 
-With these notions of low degree functions/polynomials in hand, we can consider algorithms based on such functions.
+We now formalize our notion of "algorithm" from @section_intro_results.
 
 #definition[
   A _(randomized) algorithm_ is a measurable function $alg colon (g,omega) mapsto x in Sigma_N$, where $omega in Omega_N$ is an independent random variable. Such an $alg$ is _deterministic_ if it does not depend on $omega$.
 ] <def_algorithm>
 
-As discussed in the introduction to this section, we will usually focus on deterministic algorithms, discussing the minor modifications necessary for handling randomized algorithms as necessary.
+/*
+As discussed in the introduction to this section, we will usually focus on deterministic algorithms, discussing the minor modifications for handling randomized algorithms as necessary.
 In addition, many practical algorithms are $RR^N$-valued, which must be rounded to give outputs on $Sigma_N$.
 For simplicity, we assume for now that our algorithms are $Sigma_N$-valued, and discuss the extensions to handle this rounding in @section_rounding.
+*/
+
+With the notions of low coordinate degree functions or low degree polynomials in hand, we can consider algorithms based on such functions.
 
 #definition[
-  A _polynomial algorithm_ is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, we say it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
+  A _polynomial algorithm_ is an algorithm $alg(g,omega)$ where each coordinate of $alg(g,omega)$ is given by a polynomial in the $N$ entries of $g$. If $alg$ is a polynomial algorithm, then it has degree $D$ if each coordinate has degree at most $D$ (with at least one equality).
 ]
 
-We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of coordinate degree.
+// We can broaden the notion of polynomial algorithms (with their obvious notion of degree) to algorithms with a well-defined notion of coordinate degree.
 
 #definition[
-  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _coordinate degree_ of $alg$ is the maximum coordinate degree of each of its coordinate functions.
+  Suppose an algorithm $alg(g,omega)$ is such that each coordinate of $alg(-,omega)$ is in $L2iid$. Then, the _coordinate degree_ of $alg$ is the maximum coordinate degree of $alg(-,omega)$.
 ]
 
-Putting together @thrm_es_stability and @thrm_poly_stability, we can derive the following algorithmic $L^2$ stability bound.
+With @thrm_es_stability and @thrm_poly_stability, we can derive the following algorithmic $L^2$ stability bound.
 
 // Thrm. Stability of randomized algorithms (part 1 of Prop 1.9)
 
@@ -364,11 +346,11 @@ Putting together @thrm_es_stability and @thrm_poly_stability, we can derive the 
   $ EE norm(alg(g) - alg(g'))^2 <= 2C D epsilon N, $ <eq_alg_expected_stability>
   and thus
   $
-    PP( norm(alg(g) - alg(g'))>= 2sqrt(eta N)) <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta
+    PP( norm(alg(g) - alg(g'))>= 2sqrt(eta N)) <= (C D epsilon) / (2 eta) asymp (D epsilon) / eta.
   $ <eq_alg_stability>
 ] <prop_alg_stability>
 #proof[
-  Let $C' := EE norm(alg(g))^2$, and define the rescaling $alg' := alg slash sqrt(C')$. Then, by @thrm_poly_stability (or @thrm_es_stability, in the low coordinate degree case), we have
+  Let $C' := EE norm(alg(g))^2$ and define the rescaling $alg' := alg slash sqrt(C')$. Then, by @thrm_poly_stability (or @thrm_es_stability, in the low coordinate degree case), we have
   $
     EE norm(alg'(g) - alg'(g'))^2 = 1 / (C') EE norm(alg(g) - alg(g'))^2 <= 2 D epsilon.
   $
@@ -378,6 +360,6 @@ Putting together @thrm_es_stability and @thrm_poly_stability, we can derive the 
 
 #remark[
   Note that @prop_alg_stability also holds for randomized algorithms.
-  Namely, if $alg(g,omega)$ is a randomized algorithm with polynomial/coordinate degree $D$, with $EE_(g,omega) norm(alg(g,omega))^2 <= C N$, then by applying Markov's inequality to $omega mapsto EE[norm(alg(g,omega))^2 | omega]$ allows us to reduce to the deterministic case, possibly after adjusting $C$.
+  Namely, if $alg(g,omega)$ is a randomized algorithm with polynomial or coordinate degree $D$ and $EE_(g,omega) norm(alg(g,omega))^2 <= C N$, then applying Markov's inequality to $omega mapsto EE[norm(alg(g,omega))^2 | omega]$ allows us to reduce to the deterministic case, possibly after adjusting $C$.
 ] <rmk_randomized_L2_stable>
 

@@ -288,8 +288,8 @@ Next, we let $omega(log  N ) <= E <= o(N)$. This bridges the gap from the statis
 ]
 
 #remark[Extending to Randomized Algorithms][
-  meow
-]
+  As discussed in @rmk_randomized_L2_stable and @rmk_randomized_multiple_solve, if $alg(g,omega)$ is a randomized $Sigma_N$-valued low degree polynomial algorithm satisfying the averaged bound $EE norm(alg(g,omega))^2 <= C N$, then for every $epsilon$, one can show @thrm_sldh_poly_linear and @thrm_sldh_poly_sublinear for $alg(-,omega)$ for any fixed random seed. Averaging these bounds then allows the proof to go through. We note that this extension to randomized algorithms also applies for low coordinate degree hardness.
+] <rmk_randomized>
 
 == Hardness for Low Coordinate Degree Algorithms <section_hardness_lcd>
 
