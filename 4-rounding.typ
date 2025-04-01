@@ -105,10 +105,9 @@ However, because this rounding does not drastically alter the stability analysis
 The same argument proves hardness when $alg$ is a low degree polynomial algorithm; this is omitted for brevity.
 
 We recall the setup from @section_hardness_lcd.
-Let $g,g'$ be $(1-epsilon)$-resampled standard Normal vectors.
-Define the following events:
+Let $g,g'$ be $(1-epsilon)$-resampled standard Normal vectors and define the events
 $
-  S_"diff" &:= { g != g'} \
+  S_"diff" &:= { g != g'}, \
   S_"solve" &:= { hat(alg)_r (g) in Soln(g), hat(alg)_r (g') in Soln(g')}, \
   S_"stable" &:= { norm(hat(alg)_r (g) - hat(alg)_r (g')) <= 2 sqrt(eta N) }, \
   S_"cond" (x) &:= multiset(
@@ -137,7 +136,7 @@ Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the
 ] <lem_hat_resampled_solve_prob>
 #proof[
   Observe that, letting $+$ denote Minkowski sum, we have
-  $ { hat(alg)_r (g) in Soln(g) } = { alg(g) in Soln(g) + B(0,r) }. $
+  $ { hat(alg)_r (g) in Soln(g) } = { cube(alg(g)) in Soln(g) + B(0,r) }. $
   Expanding $Soln(g)$, the proof proceeds as in @lem_resampled_solve_prob.
 ]
 
@@ -158,7 +157,8 @@ Observe that since $hat(p)^cor _"cond"$ makes no reference to any algorithm, the
   $
     (hat(p)^cor_"solve")^2 <= hat(p)^cor_"unstable" + hat(p)^cor_"cond" + (1 - PP(S_"diff")).
   $ <eq_hat_lcd_fundamental>
-  To ensure $PP(S_"diff") approx 1$, we begin by following @eq_def_lcd_epsilon and choosing $epsilon = log_2 (N slash D) slash N$. Moreover, following the proof of @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear, we know that choosing
+  To ensure $PP(S_"diff") -> 1$, we begin by following @eq_def_lcd_epsilon and choosing $epsilon = log_2 (N slash D) slash N$.
+  Moreover, following the proof of @thrm_sldh_lcd_linear and @thrm_sldh_lcd_sublinear, we know that choosing
   $
     eta = cases(
       O(1) "s.t." 2 eta log_2(1 slash eta) < delta slash 4 #h(1em) &E = delta N\,,
@@ -180,7 +180,7 @@ Note that as $hat(p)^cor_"solve"$ upper bounds $PP(S_"close" (r))$, this argumen
 
 == Truly Random Rounding
 
-At this point, while deterministic algorithms fail to get close to NPP solutions, perhaps a randomized rounding scheme work instead.
+While deterministic algorithms fail to get close to NPP solutions, perhaps a randomized rounding scheme could work instead.
 As discussed above, the failure of algorithms finding outputs within a constant distance of a solution motivates considering rounding schemes which are "truly random," in that they change a superconstant number of coordinates.
 However, this approach is blunted by the same brittleness of the NPP landscape that established the conditional obstruction of @prop_correlated_fundamental and @prop_resampled_fundamental.
 In particular, we will see by @thrm_solutions_repel that if one has a subcube of $Sigma_N$ with dimension growing slowly with $N$, then with high probability at most one of those points will be a solution.
