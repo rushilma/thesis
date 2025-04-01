@@ -9,7 +9,7 @@ In this section, we prove @thrm_sldh_poly_informal and @thrm_sldh_lcd_informal -
 Our argument utilizes what can be thought of as a "conditional" version of the overlap gap property.
 Traditionally, proofs of algorithmic hardness use the overlap gap property as a global obstruction: one shows that with high probability, there are no tuples of good solutions to a family of correlated instances which are all roughly the same distance apart.
 Here, however, we show a local obstruction; we condition on being able to solve a single instance and show that after a small change to the instance, we cannot guarantee any solutions will exist close to the first one.
-This is an instance of the "brittleness," so to speak, that makes NPP so frustrating to solve; even small changes in the instance break the landscape geometry, so that even if solutions exist, there's no way to know where they will end up.
+This is an instance of the "brittleness," so to speak, that makes NPP so frustrating to solve; even small changes in the instance break the landscape geometry, so that even if solutions exist, there is no way to know where they will end up.
 
 This conditional landscape obstruction approach is partially inspired by Huang and Sellke's recent work on strong low degree hardness for finding optima in spin glasses @huangStrongLowDegree2025.
 However, a main reason for not appealing to an OGP-style result is Gamarnik and Kızıldağ's disproof of the $m$-OGP for sublinear energy levels @gamarnikAlgorithmicObstructionsRandom2021b[Thm. 2.5].

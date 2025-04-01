@@ -34,6 +34,11 @@ To this end, the authors suggest this discrepancy arises from the requirement of
 As a takeaway, we can surmise that the low degree heuristic is reasonable for describing random search problems involving optimization of a "flat" structure, in which algorithmic complexity cannot hide behind $N$-independent factors.
 Thus, having an explicit handle on algorithm degree enables us to both control stability and extend our results to rule out general polynomial-time algorithms.
 
+We start by introducing the theory of _Efron-Stein decompositions_ and coordinate degree, and demonstrate how elementary Fourier analysis can give straightforward $L^2$ stability properties.
+We then review the theory of _Hermite polynomials_, which gives altered $L^2$ bounds for polynomial functions.
+This section then concludes with a discussion of our terminology for low polynomial degree and low coordinate degree algorithms, and we summarize our stability analysis in @prop_alg_stability.
+// These results are well-known, and we encourage the experienced reader to proceed to @section_hardness.
+
 == Coordinate Degree and $L^2$ Stability <section_algorithm_es>
 
 First, we consider a general class of putative algorithms, and construct the "coordinate decomposition" underlying the notion of coordinate degree.
