@@ -49,16 +49,9 @@ non-specialist reader
 
 ## Abstract
 
-Given N numbers, the number partitioning problem (NPP) asks for a partition of this set into two subsets minimizing the "discrepancy," that is, the difference of their sums.
-Finding solutions, i.e. low-discrepancy partitions, to the NPP has applications for designing randomized trials, scheduling tasks on multicore computers, or implementing public-key encryption.
-Yet despite its utility, the NPP is infamous for its statistical-to-computational gap:
-when the inputs are random, the discrepancies of the partitions found by the best-known polynomial-time algorithms are exponentially worse (in N) than the discrepancies probabilistic analysis guarantees are achievable.
-Such gaps are common in many random combinatorial problems encountered in statistical physics and computer science; such problems are not just NP-hard, but hard on average, preventing the development of efficient practical algorithms.
+Given N numbers, the number partitioning problem (NPP) asks for a partition of this set into two subsets minimizing the "discrepancy," that is, the difference of their sums. Finding solutions, i.e. low-discrepancy partitions, to the NPP has applications for designing randomized trials, scheduling tasks on multicore computers, or implementing public-key encryption. Yet despite its utility, the NPP is infamous for its statistical-to-computational gap: when the inputs are random, the discrepancies of the partitions found by the best-known polynomial-time algorithms are exponentially worse (in N) than the discrepancies probabilistic analysis guarantees are achievable. Such gaps are common in many random combinatorial problems encountered in statistical physics and computer science; such problems are not just NP-hard, but hard on average, preventing the development of efficient practical algorithms.
 
-We prove that for a certain representative class of "low degree" algorithms, there is a precise tradeoff between algorithm complexity and achievable discrepancy.
-Heuristically, such low degree hardness implies it is impossible to design polynomial-time algorithms which can find better partitions than the current state-of-the-art.
-That is, the statistical-to-computational gap is impossible to close.
-Our proof relies on analyzing the random landscape of solutions, an emerging strategy which is effective for studying high-dimensional random optimization.
+We prove that for a certain representative class of "low degree" algorithms, there is a precise tradeoff between algorithm complexity and achievable discrepancy. Heuristically, such low degree hardness implies it is impossible to design polynomial-time algorithms which can find better partitions than the current state-of-the-art. That is, the statistical-to-computational gap is impossible to close. Our proof relies on analyzing the random landscape of solutions, an emerging strategy which is effective for studying high-dimensional random optimization.
 
 ## Scratch
 
@@ -118,10 +111,15 @@ to Du Bois' extension of differentials to singular varieties, which forms the ba
 Altogether, we narrate the rich mathematical story of Hodge theory from Deligne to Du Bois.
 
 (Why study these varieties?)
-Mixed Hodge structures, introduced by Pierre Deligne, are fundamental objects in Hodge theory which precisely relate the geometry of algebraic varieties to the linear algebra of their cohomology spaces.
+Varieties show up in the most important question in AG, the classification of varieties, but lack differential geometric methods
+
+In algebraic geometry, singular varieties are the cornerstone of Mori's Minimal Model Program in algebraic geometry and Mori's minimal model program,
+but are impenetrable by differential geometric methods.
+
+Mixed Hodge structures are fundamental objects in Hodge theory which precisely relate the geometry of algebraic varieties to the linear algebra of their cohomology spaces.
 In this thesis, we unify historical accounts, classical textbooks, and cutting-edge research to deliver a contemporary exposition on the profound theory and applications of these objects.
 
-First, we trace the historical progression of Hodge theory, going from Abel's pioneering work on elliptic integrals to Hodge's analysis of the cohomology of smooth varieties, culminating with Deligne's extension of Hodge theory to general varieties.
+First, we trace the historical progression of , going from Abel's pioneering work on elliptic integrals to Hodge's analysis of the cohomology of smooth varieties, culminating with Deligne's extension of Hodge theory to general varieties.
 Then, we develop the theory of mixed Hodge structures, interleaving abstract constructions with specific examples of geometrically significant computations to make this notoriously opaque subject more accessible 
 Finally, we explore the important applications of mixed Hodge theory, from Kontsevich's theorem on the birational invariance of Calabi-Yau Hodge diamonds, which has far-reaching implications in string theory, to Du Bois' extension of differentials to singular varieties, which forms the basis for our most powerful techniques for understanding singularities in modern algebraic geometry.
 Altogether, we narrate the rich mathematical story of Hodge theory from Deligne to Du Bois.
