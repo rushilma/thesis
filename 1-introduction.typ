@@ -224,7 +224,7 @@ We conclude in @section_rounding by extending our results to the case of $RR^N$-
 
 == Conventions and Fundamentals
 
-We use the standard Bachmann-Landau notations $o(dots), O(dot), omega(dot), Omega(dot), Theta(dot)$, taken in the limit $N to infinity$. In addition, we write $f(N) asymp g(N)$, $f(N) << g(N)$, or $f(N) >> g(N)$ when $f(N)=Theta(g(N))$, $f(N) = o(g(N))$, or $f(N) = omega(g(N))$, respectively.
+We use the standard Bachmann-Landau notations $o(dot), O(dot), omega(dot), Omega(dot), Theta(dot)$, taken in the limit $N to infinity$. In addition, we write $f(N) asymp g(N)$, $f(N) << g(N)$, or $f(N) >> g(N)$ when $f(N)=Theta(g(N))$, $f(N) = o(g(N))$, or $f(N) = omega(g(N))$, respectively.
 
 We write $[N] := {1,dots,N}$. If $S subeq [N]$, then $overline(S) := [N] without S$ is the complimentary set of indices. If $x in RR^N$ and $S subeq [N]$, then $x_S$ is the vector with
 $ (x_S)_i := cases(x_i #h(2em) &i in S\,, 0 &"else.") $
